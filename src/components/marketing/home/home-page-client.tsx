@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useState } from "react";
@@ -19,7 +20,6 @@ import {
   Mail,
   Rocket,
   LifeBuoy,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Share2,
@@ -52,6 +52,8 @@ import harshitChat3 from "@/assets/testimonials/harshit/harshit-3.png";
 import chetaliChat1 from "@/assets/testimonials/chetali/chetali-1.png";
 import chetaliChat2 from "@/assets/testimonials/chetali/chetali-2.png";
 import chetaliChat3 from "@/assets/testimonials/chetali/chetali-3.png";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 const HERO_STATS = [
   { value: "850+", label: "Professionals Served", icon: Users },
@@ -186,7 +188,7 @@ export function HomePageClient() {
               Professional, AI &amp; Creative Tools
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-              The exact stack today's professionals, creators and founders pay for — all in one place.
+              The exact stack today&apos;s professionals, creators and founders pay for — all in one place.
             </p>
           </div>
 
@@ -230,7 +232,7 @@ export function HomePageClient() {
             ))}
           </div>
 
-          <div className="mt-12 flex justify-center">
+          <div className="mt-12 flex justify-center">   
             <Link
               href="/tools"
               className="inline-flex items-center gap-3 rounded-full bg-gradient-brand px-10 py-5 text-lg font-bold text-primary-foreground shadow-elegant transition hover:opacity-90 sm:text-xl"
@@ -438,7 +440,7 @@ export function HomePageClient() {
                 Many leading subscription providers run promotional campaigns and special events
                 where official gift vouchers are distributed. Additionally, subscription pricing
                 often varies across different regions, countries, and markets. By having access to
-                these opportunities and making use of these legitimate offers, we're able to
+                these opportunities and making use of these legitimate offers, we&apos;re able to
                 secure subscriptions at discounted rates and pass those savings directly to our
                 customers. This allows us to provide official subscriptions at significant savings
                 while delivering the exact same subscription and features available through the
@@ -661,7 +663,7 @@ export function HomePageClient() {
               Get <span className="text-gradient">In Touch</span>
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Questions? Ready to save? We're one message away.
+              Questions? Ready to save? We&apos;re one message away.
             </p>
           </div>
 
@@ -734,7 +736,7 @@ export function HomePageClient() {
                 <DialogHeader>
                   <DialogTitle className="font-display text-2xl">Send an Enquiry</DialogTitle>
                   <DialogDescription>
-                    Fill in your details and we'll contact you within minutes.
+                    Fill in your details and we&apos;ll contact you within minutes.
                   </DialogDescription>
                 </DialogHeader>
                 <InquiryForm />
@@ -749,75 +751,6 @@ export function HomePageClient() {
   );
 }
 
-function ReferralForm() {
-  const [submitted, setSubmitted] = useState(false);
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const name = String(data.get("name") || "").trim().slice(0, 100);
-    const email = String(data.get("email") || "").trim().slice(0, 255);
-    const phone = String(data.get("phone") || "").trim().slice(0, 20);
-    const reward = String(data.get("reward") || "Cash Reward");
-    const notes = String(data.get("notes") || "").trim().slice(0, 500);
-
-    if (!name || !phone) return;
-
-    const text =
-      `Hi, I'd like to register for the SpendSmart Referral Program.\n\n` +
-      `Name: ${name}\n` +
-      `Phone: ${phone}\n` +
-      (email ? `Email: ${email}\n` : "") +
-      `Preferred Reward: ${reward}\n` +
-      (notes ? `Notes: ${notes}\n` : "");
-
-    window.open(`https://wa.me/918770066995?text=${encodeURIComponent(text)}`, "_blank");
-    setSubmitted(true);
-  };
-
-  return (
-    <form onSubmit={onSubmit} className="mt-8 grid gap-4">
-      <FormField label="Full Name" name="name" required placeholder="Your name" maxLength={100} />
-      <div className="grid gap-4 sm:grid-cols-2">
-        <FormField label="Phone / WhatsApp" name="phone" required placeholder="+91 …" maxLength={20} />
-        <FormField label="Email (optional)" name="email" type="email" placeholder="you@example.com" maxLength={255} />
-      </div>
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Preferred Reward
-        </label>
-        <select
-          name="reward"
-          className="mt-1.5 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm shadow-card focus:border-primary focus:outline-none"
-        >
-          <option>Cash Reward</option>
-          <option>Subscription Reward (3 Months Free)</option>
-        </select>
-      </div>
-      <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Anything we should know? (optional)
-        </label>
-        <textarea
-          name="notes"
-          rows={3}
-          maxLength={500}
-          placeholder="Audience, network size, social handles…"
-          className="mt-1.5 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm shadow-card focus:border-primary focus:outline-none"
-        />
-      </div>
-      <button
-        type="submit"
-        className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-elegant transition hover:opacity-90"
-      >
-        {submitted ? "Resend on WhatsApp" : "Register & Get My Link"} <ArrowRight className="h-4 w-4" />
-      </button>
-      <p className="text-center text-xs text-muted-foreground">
-        Submitting opens WhatsApp with your details prefilled.
-      </p>
-    </form>
-  );
-}
 
 function FormField({
   label,
@@ -935,7 +868,7 @@ function InquiryForm() {
         {submitted ? "Book a Call" : "Book a Call"}
       </button>
       <p className="text-center text-xs text-muted-foreground">
-        We'll never spam you. Your details go straight to our WhatsApp support.
+        We&apos;ll never spam you. Your details go straight to our WhatsApp support.
       </p>
     </form>
   );
@@ -964,7 +897,7 @@ function TestimonialCard({ testimonial: t }: { testimonial: Testimonial }) {
           </svg>
         ))}
       </div>
-      <p className="mt-4 text-sm leading-relaxed text-foreground/90">"{t.quote}"</p>
+      <p className="mt-4 text-sm leading-relaxed text-foreground/90">&quot;{t.quote}&quot;</p>
       {total > 0 && (
         <div className="mt-5">
           <p className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
@@ -973,19 +906,19 @@ function TestimonialCard({ testimonial: t }: { testimonial: Testimonial }) {
           </p>
           <div className="mt-2 flex gap-2">
             {screenshots.map((s, i) => (
-              <button
+              <Button
                 key={i}
                 type="button"
                 onClick={() => openAt(i)}
                 className="group relative h-16 w-12 overflow-hidden rounded-md border border-border bg-muted/40 transition hover:border-gold hover:shadow-soft focus:outline-none focus:ring-2 focus:ring-gold"
                 aria-label={`Open ${t.name} chat screenshot ${i + 1}`}
               >
-                <img
+                <Image
                   src={typeof s.src === "object" && s.src !== null && "src" in s.src ? s.src : s.src}
                   alt={s.alt}
                   className="h-full w-full object-cover object-top transition group-hover:scale-105"
                 />
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -1024,7 +957,7 @@ function TestimonialCard({ testimonial: t }: { testimonial: Testimonial }) {
 
             <div className="relative">
               {current && (
-                <img
+                <Image
                   src={typeof current.src === "object" && current.src !== null && "src" in current.src ? current.src.src : current.src}
                   alt={current.alt}
                   className="h-auto max-h-[78vh] w-full rounded-lg object-contain"

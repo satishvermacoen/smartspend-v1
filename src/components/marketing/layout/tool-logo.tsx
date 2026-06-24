@@ -12,7 +12,7 @@ export function ToolLogo({
 }) {
   // ONE stable source per tool.
   // Priority: explicit local logo → simpleicons (slug) → branded favicon (domain).
-  let primary: any = null;
+  let primary: string | undefined = undefined;
   if (tool.logo) {
     primary = typeof tool.logo === "object" && tool.logo !== null && "src" in tool.logo ? tool.logo.src : tool.logo;
   } else if (tool.slug) {

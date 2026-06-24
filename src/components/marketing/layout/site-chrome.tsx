@@ -1,4 +1,15 @@
+"use client";
+
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Menu } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const WhatsAppIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
   <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
@@ -7,17 +18,7 @@ const WhatsAppIcon = ({ className = "h-4 w-4" }: { className?: string }) => (
 );
 
 const SpendSmartMark = ({ className = "h-full w-full" }: { className?: string }) => (
-  <svg viewBox="0 0 64 64" className={className} role="img" aria-label="SpendSmart logo">
-    <rect width="64" height="64" rx="16" fill="url(#spendsmart-mark-gradient)" />
-    <path d="M20 40c2.8 4.1 7.1 6.2 12.8 6.2 6.6 0 11.2-3.1 11.2-8 0-4.7-3.2-6.9-10.5-8.2-5.1-.9-7.2-1.6-7.2-3.9 0-2 2-3.4 5.3-3.4 3.6 0 6.2 1.3 8.2 4l5.1-4.2c-2.8-3.8-7-5.7-12.8-5.7-6.6 0-11 3.2-11 8.1 0 5.1 3.7 7.2 10.8 8.4 4.9.9 6.8 1.7 6.8 3.9 0 2.1-2.1 3.3-5.7 3.3-3.7 0-6.5-1.4-8.6-4.3L20 40Z" fill="white" />
-    <path d="M45.5 15.5h6.8v6.8h-6.8zM45.5 25.3h6.8v6.8h-6.8zM52.3 22.3h-6.8l6.8-6.8v6.8Z" fill="#F59E0B" />
-    <defs>
-      <linearGradient id="spendsmart-mark-gradient" x1="10" y1="8" x2="56" y2="58" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#064E3B" />
-        <stop offset="1" stopColor="#F59E0B" />
-      </linearGradient>
-    </defs>
-  </svg>
+  <img src="/logo.png" className={`${className} object-contain rounded-lg`} alt="SpendSmart logo" />
 );
 
 export function SiteHeader() {
@@ -40,15 +41,106 @@ export function SiteHeader() {
           <Link href="/#referral" className="hover:text-foreground transition-colors">Referral Program</Link>
           <Link href="/#about" className="hover:text-foreground transition-colors">About Us</Link>
         </nav>
-        <a
-          href="https://wa.me/918770066995"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2 rounded-full bg-gradient-brand px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-elegant transition hover:opacity-90"
-        >
-          <span className="hidden sm:inline">Enquire Now</span>
-          <span className="sm:hidden">Enquire</span>
-        </a>
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Desktop Navigation Actions */}
+          <div className="hidden lg:flex items-center gap-3">
+            <Button
+              variant="outline"
+              asChild
+              className="rounded-full border-border/60 px-5 text-sm font-semibold hover:bg-muted"
+            >
+              <Link href="/login">Login</Link>
+            </Button>
+            <Button
+              variant="outline"
+              asChild
+              className="rounded-full bg-gradient-brand text-primary-foreground shadow-elegant hover:opacity-90 border-0 px-5 text-sm font-semibold"
+              >
+              <Link href="/signup">Sign Up</Link>
+            </Button>
+             <Button
+              variant="default"
+              asChild
+                className="rounded-full bg-gradient-brand text-primary-foreground shadow-elegant hover:opacity-90 border-0 px-5 text-sm font-semibold"
+              >
+              <a
+                href="https://wa.me/918770066995"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span>Enquire Now</span>
+              </a>
+            </Button>
+          </div>
+
+          {/* Mobile Menu Trigger & Drawer */}
+          <div className="lg:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[350px] p-6 flex flex-col justify-between">
+                <div className="flex flex-col gap-6">
+                  <SheetHeader className="p-0 border-b border-border/40 pb-4">
+                    <SheetTitle>
+                      <Link href="/" className="flex items-center gap-2.5" aria-label="SpendSmart Subscriptions">
+                        <span className="grid h-10 w-10 place-items-center">
+                          <SpendSmartMark />
+                        </span>
+                        <span className="font-display text-base font-extrabold tracking-tight text-foreground">
+                          SpendSmart
+                          <span className="ml-1 text-gradient">Subs</span>
+                        </span>
+                      </Link>
+                    </SheetTitle>
+                  </SheetHeader>
+                  <nav className="flex flex-col gap-4 text-base font-medium">
+                    <Link href="/" className="hover:text-foreground transition-colors py-1">Home</Link>
+                    <Link href="/tools" className="hover:text-foreground transition-colors py-1">Subscriptions</Link>
+                    <Link href="/#how-it-works" className="hover:text-foreground transition-colors py-1">How It Works</Link>
+                    <Link href="/#referral" className="hover:text-foreground transition-colors py-1">Referral Program</Link>
+                    <Link href="/#about" className="hover:text-foreground transition-colors py-1">About Us</Link>
+                  </nav>
+                </div>
+                <div className="flex flex-col gap-3 border-t border-border/40 pt-6">
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="w-full rounded-full text-sm font-semibold hover:bg-muted"
+                  >
+                    <a
+                      href="https://wa.me/918770066995"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-center gap-2"
+                    >
+                      <span>Enquire Now</span>
+                    </a>
+                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      asChild
+                      className="flex-1 rounded-full border-border/60 text-sm font-semibold hover:bg-muted"
+                    >
+                      <Link href="/login">Login</Link>
+                    </Button>
+                    <Button
+                      variant="default"
+                      asChild
+                      className="flex-1 rounded-full bg-gradient-brand text-primary-foreground shadow-elegant hover:opacity-90 border-0 text-sm font-semibold"
+                    >
+                      <Link href="/signup">Sign Up</Link>
+                    </Button>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
       </div>
     </header>
   );
