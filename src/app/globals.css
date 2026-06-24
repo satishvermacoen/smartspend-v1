@@ -1,0 +1,176 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  
+  --color-beige: var(--beige);
+  --color-soft: var(--soft);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-gold: var(--gold);
+  --color-teal-deep: var(--teal-deep);
+  --color-teal-mid: var(--teal-mid);
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+}
+
+:root {
+  --radius: 0.875rem;
+  /* Premium dark teal palette with gold accents (matches brand) */
+  --background: oklch(0.22 0.045 185);            /* deep teal */
+  --foreground: oklch(0.97 0.01 95);              /* warm off-white */
+  --card: oklch(0.27 0.05 185);                   /* slightly lifted teal */
+  --card-foreground: oklch(0.97 0.01 95);
+  --popover: oklch(0.25 0.05 185);
+  --popover-foreground: oklch(0.97 0.01 95);
+  --primary: oklch(0.78 0.16 78);                 /* warm gold */
+  --primary-foreground: oklch(0.2 0.04 185);
+  --secondary: oklch(0.3 0.05 185);
+  --secondary-foreground: oklch(0.97 0.01 95);
+  --muted: oklch(0.3 0.045 185);
+  --muted-foreground: oklch(0.78 0.02 180);
+  --accent: oklch(0.38 0.07 185);
+  --accent-foreground: oklch(0.97 0.01 95);
+  --destructive: oklch(0.62 0.22 28);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.97 0.02 95 / 12%);            /* warm subtle border */
+  --input: oklch(0.97 0.02 95 / 14%);
+  --ring: oklch(0.78 0.16 78);
+
+  --beige: oklch(0.92 0.04 80);
+  --soft: oklch(0.3 0.045 185);
+  --brand: oklch(0.78 0.16 78);                   /* gold = brand accent */
+  --brand-soft: oklch(0.5 0.09 185);
+  --gold: oklch(0.82 0.16 80);
+  --teal-deep: oklch(0.18 0.04 185);
+  --teal-mid: oklch(0.32 0.06 185);
+
+  --gradient-hero: radial-gradient(120% 100% at 20% 10%, oklch(0.32 0.07 185) 0%, oklch(0.18 0.04 185) 70%);
+  --gradient-brand: linear-gradient(135deg, oklch(0.78 0.16 78), oklch(0.65 0.18 45));
+  --gradient-soft: linear-gradient(180deg, oklch(0.27 0.05 185) 0%, oklch(0.22 0.045 185) 100%);
+  --shadow-elegant: 0 25px 70px -25px oklch(0 0 0 / 55%), 0 0 0 1px oklch(0.97 0.02 95 / 6%);
+  --shadow-soft: 0 8px 30px -12px oklch(0 0 0 / 45%);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 30%), 0 12px 30px -16px oklch(0 0 0 / 50%);
+
+  --sidebar: oklch(0.27 0.05 185);
+  --sidebar-foreground: oklch(0.97 0.01 95);
+  --sidebar-primary: oklch(0.78 0.16 78);
+  --sidebar-primary-foreground: oklch(0.2 0.04 185);
+  --sidebar-accent: oklch(0.3 0.05 185);
+  --sidebar-accent-foreground: oklch(0.97 0.01 95);
+  --sidebar-border: oklch(0.97 0.02 95 / 12%);
+  --sidebar-ring: oklch(0.78 0.16 78);
+}
+
+.dark {
+  --background: oklch(0.18 0.03 260);
+  --foreground: oklch(0.98 0.005 245);
+  --card: oklch(0.22 0.04 260);
+  --card-foreground: oklch(0.98 0.005 245);
+  --primary: oklch(0.7 0.14 250);
+  --primary-foreground: oklch(0.15 0.04 260);
+  --border: oklch(1 0 0 / 10%);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-hero { background: var(--gradient-hero); }
+  .bg-gradient-brand { background: var(--gradient-brand); }
+  .bg-gradient-soft { background: var(--gradient-soft); }
+  .shadow-elegant { box-shadow: var(--shadow-elegant); }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .text-gradient {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+@keyframes orbit-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes orbit-spin-reverse {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-reverse {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.animate-orbit { animation: orbit-spin 40s linear infinite; }
+.animate-orbit-reverse { animation: orbit-spin-reverse 55s linear infinite; }
+.animate-float { animation: float-y 4s ease-in-out infinite; }
+.animate-marquee { animation: marquee 42s linear infinite; }
+.animate-marquee-reverse { animation: marquee-reverse 46s linear infinite; }
