@@ -22,7 +22,7 @@ export function AuthLayout({
   bannerDescription = "Get genuine vouchers to your favorite subscriptions (LinkedIn Premium, ChatGPT Plus, Adobe Creative Cloud, and more) at up to 50% off."
 }: AuthLayoutProps) {
   return (
-    <div className="grid min-h-screen lg:grid-cols-2 bg-gradient-hero font-sans antialiased overflow-hidden">
+    <div className="dark grid min-h-screen lg:grid-cols-2 bg-gradient-hero font-sans antialiased overflow-hidden">
       {/* Form / Authentication Side */}
       <div className="flex flex-col p-6 md:p-10 lg:p-16 justify-center relative overflow-hidden">
         {/* Subtle grid pattern overlay */}

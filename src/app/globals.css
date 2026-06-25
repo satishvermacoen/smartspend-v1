@@ -93,16 +93,16 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   --beige: oklch(0.92 0.04 80);
-  --soft: oklch(0.3 0.045 185);
+  --soft: oklch(0.96 0.01 185);                    /* light soft teal-gray in light mode */
   --brand: oklch(0.58 0.23 264.376);              /* indigo/purple brand accent */
-  --brand-soft: oklch(0.5 0.09 185);
+  --brand-soft: oklch(0.92 0.03 185);              /* light brand accent in light mode */
   --gold: oklch(0.68 0.18 264.376);               /* lighter indigo accent */
-  --teal-deep: oklch(0.18 0.04 185);
-  --teal-mid: oklch(0.32 0.06 185);
+  --teal-deep: oklch(0.94 0.02 185);              /* light deep-tinted teal in light mode */
+  --teal-mid: oklch(0.96 0.02 185);               /* light mid-tinted teal in light mode */
 
-  --gradient-hero: radial-gradient(120% 100% at 20% 10%, oklch(0.32 0.07 185) 0%, oklch(0.18 0.04 185) 70%);
+  --gradient-hero: radial-gradient(120% 100% at 20% 10%, oklch(0.99 0.005 185) 0%, oklch(0.95 0.01 185) 70%); /* light teal gradient */
   --gradient-brand: linear-gradient(135deg, oklch(0.488 0.243 264.376), oklch(0.62 0.21 285.0));
-  --gradient-soft: linear-gradient(180deg, oklch(0.27 0.05 185) 0%, oklch(0.22 0.045 185) 100%);
+  --gradient-soft: linear-gradient(180deg, oklch(0.98 0.005 185) 0%, oklch(0.94 0.01 185) 100%);
   --shadow-elegant: 0 25px 70px -25px oklch(0 0 0 / 55%), 0 0 0 1px oklch(0.97 0.02 95 / 6%);
   --shadow-soft: 0 8px 30px -12px oklch(0 0 0 / 45%);
   --shadow-card: 0 1px 2px oklch(0 0 0 / 30%), 0 12px 30px -16px oklch(0 0 0 / 50%);
@@ -140,6 +140,14 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* dark-mode overrides for brand-specific custom colors */
+  --soft: oklch(0.3 0.045 185);
+  --brand-soft: oklch(0.5 0.09 185);
+  --teal-deep: oklch(0.18 0.04 185);
+  --teal-mid: oklch(0.32 0.06 185);
+  --gradient-hero: radial-gradient(120% 100% at 20% 10%, oklch(0.32 0.07 185) 0%, oklch(0.18 0.04 185) 70%);
+  --gradient-soft: linear-gradient(180deg, oklch(0.27 0.05 185) 0%, oklch(0.22 0.045 185) 100%);
 }
 
 @layer base {
@@ -162,7 +170,10 @@
 
 @layer utilities {
   .bg-gradient-hero { background: var(--gradient-hero); }
-  .bg-gradient-brand { background: var(--gradient-brand); }
+  .bg-gradient-brand {
+    background: var(--gradient-brand);
+    --primary-foreground: oklch(0.985 0 0); /* Force white text on brand purple gradient in both light and dark mode */
+  }
   .bg-gradient-soft { background: var(--gradient-soft); }
   .shadow-elegant { box-shadow: var(--shadow-elegant); }
   .shadow-soft { box-shadow: var(--shadow-soft); }

@@ -1,9 +1,10 @@
-import { AppSidebar } from "@/components/app-sidebar"
-import { SiteHeader } from "@/components/site-header"
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/admin/layout/app-sidebar";
+import { SiteHeader } from "@/components/admin/layout/site-header";
 
 export default async function Adminlayout({ children }: { children: React.ReactNode }) {
   const session = await getServerSession(authOptions);
