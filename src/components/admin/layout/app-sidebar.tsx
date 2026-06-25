@@ -13,7 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, ListIcon, UsersIcon, CommandIcon } from "lucide-react"
+import { LayoutDashboardIcon, ListIcon, UsersIcon, CommandIcon, Share2Icon } from "lucide-react"
 
 const data = {
   user: {
@@ -31,6 +31,14 @@ const data = {
       ),
     },
     {
+      title: "Clients",
+      url: "/admin/clients",
+      icon: (
+        <UsersIcon
+        />
+      ),
+    },
+    {
       title: "Enquiries",
       url: "/admin/enquiry",
       icon: (
@@ -42,7 +50,7 @@ const data = {
       title: "Referrals",
       url: "/admin/referral",
       icon: (
-        <UsersIcon
+        <Share2Icon
         />
       ),
     },

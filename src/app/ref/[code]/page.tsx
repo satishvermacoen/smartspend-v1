@@ -131,6 +131,13 @@ export default function RefCodeLandingPage({ params }: { params: Promise<{ code:
                 Claim Your Discount <ArrowRight className="h-4 w-4" />
               </button>
 
+              <Link
+                href="/"
+                className="w-full h-12 inline-flex items-center justify-center rounded-xl border border-border/15 bg-card/40 backdrop-blur-md text-sm font-semibold text-foreground hover:bg-card/70 hover:-translate-y-0.5 active:scale-[0.98] transition-all cursor-pointer shadow-soft"
+              >
+                Visit Website & View Services
+              </Link>
+
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground/80 mt-1">
                 <span>Invited using code</span>
                 <span className="font-mono font-bold text-foreground bg-soft/40 px-2 py-0.5 rounded border border-border/5">{uppercaseCode}</span>
