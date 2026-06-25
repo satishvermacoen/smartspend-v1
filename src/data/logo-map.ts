@@ -96,7 +96,7 @@ import replitLogo from "@/assets/logos/replit.png";
 import supabaseProLogo from "@/assets/logos/supabase-pro.png";
 import whisperFlowLogo from "@/assets/logos/whisper-flow.png";
 
-export const LOGOS: Record<string, any> = {
+export const LOGOS: Record<string, unknown> = {
   "adobe-cc": adobeCcLogo,
   "anytime-invent": anytimeInventLogo,
   "apify-credits": apifyCreditsLogo,

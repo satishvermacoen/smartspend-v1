@@ -80,20 +80,20 @@ export function WishlistSection() {
   return (
     <section
       id="wishlist"
-      className="border-y border-border bg-secondary/40 py-20"
+      className="border-y border-border bg-secondary/30 py-20"
     >
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary shadow-soft backdrop-blur">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary shadow-sm backdrop-blur">
             Subscription Wishlist
           </span>
-          <h2 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Tell us which subscriptions you use{" "}
-            <span className="text-gradient">regularly.</span>
+            <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">regularly.</span>
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
             AI, professional, OTT, creative, productivity — anything you pay for
-            every month. If we can source it at a discount, we'll reach out to you.
+            every month. If we can source it at a discount, we&apos;ll reach out to you.
           </p>
         </div>
 
@@ -102,7 +102,7 @@ export function WishlistSection() {
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-elegant transition hover:opacity-90"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-md transition hover:bg-primary/95"
             >
               <Sparkles className="h-4 w-4" />
               Share your wishlist
@@ -111,7 +111,7 @@ export function WishlistSection() {
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="mt-10 rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8"
+            className="mt-10 rounded-lg border border-border bg-card p-6 shadow-sm sm:p-8"
           >
             <div className="grid gap-5 sm:grid-cols-2">
               <label className="block">
@@ -124,7 +124,7 @@ export function WishlistSection() {
                   onChange={(e) => setName(e.target.value)}
                   maxLength={80}
                   placeholder="e.g. Aditi Sharma"
-                  className="mt-2 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="mt-2 w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-1 focus:ring-primary focus:ring-offset-0"
                   required
                 />
               </label>
@@ -138,7 +138,7 @@ export function WishlistSection() {
                   onChange={(e) => setPhone(e.target.value)}
                   maxLength={20}
                   placeholder="e.g. +91 98765 43210"
-                  className="mt-2 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="mt-2 w-full rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-1 focus:ring-primary focus:ring-offset-0"
                   required
                 />
               </label>
@@ -147,7 +147,7 @@ export function WishlistSection() {
             <div className="mt-6">
               <div className="flex items-center justify-between gap-3">
                 <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Subscriptions you're interested in
+                  Subscriptions you&apos;re interested in
                 </span>
                 <button
                   type="button"
@@ -181,7 +181,7 @@ export function WishlistSection() {
               )}
 
               {pickerOpen && (
-                <div className="mt-4 rounded-2xl border border-border bg-background p-4">
+                <div className="mt-4 rounded-lg border border-border bg-background p-4">
                   <div className="relative">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <input
@@ -189,7 +189,7 @@ export function WishlistSection() {
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
                       placeholder="Search subscriptions..."
-                      className="w-full rounded-xl border border-border bg-card px-9 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      className="w-full rounded-lg border border-border bg-card px-9 py-2.5 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary focus:ring-offset-0"
                     />
                   </div>
                   <div className="mt-3 grid max-h-72 grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3">
@@ -200,7 +200,7 @@ export function WishlistSection() {
                           key={t.name}
                           type="button"
                           onClick={() => toggle(t.name)}
-                          className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition ${
+                          className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-left text-xs font-semibold transition ${
                             active
                               ? "border-primary bg-primary/10 text-primary"
                               : "border-border bg-card text-foreground hover:bg-secondary"
@@ -216,7 +216,7 @@ export function WishlistSection() {
                     })}
                     {filtered.length === 0 && (
                       <p className="col-span-full py-6 text-center text-xs text-muted-foreground">
-                        No matches. Add it under "Others" below.
+                        No matches. Add it under &quot;Others&quot; below.
                       </p>
                     )}
                   </div>
@@ -233,7 +233,7 @@ export function WishlistSection() {
                   maxLength={300}
                   rows={3}
                   placeholder="e.g. Notion AI, Apple One, Audible..."
-                  className="mt-2 w-full resize-none rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="mt-2 w-full resize-none rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
                 />
               </label>
             </div>
@@ -246,7 +246,7 @@ export function WishlistSection() {
 
             <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
               <p className="text-xs text-muted-foreground">
-                We'll try our best to get them all at a discount.
+                We&apos;ll try our best to get them all at a discount.
               </p>
               <div className="flex w-full gap-3 sm:w-auto">
                 <button
@@ -258,7 +258,7 @@ export function WishlistSection() {
                 </button>
                 <button
                   type="submit"
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-elegant transition hover:opacity-90 sm:flex-none"
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md transition hover:bg-primary/95 sm:flex-none"
                 >
                   <Send className="h-4 w-4" />
                   Send my wishlist

@@ -1,5 +1,8 @@
-import { LOGOS } from "@/data/logo-map";
+import { LOGOS as RAW_LOGOS } from "@/data/logo-map";
 import { Tool } from "@/types";
+import { StaticImageData } from "next/image";
+
+const LOGOS = RAW_LOGOS as Record<string, StaticImageData>;
 
 const courseraLogo = LOGOS["coursera"];
 
@@ -215,7 +218,7 @@ export const MARQUEE_TOOLS: Tool[] = [
   { name: "Vapi Credits", slug: "vapi", color: "10B981", category: "Credits", domain: "vapi.ai", logo: marqueeLogo("Vapi Credits") },
 ];
 
-export const ALL_TOOLS: Tool[] = [
+const RAW_ALL_TOOLS: Tool[] = [
   ...TOP_TOOLS,
   { name: "Bolt", slug: "lightning", color: "FBBF24", category: "Developer" },
   { name: "N8N", slug: "n8n", color: "EA4B71", category: "Developer" },
@@ -280,5 +283,10 @@ export const ALL_TOOLS: Tool[] = [
   { name: "Vapi Credits", slug: "vapi", color: "10B981", category: "Credits", logo: marqueeLogo("Vapi Credits") },
 ];
 
+export const ALL_TOOLS: Tool[] = Array.from(
+  new Map(RAW_ALL_TOOLS.map(t => [`${t.name}-${t.category}`, t])).values()
+);
+
 export const logoUrl = (tool: Tool) =>
   `https://cdn.simpleicons.org/${tool.slug}/${tool.color ?? "0A66C2"}`;
+

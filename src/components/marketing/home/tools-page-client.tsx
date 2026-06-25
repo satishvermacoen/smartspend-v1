@@ -26,12 +26,12 @@ export function ToolsPageClient() {
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
       <main className="flex-1">
-        <section className="border-b border-border bg-gradient-soft">
+        <section className="border-b border-border bg-secondary/10">
           <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-            <h1 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-              All <span className="text-gradient">Subscriptions</span>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              All <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">Subscriptions</span>
             </h1>
-            <p className="mt-3 max-w-2xl text-muted-foreground">
+            <p className="mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
               {ALL_TOOLS.length}+ premium subscriptions — AI, Professional, Creative, Developer tools & cloud credits. Up to 50% off.
             </p>
 
@@ -43,7 +43,7 @@ export function ToolsPageClient() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search subscriptions…"
-                className="h-12 w-full rounded-full border border-border bg-card pl-11 pr-4 text-sm shadow-card outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/40"
+                className="h-12 w-full rounded-lg border border-border bg-card pl-11 pr-4 text-sm shadow-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary"
               />
             </div>
 
@@ -57,8 +57,8 @@ export function ToolsPageClient() {
                     type="button"
                     className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition ${
                       cat === c
-                        ? "border-transparent bg-gradient-brand text-primary-foreground shadow-soft"
-                        : "border-border bg-card text-muted-foreground hover:text-foreground"
+                        ? "border-transparent bg-primary text-primary-foreground shadow-sm"
+                        : "border-border bg-card text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                     }`}
                   >
                     {c}
@@ -82,8 +82,8 @@ export function ToolsPageClient() {
         </section>
 
         <section className="mx-auto max-w-5xl px-4 pb-16 sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-border bg-card p-8 text-center shadow-card">
-            <h2 className="font-display text-2xl font-bold">Don't see what you need?</h2>
+          <div className="rounded-lg border border-border bg-card p-8 text-center shadow-sm">
+            <h2 className="font-display text-2xl font-bold text-foreground">Don&apos;t see what you need?</h2>
             <p className="mt-2 text-sm text-muted-foreground">
               We source many more subscriptions on request. Drop us a message.
             </p>
@@ -91,7 +91,7 @@ export function ToolsPageClient() {
               href="https://wa.me/918770066995"
               target="_blank"
               rel="noreferrer"
-              className="mt-5 inline-flex rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-soft"
+              className="mt-5 inline-flex rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/95 transition-colors"
             >
               Request a subscription
             </a>
@@ -109,13 +109,13 @@ function ToolCard({ tool }: { tool: Tool }) {
       href={`https://wa.me/918770066995?text=${encodeURIComponent(`Hi, I'd like pricing for ${tool.name}`)}`}
       target="_blank"
       rel="noreferrer"
-      className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-4 text-center shadow-card transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-soft"
+      className="group flex flex-col items-center gap-3 rounded-lg border border-border bg-card p-4 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md duration-200"
     >
-      <div className="grid h-14 w-14 place-items-center rounded-2xl bg-secondary/60 p-2">
+      <div className="grid h-14 w-14 place-items-center rounded-lg bg-secondary/60 p-2">
         <ToolLogo tool={tool} className="h-full w-full" />
       </div>
       <div className="min-w-0">
-        <div className="line-clamp-2 text-sm font-semibold leading-tight">{tool.name}</div>
+        <div className="line-clamp-2 text-sm font-semibold leading-tight text-foreground">{tool.name}</div>
         <div className="mt-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
           {tool.category}
         </div>

@@ -42,7 +42,7 @@ export function ReferralForm() {
         </label>
         <select
           name="reward"
-          className="mt-1.5 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm shadow-card focus:border-primary focus:outline-none"
+          className="mt-1.5 w-full rounded-lg border border-border bg-background px-4 py-3 text-sm shadow-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
         >
           <option>Cash Reward</option>
           <option>Subscription Reward (3 Months Free)</option>
@@ -57,12 +57,12 @@ export function ReferralForm() {
           rows={3}
           maxLength={500}
           placeholder="Audience, network size, social handles…"
-          className="mt-1.5 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm shadow-card focus:border-primary focus:outline-none"
+          className="mt-1.5 w-full rounded-lg border border-border bg-background px-4 py-3 text-sm shadow-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
         />
       </div>
       <button
         type="submit"
-        className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-elegant transition hover:opacity-90"
+        className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md transition hover:bg-primary/95"
       >
         {submitted ? "Resend on WhatsApp" : "Register & Get My Link"} <ArrowRight className="h-4 w-4" />
       </button>
@@ -99,7 +99,7 @@ function FormField({
         required={required}
         placeholder={placeholder}
         maxLength={maxLength}
-        className="mt-1.5 w-full rounded-xl border border-border bg-background px-4 py-3 text-sm shadow-card focus:border-primary focus:outline-none"
+        className="mt-1.5 w-full rounded-lg border border-border bg-background px-4 py-3 text-sm shadow-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
       />
     </div>
   );

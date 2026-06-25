@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+ 
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import mongoose from 'mongoose';
@@ -19,6 +19,7 @@ try {
   let envPath = '';
   try {
     envPath = join(__dirname, '../.env');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     // __dirname is not defined in ESM
     envPath = join(process.cwd(), '.env');
@@ -80,6 +81,7 @@ async function seedAdmin() {
   try {
     try {
       await connectToMongo(MONGODB_URI);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (srvError) {
       console.warn('SRV Connection failed. Attempting direct connection fallback...');
       // Direct connection using resolved shard hosts

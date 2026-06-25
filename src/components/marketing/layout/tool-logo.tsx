@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { logoUrl } from "@/data/tools";
 import { Tool } from "@/types";
+import Image from "next/image";
 
 // Render a single stable logo source; explicit/local logos are preferred.
 export function ToolLogo({
@@ -26,7 +27,7 @@ export function ToolLogo({
   if (!primary || failed) {
     return (
       <div
-        className={`grid place-items-center rounded-lg font-display text-[11px] font-extrabold uppercase tracking-tight text-white ${className}`}
+        className={`grid place-items-center rounded-md font-display text-[11px] font-extrabold uppercase tracking-tight text-white ${className}`}
         style={{ backgroundColor: `#${tool.color ?? "0A66C2"}` }}
         title={tool.name}
       >
@@ -43,7 +44,7 @@ export function ToolLogo({
 
   return (
     <div className={`grid place-items-center p-0.5 ${className}`}>
-      <img
+      <Image
         src={primary}
         alt={tool.name}
         width="160"

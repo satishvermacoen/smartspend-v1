@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import AuthProvider from "@/components/providers/session-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -38,14 +40,24 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${plusJakartaSans.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
         <AuthProvider>
-          <TooltipProvider>
-            {children}
-          </TooltipProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
+            <Toaster />
+          </ThemeProvider>
         </AuthProvider>
       </body>
     </html>
   );
 }
+

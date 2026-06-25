@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Loader2, Sparkles, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
+import { Loader2, CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
+import { AuthLayout } from '@/components/auth/auth-layout';
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -57,92 +58,95 @@ export default function VerifyEmailPage() {
   }, [token, router]);
 
   return (
-    <div className="min-h-screen bg-gradient-hero flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Decorative blurred backgrounds */}
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-brand/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-teal-mid/20 rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center px-4">
-        <Link href="/" className="inline-flex items-center gap-2 mb-4 group">
-          <div className="h-10 w-10 rounded-xl bg-gradient-brand flex items-center justify-center shadow-soft">
-            <Sparkles className="h-5 w-5 text-teal-deep animate-pulse" />
+    <AuthLayout>
+      <div className="text-center py-4">
+        {status === 'verifying' && (
+          <div className="space-y-6 animate-pulse">
+            <div className="h-16 w-16 bg-soft/40 rounded-2xl flex items-center justify-center mx-auto border border-border/10">
+              <Loader2 className="h-8 w-8 text-brand animate-spin" />
+            </div>
+            <div>
+              <h3 className="text-xl font-display font-extrabold text-foreground tracking-tight">
+                Verifying your email
+              </h3>
+              <p className="mt-2.5 text-sm text-muted-foreground leading-relaxed px-2">
+                {message}
+              </p>
+            </div>
           </div>
-          <span className="font-display font-bold text-2xl tracking-tight text-gradient">
-            SpentSmart
-          </span>
-        </Link>
+        )}
+
+        {status === 'success' && (
+          <div className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
+            <div className="h-16 w-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto border border-emerald-500/20 text-emerald-400">
+              <CheckCircle2 className="h-10 w-10 animate-bounce" />
+            </div>
+            <div>
+              <h3 className="text-xl font-display font-extrabold text-foreground tracking-tight">
+                Email Verified!
+              </h3>
+              <p className="mt-2.5 text-sm text-muted-foreground leading-relaxed px-2">
+                {message}
+              </p>
+              <p className="mt-3 text-xs text-brand/85 animate-pulse font-semibold">
+                Redirecting to login...
+              </p>
+            </div>
+            <div className="pt-2">
+              <Link
+                href="/login"
+                className="w-full h-11 bg-gradient-brand hover:brightness-110 active:scale-[0.99] text-primary-foreground font-semibold rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-1.5 shadow-card cursor-pointer"
+              >
+                Go to Login <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {status === 'error' && (
+          <div className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
+            <div className="h-16 w-16 bg-destructive/10 rounded-2xl flex items-center justify-center mx-auto border border-destructive/20 text-destructive">
+              <XCircle className="h-10 w-10" />
+            </div>
+            <div>
+              <h3 className="text-xl font-display font-extrabold text-foreground tracking-tight">
+                Verification Failed
+              </h3>
+              <p className="mt-2.5 text-sm text-destructive/90 px-4 leading-relaxed font-medium">
+                {message}
+              </p>
+            </div>
+            <div className="pt-2">
+              <Link
+                href="/signup"
+                className="w-full h-11 bg-soft hover:bg-soft/80 active:scale-[0.99] text-foreground font-semibold rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-2 border border-border/15 shadow-soft cursor-pointer"
+              >
+                Back to Sign Up
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
+    </AuthLayout>
+  );
+}
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10 px-4">
-        <div className="bg-card/30 backdrop-blur-xl border border-border/10 shadow-elegant rounded-2xl p-6 sm:p-8 text-center">
-          {status === 'verifying' && (
-            <div className="space-y-5 animate-pulse">
-              <div className="h-16 w-16 bg-soft/50 rounded-full flex items-center justify-center mx-auto border border-border/5">
-                <Loader2 className="h-8 w-8 text-brand animate-spin" />
-              </div>
-              <div>
-                <h3 className="text-xl font-display font-bold text-foreground">
-                  Verifying...
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {message}
-                </p>
-              </div>
+export default function VerifyEmailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-hero flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-brand/10 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-teal-mid/20 rounded-full blur-[120px] pointer-events-none" />
+          <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center px-4">
+            <div className="h-16 w-16 bg-soft/50 rounded-full flex items-center justify-center mx-auto border border-border/5">
+              <Loader2 className="h-8 w-8 text-brand animate-spin" />
             </div>
-          )}
-
-          {status === 'success' && (
-            <div className="space-y-5">
-              <div className="h-16 w-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-emerald-500/20 text-emerald-400">
-                <CheckCircle2 className="h-10 w-10 animate-bounce" />
-              </div>
-              <div>
-                <h3 className="text-xl font-display font-bold text-foreground">
-                  Email Verified!
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {message}
-                </p>
-                <p className="mt-1.5 text-xs text-brand/85 animate-pulse font-medium">
-                  Redirecting to login...
-                </p>
-              </div>
-              <div className="pt-2">
-                <Link
-                  href="/login"
-                  className="w-full h-11 bg-gradient-brand hover:brightness-110 active:scale-[0.99] text-teal-deep font-semibold rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-1.5 shadow-card cursor-pointer"
-                >
-                  Go to Login <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </div>
-          )}
-
-          {status === 'error' && (
-            <div className="space-y-5">
-              <div className="h-16 w-16 bg-destructive/10 rounded-full flex items-center justify-center mx-auto border border-destructive/20 text-destructive">
-                <XCircle className="h-10 w-10" />
-              </div>
-              <div>
-                <h3 className="text-xl font-display font-bold text-foreground">
-                  Verification Failed
-                </h3>
-                <p className="mt-2 text-sm text-destructive opacity-90 px-2">
-                  {message}
-                </p>
-              </div>
-              <div className="pt-2">
-                <Link
-                  href="/signup"
-                  className="w-full h-11 bg-soft hover:bg-soft/85 active:scale-[0.99] text-foreground font-semibold rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-2 border border-border/10 shadow-soft cursor-pointer"
-                >
-                  Back to Sign Up
-                </Link>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
-      </div>
-    </div>
+      }
+    >
+      <VerifyEmailContent />
+    </Suspense>
   );
 }
