@@ -18,7 +18,6 @@ export async function GET(req: Request) {
     // 3. Parse query parameters
     const { searchParams } = new URL(req.url);
     const search = searchParams.get('search') || '';
-    const role = searchParams.get('role') || 'all';
     const status = searchParams.get('status') || 'all';
     const type = searchParams.get('type') || 'all'; // 'referrer' or 'all'
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
@@ -26,12 +25,9 @@ export async function GET(req: Request) {
     const skip = (page - 1) * limit;
 
     // 4. Construct query filters
-    const query: Record<string, unknown> = {};
-
-    // Filter by role if not "all"
-    if (role !== 'all') {
-      query.role = role;
-    }
+    const query: Record<string, unknown> = {
+      role: { $ne: 'admin' }
+    };
 
     // Filter by status if not "all"
     if (status !== 'all') {
@@ -51,12 +47,17 @@ export async function GET(req: Request) {
     // Apply search filter if query exists
     if (search) {
       const searchRegex = new RegExp(search.trim(), 'i');
-      query.$or = [
-        { firstName: searchRegex },
-        { lastName: searchRegex },
-        { email: searchRegex },
-        { phone: searchRegex },
-        { referralCode: searchRegex }
+      query.$and = [
+        { role: { $ne: 'admin' } },
+        {
+          $or: [
+            { firstName: searchRegex },
+            { lastName: searchRegex },
+            { email: searchRegex },
+            { phone: searchRegex },
+            { referralCode: searchRegex }
+          ]
+        }
       ];
     }
 
@@ -73,10 +74,10 @@ export async function GET(req: Request) {
     startOfToday.setHours(0, 0, 0, 0);
 
     const [totalUsers, activeUsers, referrerUsers, newUsersToday] = await Promise.all([
-      User.countDocuments({}),
-      User.countDocuments({ status: 'active' }),
-      User.countDocuments({ referralCode: { $exists: true, $ne: '' } }),
-      User.countDocuments({ createdAt: { $gte: startOfToday } })
+      User.countDocuments({ role: { $ne: 'admin' } }),
+      User.countDocuments({ status: 'active', role: { $ne: 'admin' } }),
+      User.countDocuments({ referralCode: { $exists: true, $ne: '' }, role: { $ne: 'admin' } }),
+      User.countDocuments({ createdAt: { $gte: startOfToday }, role: { $ne: 'admin' } })
     ]);
 
     return NextResponse.json({

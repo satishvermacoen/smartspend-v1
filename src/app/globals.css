@@ -60,7 +60,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: oklch(86.579% 0.00168 148.286);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -209,5 +209,5 @@
 .animate-orbit { animation: orbit-spin 40s linear infinite; }
 .animate-orbit-reverse { animation: orbit-spin-reverse 55s linear infinite; }
 .animate-float { animation: float-y 4s ease-in-out infinite; }
-.animate-marquee { animation: marquee 42s linear infinite; }
-.animate-marquee-reverse { animation: marquee-reverse 46s linear infinite; }
+.animate-marquee { animation: marquee 300s linear infinite; }
+.animate-marquee-reverse { animation: marquee-reverse 240s linear infinite; }

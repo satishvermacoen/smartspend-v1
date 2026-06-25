@@ -11,6 +11,50 @@ const updateSchema = z.object({
   status: z.enum(['active', 'inactive', 'suspended']).optional(),
 });
 
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    // 1. Authenticate session and check admin role
+    const session = await getServerSession(authOptions);
+    if (!session || session.user?.role !== 'admin') {
+      return NextResponse.json({ error: 'Unauthorized access.' }, { status: 401 });
+    }
+
+    const { id } = await params;
+    if (!id) {
+      return NextResponse.json({ error: 'Client ID is required.' }, { status: 400 });
+    }
+
+    // 2. Connect to database
+    await connectDB();
+
+    // 3. Find the user
+    const user = await User.findById(id);
+    if (!user) {
+      return NextResponse.json({ error: 'Client not found.' }, { status: 404 });
+    }
+
+    // 4. Fetch associated Enquiry records (wishlists)
+    const Enquiry = (await import('@/features/shared/model/enquiry')).default;
+    const enquiries = await Enquiry.find({ client_id: id }).sort({ createdAt: -1 });
+
+    return NextResponse.json({
+      success: true,
+      user,
+      enquiries
+    });
+
+  } catch (error) {
+    console.error('Admin client fetch details error:', error);
+    return NextResponse.json(
+      { error: 'An unexpected error occurred while fetching client details.' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> }

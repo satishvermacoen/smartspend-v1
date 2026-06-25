@@ -1,11 +1,25 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Check, Plus, Search, Send, Sparkles, X } from "lucide-react";
+import { Check, Plus, Search, Send, Sparkles, X, Loader2, KeyRound, ExternalLink, MessageSquare, Copy } from "lucide-react";
 import { ALL_TOOLS } from "@/data/tools";
 import { ToolLogo } from "@/components/marketing/layout/tool-logo";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import Link from "next/link";
 
 const WA_NUMBER = "918770066995";
+
+interface WishlistResponse {
+  success: boolean;
+  message: string;
+  isNewUser: boolean;
+  loginCredentials: {
+    username: string;
+    email: string;
+    password: string;
+  } | null;
+}
 
 export function WishlistSection() {
   const [name, setName] = useState("");
@@ -16,6 +30,10 @@ export function WishlistSection() {
   const [query, setQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [responseData, setResponseData] = useState<WishlistResponse | null>(null);
 
   const uniqueTools = useMemo(() => {
     const seen = new Set<string>();
@@ -38,44 +56,88 @@ export function WishlistSection() {
     );
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setLoading(true);
+
     const trimmedName = name.trim();
     const trimmedPhone = phone.trim();
     const trimmedOther = other.trim();
 
     if (!trimmedName || trimmedName.length > 80) {
       setError("Please enter your name (max 80 characters).");
+      setLoading(false);
       return;
     }
     if (!/^[+0-9\s\-()]{7,20}$/.test(trimmedPhone)) {
       setError("Please enter a valid phone number.");
+      setLoading(false);
       return;
     }
     if (picked.length === 0 && !trimmedOther) {
       setError("Pick at least one subscription or tell us what you use.");
+      setLoading(false);
       return;
     }
     if (trimmedOther.length > 300) {
       setError("Please keep the 'others' field under 300 characters.");
+      setLoading(false);
       return;
     }
 
+    try {
+      const res = await fetch("/api/public/wishlist/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: trimmedName,
+          phone: trimmedPhone,
+          picked,
+          other: trimmedOther
+        })
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json.error || "Failed to submit wishlist.");
+      }
+
+      setResponseData(json);
+      setSubmitted(true);
+      toast.success(json.message || "Wishlist submitted successfully!");
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : "An unexpected error occurred.";
+      setError(errMsg);
+      toast.error(errMsg);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleCopyPassword = () => {
+    if (!responseData?.loginCredentials?.password) return;
+    navigator.clipboard.writeText(responseData.loginCredentials.password);
+    setCopied(true);
+    toast.success("Password copied!");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleWhatsAppShare = () => {
     const lines = [
       `Hi, I'd like to share my subscription wishlist.`,
       ``,
-      `Name: ${trimmedName}`,
-      `Phone: ${trimmedPhone}`,
+      `Name: ${name.trim()}`,
+      `Phone: ${phone.trim()}`,
       picked.length ? `From your list: ${picked.join(", ")}` : null,
-      trimmedOther ? `Others I use: ${trimmedOther}` : null,
+      other.trim() ? `Others I use: ${other.trim()}` : null,
       ``,
       `Please let me know if you can get any of these at a discount.`,
     ].filter(Boolean) as string[];
 
     const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
     window.open(url, "_blank", "noopener,noreferrer");
-  }
+  };
 
   return (
     <section
@@ -100,16 +162,77 @@ export function WishlistSection() {
           </p>
         </div>
 
-        {!open ? (
+        {submitted && responseData ? (
+          <div className="mt-12 border border-emerald-500/20 bg-emerald-500/5 backdrop-blur-xl rounded-2xl p-6 sm:p-8 space-y-6 relative overflow-hidden">
+            {/* Glow accent */}
+            <div className="absolute right-0 top-0 h-24 w-24 rounded-full bg-emerald-500/10 blur-xl pointer-events-none" />
+
+            <div className="text-center space-y-2">
+              <div className="inline-flex h-12 w-12 rounded-full bg-emerald-500/20 text-emerald-400 items-center justify-center shadow-soft">
+                <Sparkles className="h-6 w-6 animate-pulse" />
+              </div>
+              <h3 className="font-display font-extrabold text-xl text-foreground">Wishlist Submitted!</h3>
+              <p className="text-xs text-muted-foreground">
+                {responseData.isNewUser 
+                  ? "We've created a temporary profile for you. Log in below to track discount statuses."
+                  : "We've added this wishlist to your existing account profile."}
+              </p>
+            </div>
+
+            {responseData.isNewUser && responseData.loginCredentials && (
+              /* Auto Generated Login Info */
+              <div className="border border-border bg-card/60 rounded-xl p-4 space-y-3.5">
+                <div className="flex items-center gap-2 font-bold text-xs text-muted-foreground uppercase tracking-wider">
+                  <KeyRound className="h-4 w-4 text-primary" /> Login Profile Created
+                </div>
+                <p className="text-xs text-muted-foreground">Log in with either your Mobile number or Email using these credentials:</p>
+                <div className="grid gap-2 text-xs sm:grid-cols-2">
+                  <div>
+                    <span className="text-muted-foreground block">Mobile / Username</span>
+                    <span className="font-mono font-bold text-foreground">{responseData.loginCredentials.username}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground block">Default Password</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-bold text-foreground">{responseData.loginCredentials.password}</span>
+                      <button 
+                        onClick={handleCopyPassword}
+                        className="text-primary hover:text-emerald-400 transition-colors cursor-pointer shrink-0"
+                        title="Copy Password"
+                      >
+                        {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <button
+                onClick={handleWhatsAppShare}
+                className="flex-1 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-soft transition-all cursor-pointer"
+              >
+                <MessageSquare className="h-4.5 w-4.5" /> Share on WhatsApp
+              </button>
+              <Link
+                href="/login"
+                className="flex-1 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-card border border-border hover:bg-soft text-foreground font-bold text-sm shadow-soft transition-all"
+              >
+                Log in to Dashboard <ExternalLink className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        ) : !open ? (
           <div className="mt-12 flex justify-center">
-            <button
+            <Button
               type="button"
               onClick={() => setOpen(true)}
               className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-primary px-8 py-4 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 transition-all duration-300 hover:-translate-y-0.5"
             >
               <Sparkles className="h-4 w-4 animate-pulse" />
               Share Your Wishlist
-            </button>
+            </Button>
           </div>
         ) : (
           <form
@@ -152,14 +275,14 @@ export function WishlistSection() {
                 <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/80">
                   Select Subscriptions Interested In
                 </span>
-                <button
+                <Button
                   type="button"
                   onClick={() => setPickerOpen((v) => !v)}
                   className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card/85 px-4.5 py-2 text-xs font-bold text-foreground transition-all duration-200 hover:bg-accent/20 hover:border-primary/30"
                 >
                   <Plus className={`h-3.5 w-3.5 transition-transform duration-200 ${pickerOpen ? "rotate-45" : ""}`} />
                   {pickerOpen ? "Hide Directory" : "Browse Our List"}
-                </button>
+                </Button>
               </div>
 
               {/* Selected Tags list */}
@@ -171,14 +294,14 @@ export function WishlistSection() {
                       className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 border border-primary/20 px-3 py-1.5 text-xs font-semibold text-primary animate-in fade-in zoom-in-95 duration-200"
                     >
                       {p}
-                      <button
+                      <Button
                         type="button"
                         onClick={() => toggle(p)}
                         aria-label={`Remove ${p}`}
                         className="rounded-full p-0.5 transition hover:bg-primary/20"
                       >
                         <X className="h-3 w-3" />
-                      </button>
+                      </Button>
                     </span>
                   ))}
                 </div>
@@ -201,7 +324,7 @@ export function WishlistSection() {
                     {filtered.map((t) => {
                       const active = picked.includes(t.name);
                       return (
-                        <button
+                        <Button
                           key={t.name}
                           type="button"
                           onClick={() => toggle(t.name)}
@@ -216,7 +339,7 @@ export function WishlistSection() {
                           </span>
                           <span className="flex-1 truncate">{t.name}</span>
                           {active && <Check className="h-4 w-4 shrink-0 text-primary animate-in zoom-in-75 duration-200" />}
-                        </button>
+                        </Button>
                       );
                     })}
                     {filtered.length === 0 && (
@@ -254,20 +377,30 @@ export function WishlistSection() {
                 We will try our best to source these subscriptions at a discounted price.
               </p>
               <div className="flex w-full gap-3 sm:w-auto">
-                <button
+                <Button
                   type="button"
                   onClick={() => setOpen(false)}
                   className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border/60 bg-background px-5 py-3.5 text-sm font-bold text-foreground transition-all duration-200 hover:bg-accent/20 sm:flex-none"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
+                  disabled={loading}
                   className="inline-flex flex-1 items-center justify-center gap-2.5 rounded-full bg-primary px-6 py-3.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-200 sm:flex-none"
                 >
-                  <Send className="h-4 w-4" />
-                  Send Wishlist
-                </button>
+                  {loading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4" />
+                      Send Wishlist
+                    </>
+                  )}
+                </Button>
               </div>
             </div>
           </form>

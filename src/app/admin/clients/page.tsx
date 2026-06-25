@@ -74,6 +74,13 @@ interface UserItem {
   updatedAt: string;
 }
 
+interface EnquiryItem {
+  _id?: string;
+  subscription?: string;
+  createdAt: string;
+  message?: string;
+}
+
 interface Stats {
   totalUsers: number;
   activeUsers: number;
@@ -85,7 +92,6 @@ export default function AllClientsPage() {
   const [users, setUsers] = useState<UserItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [role, setRole] = useState("all");
   const [status, setStatus] = useState("all");
   const [type, setType] = useState("all"); // 'all' | 'referrer' | 'non-referrer'
   const [page, setPage] = useState(1);
@@ -96,6 +102,8 @@ export default function AllClientsPage() {
   const [currentUser, setCurrentUser] = useState<{ id: string; name?: string | null; email?: string | null; role?: string | null } | null>(null);
   const [updatingUser, setUpdatingUser] = useState(false);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [enquiries, setEnquiries] = useState<EnquiryItem[]>([]);
+  const [loadingDetails, setLoadingDetails] = useState(false);
 
   // Get current logged in user session on load to prevent self-action (e.g. self-delete or self-role-change)
   useEffect(() => {
@@ -116,7 +124,7 @@ export default function AllClientsPage() {
     setLoading(true);
     try {
       const res = await fetch(
-        `/api/admin/clients?role=${role}&status=${status}&type=${type}&search=${encodeURIComponent(search)}&page=${page}&limit=10`
+        `/api/admin/clients?status=${status}&type=${type}&search=${encodeURIComponent(search)}&page=${page}&limit=10`
       );
       const data = await res.json();
 
@@ -133,7 +141,7 @@ export default function AllClientsPage() {
     } finally {
       setLoading(false);
     }
-  }, [role, status, type, search, page]);
+  }, [status, type, search, page]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -221,9 +229,22 @@ export default function AllClientsPage() {
     }
   };
 
-  const openDetails = (user: UserItem) => {
+  const openDetails = async (user: UserItem) => {
     setSelectedUser(user);
+    setEnquiries([]);
     setIsDetailsOpen(true);
+    setLoadingDetails(true);
+    try {
+      const res = await fetch(`/api/admin/clients/${user._id}`);
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setEnquiries(data.enquiries || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch detailed profile information", err);
+    } finally {
+      setLoadingDetails(false);
+    }
   };
 
   const copyToClipboard = (text: string, type: string) => {
@@ -284,13 +305,13 @@ export default function AllClientsPage() {
             Monitor and administer system signups, referral links, and subscription tiers.
           </p>
         </div>
-        <button
+        <Button
           onClick={fetchUsers}
           className="inline-flex items-center gap-2 rounded-xl border border-border/15 bg-card/40 backdrop-blur-md px-4 py-2 text-sm font-medium text-foreground hover:bg-card/70 hover:-translate-y-0.5 active:scale-[0.98] transition-all cursor-pointer shadow-soft"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
           Refresh
-        </button>
+        </Button>
       </div>
 
       {/* KPI Stats Cards */}
@@ -343,20 +364,6 @@ export default function AllClientsPage() {
       {/* Filters and Search Control Block */}
       <div className="bg-card/30 backdrop-blur-xl border border-border/10 rounded-2xl p-4 shadow-elegant flex flex-col xl:flex-row xl:items-center justify-between gap-4 relative z-10">
         <div className="flex flex-wrap items-center gap-3">
-          {/* Role filter */}
-          <div className="flex flex-col gap-1">
-            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Role</label>
-            <select
-              value={role}
-              onChange={e => { setRole(e.target.value); setPage(1); }}
-              className="bg-soft/40 border border-border/10 rounded-lg px-3 py-1.5 text-xs text-foreground focus:outline-none focus:border-brand/40"
-            >
-              <option value="all">All Roles</option>
-              <option value="customer">Customer Only</option>
-              <option value="admin">Admin Only</option>
-            </select>
-          </div>
-
           {/* Status filter */}
           <div className="flex flex-col gap-1">
             <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Status</label>
@@ -424,7 +431,6 @@ export default function AllClientsPage() {
               <thead>
                 <tr className="border-b border-border/10 bg-soft/20 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   <th className="px-6 py-4">Client Info</th>
-                  <th className="px-6 py-4">Role</th>
                   <th className="px-6 py-4">Status</th>
                   <th className="px-6 py-4">Referral Code</th>
                   <th className="px-6 py-4">Joined At</th>
@@ -455,11 +461,6 @@ export default function AllClientsPage() {
                       </div>
                     </td>
                     
-                    {/* Role */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {renderRoleBadge(user.role)}
-                    </td>
-
                     {/* Status */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       {renderStatusBadge(user.status)}
@@ -468,7 +469,7 @@ export default function AllClientsPage() {
                     {/* Referral Code */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       {user.referralCode ? (
-                        <button
+                        <Button
                           onClick={() => copyToClipboard(user.referralCode || "", "Referral Code")}
                           className="px-2 py-1 text-xs rounded border border-border/10 bg-soft/20 text-foreground hover:bg-soft/50 font-mono transition-all inline-flex items-center gap-1 text-[11px]"
                         >
@@ -476,7 +477,7 @@ export default function AllClientsPage() {
                           <span className="text-[9px] text-muted-foreground opacity-60">
                             {copiedCode === user.referralCode ? "Copied!" : "Copy"}
                           </span>
-                        </button>
+                        </Button>
                       ) : (
                         <span className="text-xs text-muted-foreground/40 italic">Not set</span>
                       )}
@@ -490,12 +491,12 @@ export default function AllClientsPage() {
                     {/* Actions */}
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <div className="flex gap-2 justify-end">
-                        <button
+                        <Button
                           onClick={() => openDetails(user)}
                           className="inline-flex items-center gap-1 rounded-lg border border-border/15 bg-card/40 backdrop-blur-md px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-card/70 transition-all cursor-pointer"
                         >
                           <Eye className="h-3.5 w-3.5" /> Details
-                        </button>
+                        </Button>
                         <Button
                           disabled={currentUser?.id === user._id}
                           onClick={() => handleDeleteUser(user._id)}
@@ -520,20 +521,20 @@ export default function AllClientsPage() {
               Page {page} of {totalPages}
             </span>
             <div className="flex gap-2">
-              <button
+              <Button
                 disabled={page === 1}
                 onClick={() => setPage(p => Math.max(1, p - 1))}
                 className="px-3 py-1.5 rounded-lg border border-border/15 text-xs text-foreground bg-soft/10 hover:bg-soft/30 disabled:opacity-40 disabled:pointer-events-none cursor-pointer transition-all"
               >
                 Previous
-              </button>
-              <button
+              </Button>
+              <Button
                 disabled={page === totalPages}
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                 className="px-3 py-1.5 rounded-lg border border-border/15 text-xs text-foreground bg-soft/10 hover:bg-soft/30 disabled:opacity-40 disabled:pointer-events-none cursor-pointer transition-all"
               >
                 Next
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -594,12 +595,12 @@ export default function AllClientsPage() {
                       <KeyRound className="h-4 w-4 opacity-75 shrink-0 text-brand" />
                       <span>Referral Link Code: {selectedUser.referralCode ? (
                         <>
-                          <button
+                          <Button
                             onClick={() => copyToClipboard(selectedUser.referralCode || "", "Referral Code")}
                             className="font-mono text-foreground underline hover:text-brand cursor-pointer pl-1"
                           >
                             {selectedUser.referralCode}
-                          </button>
+                          </Button>
                           {copiedCode === selectedUser.referralCode && (
                             <span className="text-[10px] text-emerald-400 font-medium ml-2">Copied!</span>
                           )}
@@ -640,7 +641,7 @@ export default function AllClientsPage() {
                     </div>
                     <div className="flex gap-1.5">
                       {['customer', 'admin'].map(r => (
-                        <button
+                        <Button
                           key={r}
                           disabled={updatingUser}
                           onClick={() => handleUpdateUser(selectedUser._id, { role: r as 'customer' | 'admin' })}
@@ -651,7 +652,7 @@ export default function AllClientsPage() {
                           }`}
                         >
                           {r}
-                        </button>
+                        </Button>
                       ))}
                     </div>
                   </div>
@@ -663,7 +664,7 @@ export default function AllClientsPage() {
                     </div>
                     <div className="flex gap-1.5">
                       {['active', 'inactive', 'suspended'].map(s => (
-                        <button
+                        <Button
                           key={s}
                           disabled={updatingUser}
                           onClick={() => handleUpdateUser(selectedUser._id, { status: s as 'active' | 'inactive' | 'suspended' })}
@@ -676,12 +677,52 @@ export default function AllClientsPage() {
                           }`}
                         >
                           {s}
-                        </button>
+                        </Button>
                       ))}
                     </div>
                   </div>
                 </div>
               )}
+
+              {/* Wishlist Submissions / Enquiries */}
+              <div>
+                <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2.5 flex items-center gap-1.5">
+                  <Activity className="h-4 w-4 text-brand" />
+                  Wishlist Subscriptions Interested In ({enquiries.length})
+                </h5>
+                <div className="bg-soft/10 border border-border/5 rounded-2xl p-4 space-y-3">
+                  {loadingDetails ? (
+                    <div className="flex items-center justify-center py-4 gap-2 text-xs text-muted-foreground">
+                      <Loader2 className="h-4 w-4 animate-spin text-brand animate-pulse" />
+                      <span>Loading wishlist entries...</span>
+                    </div>
+                  ) : enquiries.length === 0 ? (
+                    <div className="text-center text-xs text-muted-foreground italic py-2">
+                      No subscription wishlist entries submitted yet.
+                    </div>
+                  ) : (
+                    <div className="space-y-3 max-h-[200px] overflow-y-auto pr-1">
+                      {enquiries.map((enq, idx) => (
+                        <div key={enq._id || idx} className="border-b border-border/5 pb-2.5 last:border-b-0 last:pb-0">
+                          <div className="flex justify-between items-start gap-2">
+                            <span className="font-semibold text-xs text-foreground bg-brand/10 text-brand px-2 py-0.5 rounded-full">
+                              {enq.subscription || "Custom Subscription"}
+                            </span>
+                            <span className="text-[10px] text-muted-foreground font-mono">
+                              {formatDate(enq.createdAt)}
+                            </span>
+                          </div>
+                          {enq.message && (
+                            <p className="text-xs text-muted-foreground mt-1.5 bg-background/40 p-2 rounded-lg italic">
+                              &ldquo;{enq.message}&rdquo;
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
 
               {/* Active / Past Subscriptions */}
               <div>
@@ -785,22 +826,22 @@ export default function AllClientsPage() {
               <div className="flex gap-2 justify-between border-t border-border/10 pt-4 mt-2">
                 <div>
                   {(!currentUser || currentUser.id !== selectedUser._id) && (
-                    <button
+                    <Button
                       type="button"
                       onClick={() => handleDeleteUser(selectedUser._id)}
                       className="inline-flex items-center gap-1.5 rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-2.5 text-xs font-semibold text-destructive shadow-sm hover:bg-destructive/25 transition-colors cursor-pointer"
                     >
                       <Trash2 className="h-4 w-4" /> Delete Account Profile
-                    </button>
+                    </Button>
                   )}
                 </div>
-                <button
+                <Button
                   type="button"
                   onClick={() => setIsDetailsOpen(false)}
                   className="inline-flex items-center gap-1.5 rounded-xl border border-border/15 bg-card/40 backdrop-blur-md px-5 py-2.5 text-xs font-semibold text-foreground hover:bg-card/70 transition-all cursor-pointer"
                 >
                   Close Profile
-                </button>
+                </Button>
               </div>
             </div>
           )}
