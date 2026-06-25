@@ -3,10 +3,13 @@ import dns from 'dns'
 import { DB_NAME } from './contant'
 
 // Fallback to public DNS servers to resolve MongoDB SRV records when the local DNS fails/refuses SRV queries
-try {
-  dns.setServers(['8.8.8.8', '1.1.1.1'])
-} catch (e) {
-  console.warn('⚠️ Failed to set custom DNS servers for MongoDB connection:', e)
+// Only apply this in development, as Vercel/Serverless environments may block external DNS (port 53), causing the connection to hang
+if (process.env.NODE_ENV !== 'production') {
+  try {
+    dns.setServers(['8.8.8.8', '1.1.1.1'])
+  } catch (e) {
+    console.warn('⚠️ Failed to set custom DNS servers for MongoDB connection:', e)
+  }
 }
 
 const MONGODB_URI = process.env.MONGODB_URI
