@@ -14,6 +14,8 @@ import {
   ToggleRight, 
   Plus, 
   Loader2, 
+  Coins,
+  Clipboard,
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";

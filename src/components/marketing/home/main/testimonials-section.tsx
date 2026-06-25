@@ -12,6 +12,7 @@ import chetaliChat1 from "@/assets/testimonials/chetali/chetali-1.png";
 import chetaliChat2 from "@/assets/testimonials/chetali/chetali-2.png";
 import chetaliChat3 from "@/assets/testimonials/chetali/chetali-3.png";
 import { TestimonialCard } from "./testimonial-card";
+import { MessageSquare } from "lucide-react";
 
 const TESTIMONIALS = [
   {
@@ -49,20 +50,29 @@ const TESTIMONIALS = [
 
 export function TestimonialsSection() {
   return (
-    <section id="testimonials" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-      <div className="text-center">
-        <p className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-primary sm:text-sm">
-          Loved by 850+
-        </p>
-        <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          What Our <span className="text-primary">Customers Say</span>
-        </h2>
-        <p className="mt-3 text-sm text-muted-foreground sm:text-base">Real customers. Real savings. Verified on WhatsApp.</p>
-      </div>
-      <div className="mt-12 grid gap-6 md:grid-cols-3">
-        {TESTIMONIALS.map((t) => (
-          <TestimonialCard key={t.name} testimonial={t} />
-        ))}
+    <section id="testimonials" className="relative overflow-hidden py-24 sm:py-28 bg-background">
+      {/* Background decorations */}
+      <div className="absolute right-10 bottom-10 h-72 w-72 rounded-full bg-emerald-500/5 blur-3xl opacity-40" />
+      <div className="absolute left-10 top-10 h-72 w-72 rounded-full bg-primary/5 blur-3xl opacity-40" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto">
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary backdrop-blur">
+            <MessageSquare className="h-3.5 w-3.5" /> Loved by 850+ Professionals
+          </span>
+          <h2 className="mt-5 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            What Our <span className="bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent">Customers Say</span>
+          </h2>
+          <p className="mt-4 text-base text-muted-foreground sm:text-lg">
+            Real customers. Real savings. Authenticity verified directly through WhatsApp chats.
+          </p>
+        </div>
+
+        <div className="mt-16 grid gap-8 md:grid-cols-3">
+          {TESTIMONIALS.map((t) => (
+            <TestimonialCard key={t.name} testimonial={t} />
+          ))}
+        </div>
       </div>
     </section>
   );

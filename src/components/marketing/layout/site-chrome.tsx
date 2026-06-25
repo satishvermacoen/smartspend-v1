@@ -47,9 +47,9 @@ export function SiteHeader() {
         <nav className="hidden items-center gap-6 text-sm font-medium text-muted-foreground lg:flex">
           <Link href="/" className="hover:text-primary transition-colors">Home</Link>
           <Link href="/tools" className="hover:text-primary transition-colors">Subscriptions</Link>
-          <Link href="/#how-it-works" className="hover:text-primary transition-colors">How It Works</Link>
-          <Link href="/#referral" className="hover:text-primary transition-colors">Referral Program</Link>
-          <Link href="/#about" className="hover:text-primary transition-colors">About Us</Link>
+          <Link href="/how-it-works" className="hover:text-primary transition-colors">How It Works</Link>
+          <Link href="/referral" className="hover:text-primary transition-colors">Referral Program</Link>
+          <Link href="/about" className="hover:text-primary transition-colors">About Us</Link>
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
@@ -113,9 +113,9 @@ export function SiteHeader() {
                   <nav className="flex flex-col gap-4 text-base font-medium">
                     <Link href="/" className="hover:text-primary transition-colors py-1">Home</Link>
                     <Link href="/tools" className="hover:text-primary transition-colors py-1">Subscriptions</Link>
-                    <Link href="/#how-it-works" className="hover:text-primary transition-colors py-1">How It Works</Link>
-                    <Link href="/#referral" className="hover:text-primary transition-colors py-1">Referral Program</Link>
-                    <Link href="/#about" className="hover:text-primary transition-colors py-1">About Us</Link>
+                    <Link href="/how-it-works" className="hover:text-primary transition-colors py-1">How It Works</Link>
+                    <Link href="/referral" className="hover:text-primary transition-colors py-1">Referral Program</Link>
+                    <Link href="/about" className="hover:text-primary transition-colors py-1">About Us</Link>
                   </nav>
                 </div>
                 <div className="flex flex-col gap-3 border-t border-border/40 pt-6">
@@ -244,10 +244,10 @@ export function SiteFooter() {
               <h3 className="text-xs font-bold uppercase tracking-[0.18em] text-primary border-b border-border/10 pb-2 mb-4">Quick Links</h3>
               <ul className="space-y-3">
                 <li><Link href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">Home</Link></li>
-                <li><Link href="/#about" className="text-sm text-muted-foreground hover:text-primary transition-colors">About Us</Link></li>
+                <li><Link href="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">About Us</Link></li>
                 <li><Link href="/tools" className="text-sm text-muted-foreground hover:text-primary transition-colors">Subscriptions</Link></li>
-                <li><Link href="/#how-it-works" className="text-sm text-muted-foreground hover:text-primary transition-colors">How It Works</Link></li>
-                <li><Link href="/#referral" className="text-sm text-muted-foreground hover:text-primary transition-colors">Referral Program</Link></li>
+                <li><Link href="/how-it-works" className="text-sm text-muted-foreground hover:text-primary transition-colors">How It Works</Link></li>
+                <li><Link href="/referral" className="text-sm text-muted-foreground hover:text-primary transition-colors">Referral Program</Link></li>
                 <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link></li>
               </ul>
             </div>

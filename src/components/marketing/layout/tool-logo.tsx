@@ -52,6 +52,7 @@ export function ToolLogo({
         loading={tool.logo ? "eager" : "lazy"}
         className="block h-full w-full object-contain object-center"
         onError={() => setFailed(true)}
+        unoptimized
       />
     </div>
   );
