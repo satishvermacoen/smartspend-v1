@@ -88,7 +88,6 @@ function LoginForm() {
         } else {
           router.push(targetUrl);
         }
-        router.refresh();
       }
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : 'An unexpected error occurred.';
