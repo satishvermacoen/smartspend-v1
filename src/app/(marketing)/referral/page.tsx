@@ -1,4 +1,4 @@
-import { Share2, Wallet, Gift, Tag, Infinity as InfinityIcon, Check } from "lucide-react";
+import { Share2, Wallet, Gift, Tag, Infinity as InfinityIcon, Check, ShieldCheck } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/marketing/layout/site-chrome";
 import { ReferralForm } from "@/components/marketing/home/referral-form";
 import { Metadata } from "next";
@@ -115,19 +115,41 @@ export default function ReferralPage() {
             </div>
           </div>
 
-          {/* Referral bonus */}
-          <div className="mt-8 group relative overflow-hidden rounded-3xl border border-border/80 bg-gradient-to-br from-card to-card/50 p-6 shadow-elegant transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-brand/20 sm:flex-row sm:items-center sm:p-8">
-            <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-brand to-gold opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <div className="relative flex flex-col sm:flex-row items-start gap-4">
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-brand/20 bg-brand/10 text-brand transition-all duration-300 group-hover:scale-105">
-                <Tag className="h-6 w-6" />
+          {/* Referral bonus & Performance tracking */}
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {/* Referral bonus */}
+            <div className="group relative overflow-hidden rounded-3xl border border-border/80 bg-gradient-to-br from-card to-card/50 p-6 shadow-elegant transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-brand/20">
+              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-brand to-gold opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="relative flex flex-col sm:flex-row items-start gap-4">
+                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-brand/20 bg-brand/10 text-brand transition-all duration-300 group-hover:scale-105">
+                  <Tag className="h-6 w-6" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-display text-xl font-bold text-foreground">Bonus for Your Referral</h3>
+                  <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+                    Your referral receives an additional <strong className="text-foreground">₹500 OFF</strong> on
+                    their purchase when they join through your unique referral link.
+                  </p>
+                </div>
               </div>
-              <div className="flex-1">
-                <h3 className="font-display text-xl font-bold text-foreground">Bonus for Your Referral</h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Your referral receives an additional <strong className="text-foreground">₹500 OFF</strong> on
-                  their purchase when they join through your unique referral link.
-                </p>
+            </div>
+
+            {/* Real-Time Performance Tracking */}
+            <div className="group relative overflow-hidden rounded-3xl border border-border/80 bg-gradient-to-br from-card to-card/50 p-6 shadow-elegant transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-brand/20">
+              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-brand to-gold opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="relative flex flex-col sm:flex-row items-start gap-4">
+                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-brand/20 bg-brand/10 text-brand transition-all duration-300 group-hover:scale-105">
+                  <ShieldCheck className="h-6 w-6" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-display text-xl font-bold text-foreground">Real-Time Performance Tracking</h3>
+                  <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+                    All referral commissions are tracked transparently through your{" "}
+                    <strong className="text-foreground">unique referral link</strong>. Every registered
+                    referrer receives a personalized tracking link, allowing you to monitor referrals
+                    and earnings in real time.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
