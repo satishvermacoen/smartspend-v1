@@ -74,9 +74,9 @@ export function TopDemandSection() {
       </div>
  
       <div className="mt-12 text-center">
-        <div className="inline-flex items-center gap-4 rounded-lg border border-primary/30 bg-primary/5 px-6 py-4 shadow-sm">
-          <BadgePercent className="h-8 w-8 text-primary sm:h-10 sm:w-10" />
-          <span className="font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
+        <div className="inline-flex flex-col sm:flex-row items-center gap-3 sm:gap-4 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 sm:px-6 sm:py-4 shadow-sm max-w-full">
+          <BadgePercent className="h-8 w-8 text-primary shrink-0 sm:h-10 sm:w-10" />
+          <span className="font-display text-lg font-extrabold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
             Minimum <span className="text-primary">50% Savings</span> — Guaranteed
           </span>
         </div>

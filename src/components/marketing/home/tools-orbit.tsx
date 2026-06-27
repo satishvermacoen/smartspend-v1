@@ -70,7 +70,7 @@ function Ring({
                   <div className="absolute inset-0 rounded-full bg-primary opacity-0 transition group-hover:opacity-[0.06]" />
                   <ToolLogo tool={t} className="h-7 w-7 sm:h-10 sm:w-10" />
                 </div>
-                <span className="max-w-[96px] whitespace-nowrap text-center text-[9px] font-semibold leading-tight text-muted-foreground sm:max-w-[120px] sm:text-[11px]">
+                <span className="hidden sm:block max-w-[96px] whitespace-nowrap text-center text-[9px] font-semibold leading-tight text-muted-foreground sm:max-w-[120px] sm:text-[11px]">
                   {t.name}
                 </span>
               </div>
