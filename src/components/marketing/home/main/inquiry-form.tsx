@@ -1,10 +1,11 @@
 "use client";
  
 import { useState } from "react";
-import { Send, Loader2, AlertCircle, User, Phone, MessageSquare, ChevronDown, Tag, Check } from "lucide-react";
+import { Send, Loader2, AlertCircle, User, Phone, MessageSquare, ChevronDown, Tag, Check, KeyRound, ExternalLink } from "lucide-react";
 import { ALL_TOOLS } from "@/data/tools";
 import { ToolLogo } from "@/components/marketing/layout/tool-logo";
 import { toast } from "sonner";
+import Link from "next/link";
  
 // Deduplicate tool names and filter out invalid values
 const uniqueTools = Array.from(
@@ -119,6 +120,7 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
   const [mobileError, setMobileError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [loginCredentials, setLoginCredentials] = useState<{username: string, email: string, password: string} | null>(null);
  
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -204,6 +206,9 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
       }
  
       toast.success("Enquiry saved successfully!");
+      if (data.loginCredentials) {
+        setLoginCredentials(data.loginCredentials);
+      }
       setSubmitted(true);
       if (onSuccess) {
         onSuccess();
@@ -227,14 +232,55 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
  
   if (submitted) {
     return (
-      <div className="border border-emerald-500/20 bg-emerald-500/5 backdrop-blur-md rounded-2xl p-6 text-center space-y-4 animate-in fade-in zoom-in-95 duration-300">
-        <div className="inline-flex h-12 w-12 rounded-full bg-emerald-500/20 text-emerald-400 items-center justify-center shadow-soft">
-          <Check className="h-6 w-6" />
+      <div className="border border-emerald-500/20 bg-emerald-500/5 backdrop-blur-md rounded-2xl p-6 space-y-6 animate-in fade-in zoom-in-95 duration-300">
+        <div className="text-center space-y-4">
+          <div className="inline-flex h-12 w-12 rounded-full bg-emerald-500/20 text-emerald-400 items-center justify-center shadow-soft mx-auto">
+            <Check className="h-6 w-6" />
+          </div>
+          <h3 className="font-display font-extrabold text-lg text-foreground">Submitted Successfully!</h3>
+          <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+            Thank you for reaching out. Our team will contact you shortly.
+          </p>
         </div>
-        <h3 className="font-display font-extrabold text-lg text-foreground">Submitted Successfully!</h3>
-        <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-          Thank you for reaching out. Our team will contact you shortly.
-        </p>
+
+        {loginCredentials && (
+          <>
+            <div className="border border-border bg-card/60 rounded-xl p-4 space-y-3.5 mt-4">
+              <div className="flex items-center gap-2 font-bold text-xs text-muted-foreground uppercase tracking-wider">
+                <KeyRound className="h-4 w-4 text-brand" /> Login Profile Created
+              </div>
+              <p className="text-xs text-muted-foreground">Log in with either your Mobile number or Email using these credentials:</p>
+              <div className="grid gap-2 text-xs sm:grid-cols-2">
+                <div>
+                  <span className="text-muted-foreground block">Mobile / Username</span>
+                  <span className="font-mono font-bold text-foreground">{loginCredentials.username}</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground block">Default Password</span>
+                  <span className="font-mono font-bold text-foreground">{loginCredentials.password}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <button
+                onClick={() => {
+                  const text = `Hey! Check out SpentSmart to manage and optimize your premium subscriptions.`;
+                  window.open(`https://wa.me/${loginCredentials.username}?text=${encodeURIComponent(text)}`, "_blank");
+                }}
+                className="flex-1 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-brand hover:bg-brand/90 text-white font-bold text-sm shadow-soft transition-all cursor-pointer"
+              >
+                <MessageSquare className="h-4.5 w-4.5" /> Share on WhatsApp
+              </button>
+              <Link
+                href="/login"
+                className="flex-1 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-card border border-border hover:bg-soft text-foreground font-bold text-sm shadow-soft transition-all"
+              >
+                Log in to Dashboard <ExternalLink className="h-4 w-4" />
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     );
   }

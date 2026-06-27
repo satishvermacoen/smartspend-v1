@@ -101,7 +101,7 @@ const LoginHistorySchema = new Schema<ILoginHistory>({
 });
 
 const UserSchema = new Schema<IUser, IUserModel>({
-  email: { type: String, required: true, unique: true, lowercase: true, trim: true, index: true },
+  email: { type: String, unique: true, sparse: true, lowercase: true, trim: true, index: true },
   password: { type: String, required: true, select: false },
   firstName: { type: String, trim: true },
   lastName: { type: String, trim: true },
@@ -140,7 +140,7 @@ UserSchema.pre('save', async function(this: IUser) {
 
 // Virtuals
 UserSchema.virtual('fullName').get(function(this: IUser) {
-  return `${this.firstName || ''} ${this.lastName || ''}`.trim() || this.email;
+  return `${this.firstName || ''} ${this.lastName || ''}`.trim() || this.email || this.phone || 'User';
 });
 
 UserSchema.virtual('isLocked').get(function(this: IUser) {
@@ -212,10 +212,12 @@ UserSchema.methods.addLoginHistory = function(this: IUser, ip: string, userAgent
 };
 
 UserSchema.methods.generateReferralCode = function(this: IUser): string {
-  // Generate base code from name or email prefix, e.g. FIRSTL1234
-  const prefix = ((this.firstName || '') + (this.lastName || '')).replace(/[^a-zA-Z]/g, '').substring(0, 5).toUpperCase() || 'REF';
-  const randomNum = Math.floor(1000 + Math.random() * 9000);
-  return `${prefix}${randomNum}`;
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = 'REF';
+  for (let i = 0; i < 5; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
 };
 
 UserSchema.methods.addSubscription = function(this: IUser, subscriptionData: Partial<ISubscription>): void {

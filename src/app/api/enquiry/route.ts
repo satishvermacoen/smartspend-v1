@@ -3,7 +3,7 @@ import connectDB from '@/lib/mongodb';
 import Enquiry from '@/features/shared/model/enquiry';
 import ReferralCode from '@/features/shared/model/referral-code';
 import ReferralConversion from '@/features/shared/model/referral-conversion';
-import User from '@/features/shared/model/user';
+import User, { IUser } from '@/features/shared/model/user';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
 
@@ -34,6 +34,53 @@ export async function POST(req: Request) {
 
     // Connect to database
     await connectDB();
+
+    const cleanPhone = mobile.trim();
+    const cleanEmail = email ? email.toLowerCase().trim() : '';
+
+    const queryConditions: Array<{ phone: string } | { email: string }> = [{ phone: cleanPhone }];
+    if (cleanEmail) {
+      queryConditions.push({ email: cleanEmail });
+    }
+
+    const existingUser = await User.findOne({
+      $or: queryConditions
+    });
+
+    let newCredentials = null;
+
+    if (!existingUser) {
+      const nameParts = name.trim().split(/\s+/);
+      const firstName = nameParts[0] || 'Client';
+      const lastName = nameParts.slice(1).join(' ') || '.';
+
+      const rawNumberDigits = cleanPhone.replace(/\D/g, '') || '123456';
+      const defaultPassword = `Welcome@${rawNumberDigits}`;
+
+      const userPayload: Partial<IUser> = {
+        firstName,
+        lastName,
+        phone: cleanPhone,
+        password: defaultPassword,
+        role: 'customer',
+        status: 'active',
+        emailVerified: true
+      };
+      
+      if (cleanEmail) {
+        userPayload.email = cleanEmail;
+      }
+
+      const user = new User(userPayload);
+
+      await user.save();
+
+      newCredentials = {
+        username: cleanPhone,
+        email: cleanEmail || '',
+        password: defaultPassword
+      };
+    }
 
     // Check for referral cookie to attribute this lead/enquiry
     let appliedCode = '';
@@ -131,7 +178,8 @@ export async function POST(req: Request) {
       { 
         success: true, 
         message: 'Enquiry submitted successfully.', 
-        enquiryId: enquiry._id 
+        enquiryId: enquiry._id,
+        loginCredentials: newCredentials
       },
       { status: 201 }
     );
