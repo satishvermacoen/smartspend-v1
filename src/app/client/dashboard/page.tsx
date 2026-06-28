@@ -15,7 +15,11 @@ import {
   Inbox,
   UserCheck,
   CheckCircle2,
-  DollarSign
+  DollarSign,
+  TrendingUp,
+  AlertTriangle,
+  Activity,
+  Info
 } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -60,11 +64,53 @@ interface DashboardData {
     daysRemaining: number;
     walletBalance: number;
     referredCount: number;
+    referralClicks: number;
+    referralSignups: number;
+    referralPurchases: number;
   };
   activeSubscription: SubscriptionItem | null;
   conversions: ConversionItem[];
   billingHistory: SubscriptionItem[];
 }
+
+const getReferralRecommendation = (clicks: number, signups: number, purchases: number) => {
+  const clickToSignupRate = clicks > 0 ? (signups / clicks) * 100 : 0;
+  const signupToPurchaseRate = signups > 0 ? (purchases / signups) * 100 : 0;
+
+  if (clicks === 0) {
+    return {
+      title: "Launch Your Campaign 🚀",
+      insight: "Your referral links haven't received any clicks yet. Let's generate some traffic!",
+      advice: "Share your referral code/link on LinkedIn or in active chat communities. Explicitly mentioning the ₹500 discount is a great hook for first clicks!",
+      type: "info"
+    };
+  }
+
+  if (clickToSignupRate < 20) {
+    return {
+      title: "Optimize Signup Conv. Rate ✍️",
+      insight: `Your link is getting clicks, but only ${Math.round(clickToSignupRate)}% are registering (Target: 20%+).`,
+      advice: "Highlight the ₹500 discount clearly! Personal messages explaining the value of SpentSmart convert visitors to signups 3x better than simple links.",
+      type: "warning"
+    };
+  }
+
+  if (signups > 0 && signupToPurchaseRate < 30) {
+    return {
+      title: "Boost Premium Upgrades 💳",
+      insight: `You have signed-up prospects, but only ${Math.round(signupToPurchaseRate)}% upgraded to paid subscriptions (Target: 30%+).`,
+      advice: "Send a friendly nudge to your signups! Remind them that upgrading unlocks the full tracking platform and redeems their ₹500 coupon.",
+      type: "warning"
+    };
+  }
+
+  return {
+    title: "Top Performer Funnel ⭐",
+    insight: `Your funnel is highly optimized! Click-to-Signup: ${Math.round(clickToSignupRate)}% | Signup-to-Purchase: ${Math.round(signupToPurchaseRate)}%.`,
+    advice: "Keep sharing! Post screenshots of your dashboard savings on Twitter, or share your link in newsletter community segments to scale up.",
+    type: "success"
+  };
+};
 
 export default function ClientDashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
@@ -376,28 +422,114 @@ export default function ClientDashboardPage() {
           </div>
 
           {/* Referral Checklist progress tracker */}
-          <div className="bg-card/30 backdrop-blur-xl border border-border/10 rounded-3xl p-5 shadow-elegant space-y-4">
+          <div className="bg-card/30 backdrop-blur-xl border border-border/10 rounded-3xl p-6 shadow-elegant space-y-6">
             <div className="flex justify-between items-center border-b border-border/10 pb-3">
-              <h4 className="text-sm font-bold text-foreground flex items-center gap-1.5"><UserCheck className="h-4 w-4 text-purple-400" /> Referred Friends</h4>
+              <h4 className="text-sm font-bold text-foreground flex items-center gap-1.5"><Activity className="h-4 w-4 text-brand" /> Referral Hub</h4>
               <Link href="/client/referral" className="text-[10px] text-brand hover:underline flex items-center gap-0.5">Rewards Portal <ArrowRight className="h-3 w-3" /></Link>
             </div>
 
-            <div className="space-y-4 max-h-[250px] overflow-y-auto">
-              {data.conversions.length === 0 ? (
-                <div className="text-center text-xs text-muted-foreground py-10 italic">No referred signups yet. Share your link to get started!</div>
-              ) : (
-                data.conversions.map((conv) => (
-                  <div key={conv._id} className="flex justify-between items-start text-xs border-b border-border/5 pb-3.5 last:border-0 last:pb-0">
-                    <div className="space-y-0.5 min-w-0">
-                      <span className="font-semibold text-foreground truncate block">{conv.prospect_email}</span>
-                      <span className="text-[9px] text-muted-foreground block font-mono">Invited on {formatDate(conv.createdAt)}</span>
+            {/* Visual Funnel analytics */}
+            {(() => {
+              const clicks = data.stats.referralClicks || 0;
+              const signups = data.stats.referralSignups || 0;
+              const purchases = data.stats.referralPurchases || 0;
+              
+              const clickToSignupRate = clicks > 0 ? Math.round((signups / clicks) * 100) : 0;
+              const signupToPurchaseRate = signups > 0 ? Math.round((purchases / signups) * 100) : 0;
+
+              const rec = getReferralRecommendation(clicks, signups, purchases);
+
+              return (
+                <div className="space-y-6">
+                  {/* Funnel chart */}
+                  <div className="space-y-3.5">
+                    <h5 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Conversion Funnel</h5>
+                    
+                    {/* Click Stage */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-muted-foreground flex items-center gap-1">🔗 Total Link Clicks</span>
+                        <span className="font-semibold text-foreground">{clicks} Clicks</span>
+                      </div>
+                      <div className="h-1.5 w-full bg-soft/20 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500 rounded-full" style={{ width: clicks > 0 ? '100%' : '0%' }} />
+                      </div>
                     </div>
-                    <div className="shrink-0 pl-2">
-                      {renderStageBadge(conv.conversion_stage)}
+
+                    {/* Signup Stage */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-muted-foreground flex items-center gap-1">👤 Registered Accounts</span>
+                        <span className="font-semibold text-foreground">
+                          {signups} Signups <span className="text-[10px] text-muted-foreground font-normal">({clickToSignupRate}% conv.)</span>
+                        </span>
+                      </div>
+                      <div className="h-1.5 w-full bg-soft/20 rounded-full overflow-hidden">
+                        <div className="h-full bg-amber-500 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, clickToSignupRate)}%` }} />
+                      </div>
+                    </div>
+
+                    {/* Purchase Stage */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-muted-foreground flex items-center gap-1">🎉 Sales Earned</span>
+                        <span className="font-semibold text-foreground">
+                          {purchases} Upgrades <span className="text-[10px] text-muted-foreground font-normal">({signupToPurchaseRate}% conv.)</span>
+                        </span>
+                      </div>
+                      <div className="h-1.5 w-full bg-soft/20 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, signupToPurchaseRate)}%` }} />
+                      </div>
                     </div>
                   </div>
-                ))
-              )}
+
+                  {/* Smart dynamic recommendations (What to Improve) */}
+                  <div className={`border rounded-2xl p-4 space-y-2.5 transition-all ${
+                    rec.type === 'success' 
+                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' 
+                      : rec.type === 'warning'
+                      ? 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                      : 'bg-blue-500/10 border-blue-500/20 text-blue-400'
+                  }`}>
+                    <div className="flex items-start gap-2">
+                      {rec.type === 'success' && <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />}
+                      {rec.type === 'warning' && <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />}
+                      {rec.type === 'info' && <Info className="h-4 w-4 shrink-0 mt-0.5" />}
+                      <div className="space-y-1">
+                        <h6 className="font-bold text-xs text-foreground uppercase tracking-wider">{rec.title}</h6>
+                        <p className="text-xs text-foreground font-medium leading-relaxed">{rec.insight}</p>
+                      </div>
+                    </div>
+                    <div className="text-[11px] text-muted-foreground border-t border-border/10 pt-2 leading-relaxed">
+                      <strong className="text-foreground">What to improve: </strong>{rec.advice}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Referred Friends Checklist */}
+            <div className="space-y-3 pt-3 border-t border-border/10">
+              <h5 className="text-xs font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+                <UserCheck className="h-3.5 w-3.5" /> Recent Invites
+              </h5>
+              <div className="space-y-3.5 max-h-[200px] overflow-y-auto pr-1">
+                {data.conversions.length === 0 ? (
+                  <div className="text-center text-xs text-muted-foreground py-6 italic">No referred signups yet.</div>
+                ) : (
+                  data.conversions.map((conv) => (
+                    <div key={conv._id} className="flex justify-between items-start text-xs border-b border-border/5 pb-3 last:border-0 last:pb-0">
+                      <div className="space-y-0.5 min-w-0">
+                        <span className="font-semibold text-foreground truncate block">{conv.prospect_email}</span>
+                        <span className="text-[9px] text-muted-foreground block font-mono">Invited: {formatDate(conv.createdAt)}</span>
+                      </div>
+                      <div className="shrink-0 pl-2">
+                        {renderStageBadge(conv.conversion_stage)}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         </div>

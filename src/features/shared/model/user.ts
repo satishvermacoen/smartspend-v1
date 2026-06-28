@@ -126,7 +126,7 @@ const UserSchema = new Schema<IUser, IUserModel>({
     referrerId: { type: Schema.Types.ObjectId, ref: 'User' },
     referrerEmail: { type: String }
   },
-  source: { type: String, enum: ['referral', 'website_enquiry', 'admin'], default: 'website_enquiry' },
+  source: { type: String, default: 'website_enquiry' },
   isDeleted: { type: Boolean, default: false },
   accountBalance: { type: Number, default: 0 },
   subscriptions: [SubscriptionSchema],

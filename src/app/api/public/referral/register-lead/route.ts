@@ -57,6 +57,7 @@ export async function POST(req: Request) {
     let appliedCode = '';
     let referredByObj = undefined;
     let validCodeDoc = null;
+    let referrerName = undefined;
 
     try {
       const cookieStore = await cookies();
@@ -79,6 +80,7 @@ export async function POST(req: Request) {
               referrerId: referrerUser._id,
               referrerEmail: referrerUser.email
             };
+            referrerName = [referrerUser.firstName, referrerUser.lastName].filter(Boolean).join(' ').trim();
           }
         }
       }
@@ -95,12 +97,15 @@ export async function POST(req: Request) {
       role: 'customer',
       status: 'active', // active immediately for direct login access
       emailVerified: true, // Bypass verification since phone/WhatsApp validation handles it
-      referredBy: referredByObj
+      referredBy: referredByObj,
+      source: referrerName || 'website_enquiry'
     };
-    
-    if (cleanEmail) {
-      userPayload.email = cleanEmail;
+    let finalEmail = cleanEmail;
+    if (!finalEmail) {
+      const sanitizedPhoneNum = cleanPhone.replace(/\D/g, '') || Math.floor(Math.random() * 10000000).toString();
+      finalEmail = `${sanitizedPhoneNum}@spentsmart.local`;
     }
+    userPayload.email = finalEmail;
     
     const user = new User(userPayload);
 
@@ -212,7 +217,7 @@ export async function POST(req: Request) {
       message: 'Account created and referral link generated successfully!',
       loginCredentials: {
         username: cleanPhone,
-        email: cleanEmail || '',
+        email: finalEmail,
         password: defaultPassword
       },
       referralLink: finalReferralLink,

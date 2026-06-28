@@ -59,6 +59,22 @@ export async function GET() {
       .sort({ createdAt: -1 })
       .limit(5);
 
+    // Calculate funnel stats
+    const referralClicks = await ReferralConversion.countDocuments({
+      referrer_id: user._id,
+      conversion_stage: { $in: ['clicked', 'visited', 'signed_up', 'purchased'] }
+    });
+
+    const referralSignups = await ReferralConversion.countDocuments({
+      referrer_id: user._id,
+      conversion_stage: { $in: ['signed_up', 'purchased'] }
+    });
+
+    const referralPurchases = await ReferralConversion.countDocuments({
+      referrer_id: user._id,
+      conversion_stage: 'purchased'
+    });
+
     // 7. Format subscription transaction history
     const billingHistory = user.subscriptions
       .slice()
@@ -77,7 +93,10 @@ export async function GET() {
         activePlanName: activeSub ? activeSub.packageName : 'No Active Plan',
         daysRemaining,
         walletBalance,
-        referredCount
+        referredCount,
+        referralClicks,
+        referralSignups,
+        referralPurchases
       },
       activeSubscription: activeSub,
       conversions: recentConversions,

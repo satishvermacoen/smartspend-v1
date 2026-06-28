@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Copy, Check, Loader2, KeyRound, ExternalLink, MessageSquare } from "lucide-react";
+import { ArrowRight, Copy, Check, Loader2, KeyRound, ExternalLink, MessageSquare, PhoneCall } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -146,6 +146,17 @@ export function ReferralForm() {
             Log in to Dashboard <ExternalLink className="h-4 w-4" />
           </Link>
         </div>
+
+        <div className="pt-1">
+          <a
+            href="https://wa.me/918770066995?text=Hi%2C%20I%20want%20to%20know%20more%20about%20the%20SpentSmart%20Referral%20Program"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex h-12 items-center justify-center gap-2 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm shadow-soft transition-all"
+          >
+            <PhoneCall className="h-4.5 w-4.5" /> Get More Info (Call / WhatsApp)
+          </a>
+        </div>
       </div>
     );
   }
@@ -199,7 +210,7 @@ export function ReferralForm() {
           </>
         ) : (
           <>
-            Register &amp; Get My Link <ArrowRight className="h-4 w-4" />
+            Register and Connect with Us <ArrowRight className="h-4 w-4" />
           </>
         )}
       </Button>

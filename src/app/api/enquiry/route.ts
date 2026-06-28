@@ -47,44 +47,11 @@ export async function POST(req: Request) {
       $or: queryConditions
     });
 
-    let newCredentials = null;
-
-    if (!existingUser) {
-      const nameParts = name.trim().split(/\s+/);
-      const firstName = nameParts[0] || 'Client';
-      const lastName = nameParts.slice(1).join(' ') || '.';
-
-      const rawNumberDigits = cleanPhone.replace(/\D/g, '') || '123456';
-      const defaultPassword = `Welcome@${rawNumberDigits}`;
-
-      const userPayload: Partial<IUser> = {
-        firstName,
-        lastName,
-        phone: cleanPhone,
-        password: defaultPassword,
-        role: 'customer',
-        status: 'active',
-        emailVerified: true
-      };
-      
-      if (cleanEmail) {
-        userPayload.email = cleanEmail;
-      }
-
-      const user = new User(userPayload);
-
-      await user.save();
-
-      newCredentials = {
-        username: cleanPhone,
-        email: cleanEmail || '',
-        password: defaultPassword
-      };
-    }
 
     // Check for referral cookie to attribute this lead/enquiry
     let appliedCode = '';
     let referredByObj = undefined;
+    let referrerName = undefined;
 
     try {
       const cookieStore = await cookies();
@@ -107,12 +74,53 @@ export async function POST(req: Request) {
               referrerId: referrerUser._id,
               referrerEmail: referrerUser.email
             };
+            referrerName = [referrerUser.firstName, referrerUser.lastName].filter(Boolean).join(' ').trim();
           }
         }
       }
     } catch (cookieErr) {
       console.warn('Could not read referral cookie during enquiry submission:', cookieErr);
     }
+
+    let newCredentials = null;
+
+    if (!existingUser) {
+      const nameParts = name.trim().split(/\s+/);
+      const firstName = nameParts[0] || 'Client';
+      const lastName = nameParts.slice(1).join(' ') || '.';
+
+      const rawNumberDigits = cleanPhone.replace(/\D/g, '') || '123456';
+      const defaultPassword = `Welcome@${rawNumberDigits}`;
+
+      const userPayload: Partial<IUser> = {
+        firstName,
+        lastName,
+        phone: cleanPhone,
+        password: defaultPassword,
+        role: 'customer',
+        status: 'active',
+        emailVerified: true,
+        source: referrerName || 'website_enquiry',
+        referredBy: referredByObj
+      };
+      let finalEmail = cleanEmail;
+      if (!finalEmail) {
+        const sanitizedPhoneNum = cleanPhone.replace(/\D/g, '') || Math.floor(Math.random() * 10000000).toString();
+        finalEmail = `${sanitizedPhoneNum}@spentsmart.local`;
+      }
+      userPayload.email = finalEmail;
+
+      const user = new User(userPayload);
+
+      await user.save();
+
+      newCredentials = {
+        username: cleanPhone,
+        email: finalEmail,
+        password: defaultPassword
+      };
+    }
+
 
     // Create and save enquiry
     const enquiry = new Enquiry({

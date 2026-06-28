@@ -5,6 +5,7 @@ import connectDB from "@/lib/mongodb";
 import User from "@/features/shared/model/user";
 import ReferralConversion from "@/features/shared/model/referral-conversion";
 import ReferralReward from "@/features/shared/model/referral-reward";
+import ClientPurchase from "@/features/shared/model/client-purchase";
 
 export async function GET(req: NextRequest) {
   try {
@@ -15,8 +16,8 @@ export async function GET(req: NextRequest) {
 
     await connectDB();
 
-    // Fetch all users (excluding soft deleted)
-    const users = await User.find({ isDeleted: { $ne: true } })
+    // Fetch all users (excluding soft deleted and admins)
+    const users = await User.find({ isDeleted: { $ne: true }, role: { $ne: "admin" } })
       .populate("referredBy.referrerId", "firstName lastName email")
       .sort({ createdAt: -1 })
       .lean();
@@ -39,6 +40,16 @@ export async function GET(req: NextRequest) {
       }
     ]);
 
+    const clientSalesAgg = await ClientPurchase.aggregate([
+      { $match: { referrer_id: { $in: userIds } } },
+      {
+        $group: {
+          _id: "$referrer_id",
+          totalSale: { $sum: "$amount" }
+        }
+      }
+    ]);
+
     const purchasesAgg = await ReferralConversion.aggregate([
       { $match: { prospect_id: { $in: userIds }, conversion_stage: "purchased" } },
       { 
@@ -49,11 +60,26 @@ export async function GET(req: NextRequest) {
       }
     ]);
 
+    const clientPurchasesAgg = await ClientPurchase.aggregate([
+      { $match: { client_id: { $in: userIds } } },
+      {
+        $group: {
+          _id: "$client_id",
+          totalPurchase: { $sum: "$amount" }
+        }
+      }
+    ]);
+
     const rewards = await ReferralReward.find({ customer_id: { $in: userIds } }).lean();
 
     const formattedUsers = users.map(user => {
-      const userSales = salesAgg.find(s => s._id.toString() === user._id.toString())?.totalSale || 0;
-      const userPurchases = purchasesAgg.find(p => p._id.toString() === user._id.toString())?.totalPurchase || 0;
+      const userSales1 = salesAgg.find(s => s._id.toString() === user._id.toString())?.totalSale || 0;
+      const userSales2 = clientSalesAgg.find(s => s._id.toString() === user._id.toString())?.totalSale || 0;
+      const userSales = userSales1 + userSales2;
+
+      const userPurchases1 = purchasesAgg.find(p => p._id.toString() === user._id.toString())?.totalPurchase || 0;
+      const userPurchases2 = clientPurchasesAgg.find(p => p._id.toString() === user._id.toString())?.totalPurchase || 0;
+      const userPurchases = userPurchases1 + userPurchases2;
       const userReward = rewards.find(r => r.customer_id.toString() === user._id.toString());
       
       let sourceDisplay: string = user.source || "website_enquiry";
@@ -68,6 +94,7 @@ export async function GET(req: NextRequest) {
         email: user.email,
         phone: user.phone || "N/A",
         source: sourceDisplay,
+        referrerId: user.referredBy?.referrerId?._id?.toString() || null,
         purchase: userPurchases,
         sale: userSales,
         commission: userReward?.total_earned || 0,

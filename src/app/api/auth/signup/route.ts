@@ -60,6 +60,7 @@ export async function POST(req: Request) {
     // Find referrer details if code is applied
     let referredByObj = undefined;
     let validCodeDoc = null;
+    let referrerName = undefined;
 
     if (appliedCode) {
       validCodeDoc = await ReferralCode.findOne({
@@ -77,6 +78,7 @@ export async function POST(req: Request) {
             referrerId: referrerUser._id,
             referrerEmail: referrerUser.email
           };
+          referrerName = [referrerUser.firstName, referrerUser.lastName].filter(Boolean).join(' ').trim();
         }
       }
     }
@@ -102,6 +104,12 @@ export async function POST(req: Request) {
         referrerId: matchedEnquiry.referredBy.referrerId,
         referrerEmail: matchedEnquiry.referredBy.referrerEmail
       };
+      if (!referrerName && referredByObj.referrerId) {
+        const enquiryReferrerUser = await User.findById(referredByObj.referrerId);
+        if (enquiryReferrerUser) {
+          referrerName = [enquiryReferrerUser.firstName, enquiryReferrerUser.lastName].filter(Boolean).join(' ').trim();
+        }
+      }
       appliedCode = matchedEnquiry.referralCode || '';
       if (appliedCode) {
         validCodeDoc = await ReferralCode.findOne({
@@ -125,7 +133,8 @@ export async function POST(req: Request) {
       role: 'customer',
       status: 'inactive', // inactive until email is verified
       emailVerified: false,
-      referredBy: referredByObj
+      referredBy: referredByObj,
+      source: referrerName || 'website_enquiry'
     });
 
     // Auto-generate referral code for this user

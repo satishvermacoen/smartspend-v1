@@ -4,6 +4,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/mongodb";
 import User from "@/features/shared/model/user";
 import ReferralCode from "@/features/shared/model/referral-code";
+import ReferralConversion from "@/features/shared/model/referral-conversion";
 
 export async function GET(req: NextRequest) {
   try {
@@ -19,11 +20,45 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
 
-    const referralCodes = await ReferralCode.find({ referrer_id: user._id }).lean();
+    const referralCodes = await ReferralCode.find({ referrer_id: user._id }).sort({ created_at: -1 }).lean();
+
+    // Enrich with dynamic usage stats
+    const enrichedCodes = await Promise.all(referralCodes.map(async (c) => {
+      const clicks = await ReferralConversion.countDocuments({
+        referral_code: c.code
+      });
+
+      const signups = await ReferralConversion.countDocuments({
+        referral_code: c.code,
+        conversion_stage: { $in: ['signed_up', 'purchased'] }
+      });
+
+      const purchasesDoc = await ReferralConversion.find({
+        referral_code: c.code,
+        conversion_stage: 'purchased'
+      });
+
+      const purchases = purchasesDoc.length;
+      
+      const revenue = purchasesDoc.reduce(
+        (sum, doc) => sum + (doc.purchase_details?.net_amount || 0), 
+        0
+      );
+
+      return {
+        ...c,
+        stats: {
+          clicks,
+          signups,
+          purchases,
+          revenue
+        }
+      };
+    }));
 
     return NextResponse.json({
       success: true,
-      referralCodes
+      referralCodes: enrichedCodes
     });
   } catch (error: any) {
     console.error("Customer get referral codes error:", error);
