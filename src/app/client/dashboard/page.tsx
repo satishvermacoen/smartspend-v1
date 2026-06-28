@@ -94,8 +94,7 @@ const generateMockActivity = (clicks: number, signups: number, purchases: number
   if (clicks === 0 && signups === 0 && purchases === 0) return [];
 
   const activities = [];
-  let idCounter = 1;
-  const now = new Date();
+  let idCounter = 1
 
   if (purchases > 0) {
     activities.push({

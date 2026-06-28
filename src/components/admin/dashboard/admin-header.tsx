@@ -12,12 +12,9 @@ export function AdminHeader({ onRefresh, isLoading }: AdminHeaderProps) {
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10 w-full">
       <div>
-        <h2 className="text-3xl font-display font-bold tracking-tight text-foreground">
-          Referral Command Center
+        <h2 className="text-xl font-display font-bold tracking-tight text-foreground">
+          Dashboard Overview
         </h2>
-        <p className="text-sm text-muted-foreground mt-1">
-          Monitor system-wide referral metrics, manage active promoters, and optimize conversion funnels.
-        </p>
       </div>
       <Button
         onClick={onRefresh}
