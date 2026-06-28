@@ -151,7 +151,6 @@ export function SiteHeader() {
 }
 
 export function SiteFooter({
-  hideWhatsAppBanner = false,
   hideFloatingSocials = false,
 }: {
   hideWhatsAppBanner?: boolean;

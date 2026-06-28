@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IReferralCode extends Document {
   code: string;
+  name?: string;
   referrer_id: mongoose.Types.ObjectId;
   is_active: boolean;
   expires_at?: Date;
@@ -16,6 +17,7 @@ export interface IReferralCode extends Document {
 
 const ReferralCodeSchema = new Schema<IReferralCode>({
   code: { type: String, required: true, unique: true, uppercase: true, trim: true, index: true },
+  name: { type: String, trim: true },
   referrer_id: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
   is_active: { type: Boolean, default: true },
   expires_at: { type: Date },

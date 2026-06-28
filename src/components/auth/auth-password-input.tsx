@@ -2,6 +2,7 @@
 
 import React, { useState, InputHTMLAttributes } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import { Button } from '../ui/button';
 
 interface AuthPasswordInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -34,14 +35,14 @@ export const AuthPasswordInput = React.forwardRef<HTMLInputElement, AuthPassword
             } ${className}`}
             {...props}
           />
-          <button
+          <Button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer focus:outline-none"
             tabIndex={-1}
           >
             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </button>
+          </Button>
         </div>
         {error && (
           <p className="text-xs text-destructive/90 font-medium mt-1 animate-in fade-in duration-200">

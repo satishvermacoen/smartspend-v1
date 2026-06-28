@@ -65,7 +65,7 @@ export const authOptions: NextAuthOptions = {
           await user.incLoginAttempts();
           user.addLoginHistory(Array.isArray(ip) ? ip[0] : ip, userAgent, false);
           await user.save();
-          throw new Error('Invalid email or password.');
+          throw new Error('Invalid email, mobile number, or password.');
         }
 
         // Check if email is verified

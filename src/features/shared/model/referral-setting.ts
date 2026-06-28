@@ -9,6 +9,8 @@ export interface IReferralSetting extends Document {
   auto_credit_cash: boolean;
   auto_apply_subscription: boolean;
   currency: string;
+  commission_percentage: number;
+  default_reward_type: 'fixed_cash' | 'percentage';
 }
 
 const ReferralSettingSchema = new Schema<IReferralSetting>({
@@ -19,7 +21,9 @@ const ReferralSettingSchema = new Schema<IReferralSetting>({
   min_purchase_for_reward: { type: Number, default: 4000 },
   auto_credit_cash: { type: Boolean, default: true },
   auto_apply_subscription: { type: Boolean, default: true },
-  currency: { type: String, default: 'INR' }
+  currency: { type: String, default: 'INR' },
+  commission_percentage: { type: Number, default: 10 },
+  default_reward_type: { type: String, enum: ['fixed_cash', 'percentage'], default: 'percentage' }
 }, {
   timestamps: true
 });

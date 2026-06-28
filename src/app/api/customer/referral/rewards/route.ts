@@ -47,7 +47,8 @@ export async function GET() {
         claimedCash,
         pendingCash,
         subscriptionMonths: ledger.subscription_months,
-        preferredRewardType: ledger.preferred_reward_type
+        preferredRewardType: ledger.preferred_reward_type,
+        redemptions: ledger.redemptions
       },
       activeSubscriptions
     });
@@ -56,6 +57,39 @@ export async function GET() {
     console.error('Customer rewards route error:', error);
     return NextResponse.json(
       { error: 'An unexpected error occurred while fetching rewards overview.' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized access.' }, { status: 401 });
+    }
+
+    const { preferredRewardType } = await req.json();
+    if (preferredRewardType !== 'cash' && preferredRewardType !== 'subscription') {
+      return NextResponse.json({ error: 'Invalid preferred reward type.' }, { status: 400 });
+    }
+
+    await connectDB();
+
+    const ledger = await getOrCreateRewardLedger(session.user.id);
+    ledger.preferred_reward_type = preferredRewardType;
+    await ledger.save();
+
+    return NextResponse.json({
+      success: true,
+      message: `Preferred reward type updated to ${preferredRewardType}.`,
+      preferredRewardType: ledger.preferred_reward_type
+    });
+
+  } catch (error) {
+    console.error('Customer patch rewards preference error:', error);
+    return NextResponse.json(
+      { error: 'An unexpected error occurred while updating preferred reward type.' },
       { status: 500 }
     );
   }

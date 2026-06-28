@@ -1,6 +1,5 @@
 "use client";
  
-import { useState } from "react";
 import { BadgePercent, Tag, BellRing, Plus, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { ToolLogo } from "@/components/marketing/layout/tool-logo";

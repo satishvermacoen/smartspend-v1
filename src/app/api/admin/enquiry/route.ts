@@ -19,6 +19,10 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get('status') || 'all';
     const search = searchParams.get('search') || '';
+    const dateRange = searchParams.get('dateRange') || 'all';
+    const subscription = searchParams.get('subscription') || 'all';
+    const sortOrder = searchParams.get('sort') || 'desc';
+    
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
     const limit = Math.max(1, parseInt(searchParams.get('limit') || '10', 10));
     const skip = (page - 1) * limit;
@@ -29,6 +33,25 @@ export async function GET(req: Request) {
     // Filter by status if not "all"
     if (status !== 'all') {
       query.status = status;
+    }
+
+    // Filter by subscription if not "all"
+    if (subscription !== 'all') {
+      query.subscription = new RegExp(`^${subscription}$`, 'i');
+    }
+
+    // Filter by date range
+    if (dateRange !== 'all') {
+      const now = new Date();
+      const startDate = new Date();
+      if (dateRange === 'today') {
+        startDate.setHours(0, 0, 0, 0);
+      } else if (dateRange === 'week') {
+        startDate.setDate(now.getDate() - 7);
+      } else if (dateRange === 'month') {
+        startDate.setMonth(now.getMonth() - 1);
+      }
+      query.createdAt = { $gte: startDate };
     }
 
     // Apply search filter if query exists
@@ -43,8 +66,10 @@ export async function GET(req: Request) {
     }
 
     // 5. Fetch enquiries and total count
+    const sortConfig: Record<string, 'asc' | 'desc'> = { createdAt: sortOrder === 'asc' ? 'asc' : 'desc' };
+    
     const enquiries = await Enquiry.find(query)
-      .sort({ createdAt: -1 })
+      .sort(sortConfig)
       .skip(skip)
       .limit(limit);
 

@@ -6,6 +6,8 @@ import { SiteHeader, SiteFooter } from "@/components/marketing/layout/site-chrom
 import { ALL_TOOLS, logoUrl } from "@/data/tools";
 import { Tool } from "@/types";
 import { LOGOS } from "@/data/logo-map";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
  
 const CATEGORIES = ["All", "Developer", "Creative", "Product/Marketing", "Business/Operations", "OTT", "Credits"] as const;
 type Category = (typeof CATEGORIES)[number];
@@ -20,7 +22,7 @@ const CATEGORY_LABELS: Record<Category, string> = {
   Credits: "Platform Credits",
 };
  
-const LOGO_OVERRIDES: Record<string, any> = {
+const LOGO_OVERRIDES: Record<string, string> = {
   // Developer Tools
   "Firecrawl": "https://logos.hunter.io/firecrawl.dev",
   "Firecrawl Credits": "https://logos.hunter.io/firecrawl.dev",
@@ -30,7 +32,7 @@ const LOGO_OVERRIDES: Record<string, any> = {
   "Bolt": "https://www.google.com/s2/favicons?domain=bolt.new&sz=128",
  
   // Design & Creative Tools
-  "Adobe Creative Cloud": LOGOS["adobe-cc"],
+  "Adobe Creative Cloud": LOGOS["adobe-cc"] as string,
   "Canva Pro": "https://logos.hunter.io/canva.com",
   "Canva Business + Leonardo AI": "https://logos.hunter.io/canva.com",
   "CapCut": "https://logos.hunter.io/capcut.com",
@@ -56,7 +58,7 @@ const LOGO_OVERRIDES: Record<string, any> = {
  
   // Platform Credits
   "OpenAI Credits": "https://logos.hunter.io/openai.com",
-  "AWS Credits": LOGOS["aws-credits"],
+  "AWS Credits": LOGOS["aws-credits"] as string,
   "MongoDB Credits": "https://logos.hunter.io/mongodb.com",
   "Vapi Credits": "https://logos.hunter.io/vapi.ai",
   "Airtable Credits": "https://logos.hunter.io/airtable.com",
@@ -135,7 +137,7 @@ export function ToolsPageClient() {
             <div className="mt-6 -mx-4 overflow-x-auto px-4 pb-1">
               <div className="flex w-max gap-2">
                 {CATEGORIES.map((c) => (
-                  <button
+                  <Button
                     key={c}
                     onClick={() => setCat(c)}
                     type="button"
@@ -146,7 +148,7 @@ export function ToolsPageClient() {
                     }`}
                   >
                     {CATEGORY_LABELS[c]}
-                  </button>
+                  </Button>
                 ))}
               </div>
             </div>
@@ -213,7 +215,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
   let primary: string | undefined = undefined;
   const override = LOGO_OVERRIDES[tool.name];
   if (override) {
-    primary = typeof override === "object" && override !== null && "src" in override ? override.src : override;
+    primary = override;
   } else if (tool.logo) {
     primary = typeof tool.logo === "object" && tool.logo !== null && "src" in tool.logo ? tool.logo.src : tool.logo;
   } else if (tool.slug) {
@@ -242,7 +244,9 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
  
   return (
     <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
-      <img
+      <Image
+        width={48}
+        height={48}
         src={primary}
         alt={tool.name}
         loading="lazy"

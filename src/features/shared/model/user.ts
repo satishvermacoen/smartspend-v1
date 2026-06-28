@@ -46,9 +46,13 @@ export interface IUser extends Document {
     referrerId?: mongoose.Types.ObjectId;
     referrerEmail?: string;
   };
+  source?: 'referral' | 'website_enquiry' | 'admin';
+  isDeleted?: boolean;
   accountBalance: number;
   subscriptions: ISubscription[];
   loginHistory: ILoginHistory[];
+  createdAt?: Date;
+  updatedAt?: Date;
   
   // Virtuals
   fullName: string;
@@ -101,7 +105,7 @@ const LoginHistorySchema = new Schema<ILoginHistory>({
 });
 
 const UserSchema = new Schema<IUser, IUserModel>({
-  email: { type: String, required: true, unique: true, lowercase: true, trim: true, index: true },
+  email: { type: String, unique: true, sparse: true, lowercase: true, trim: true, index: true },
   password: { type: String, required: true, select: false },
   firstName: { type: String, trim: true },
   lastName: { type: String, trim: true },
@@ -122,6 +126,8 @@ const UserSchema = new Schema<IUser, IUserModel>({
     referrerId: { type: Schema.Types.ObjectId, ref: 'User' },
     referrerEmail: { type: String }
   },
+  source: { type: String, default: 'website_enquiry' },
+  isDeleted: { type: Boolean, default: false },
   accountBalance: { type: Number, default: 0 },
   subscriptions: [SubscriptionSchema],
   loginHistory: [LoginHistorySchema]
@@ -140,7 +146,7 @@ UserSchema.pre('save', async function(this: IUser) {
 
 // Virtuals
 UserSchema.virtual('fullName').get(function(this: IUser) {
-  return `${this.firstName || ''} ${this.lastName || ''}`.trim() || this.email;
+  return `${this.firstName || ''} ${this.lastName || ''}`.trim() || this.email || this.phone || 'User';
 });
 
 UserSchema.virtual('isLocked').get(function(this: IUser) {
@@ -212,10 +218,12 @@ UserSchema.methods.addLoginHistory = function(this: IUser, ip: string, userAgent
 };
 
 UserSchema.methods.generateReferralCode = function(this: IUser): string {
-  // Generate base code from name or email prefix, e.g. FIRSTL1234
-  const prefix = ((this.firstName || '') + (this.lastName || '')).replace(/[^a-zA-Z]/g, '').substring(0, 5).toUpperCase() || 'REF';
-  const randomNum = Math.floor(1000 + Math.random() * 9000);
-  return `${prefix}${randomNum}`;
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = 'REF';
+  for (let i = 0; i < 5; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
 };
 
 UserSchema.methods.addSubscription = function(this: IUser, subscriptionData: Partial<ISubscription>): void {
@@ -275,6 +283,7 @@ UserSchema.methods.sanitize = function(this: IUser): Record<string, unknown> {
   delete obj.loginAttempts;
   delete obj.lockUntil;
   delete obj.isSuperAdmin;
+  delete obj.isDeleted;
   return obj;
 };
 
@@ -313,6 +322,7 @@ UserSchema.statics.searchUsers = async function(this: IUserModel, query: string,
   const searchRegex = new RegExp(query, 'i');
   return this.find({
     ...filters,
+    isDeleted: { $ne: true },
     $or: [
       { email: searchRegex },
       { firstName: searchRegex },
@@ -322,11 +332,12 @@ UserSchema.statics.searchUsers = async function(this: IUserModel, query: string,
 };
 
 UserSchema.statics.getAdminStats = async function(this: IUserModel): Promise<Record<string, unknown>> {
-  const totalUsers = await this.countDocuments();
-  const activeUsers = await this.countDocuments({ status: 'active' });
-  const customersCount = await this.countDocuments({ role: 'customer' });
-  const adminsCount = await this.countDocuments({ role: 'admin' });
-  const verifiedEmails = await this.countDocuments({ emailVerified: true });
+  const baseFilter = { isDeleted: { $ne: true } };
+  const totalUsers = await this.countDocuments(baseFilter);
+  const activeUsers = await this.countDocuments({ ...baseFilter, status: 'active' });
+  const customersCount = await this.countDocuments({ ...baseFilter, role: 'customer' });
+  const adminsCount = await this.countDocuments({ ...baseFilter, role: 'admin' });
+  const verifiedEmails = await this.countDocuments({ ...baseFilter, emailVerified: true });
 
   const activeSubscriptionsCount = await this.countDocuments({
     'subscriptions.status': 'active',

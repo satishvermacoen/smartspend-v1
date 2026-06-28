@@ -2,8 +2,10 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import User from '@/features/shared/model/user';
 import Enquiry from '@/features/shared/model/enquiry';
+import ReferralCode from '@/features/shared/model/referral-code';
+import ReferralConversion from '@/features/shared/model/referral-conversion';
+import { cookies } from 'next/headers';
 import { createNotification } from '@/lib/notification';
-
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -42,6 +44,41 @@ export async function POST(req: Request) {
     let defaultEmail = cleanEmail;
     let defaultPassword = '';
 
+    // Read cookie for referrer attribution
+    let appliedCode = '';
+    let referredByObj = undefined;
+    let validCodeDoc = null;
+    let referrerName = undefined;
+
+    try {
+      const cookieStore = await cookies();
+      const cookieRef = cookieStore.get('referral_code')?.value;
+      if (cookieRef) {
+        appliedCode = cookieRef.trim().toUpperCase();
+        validCodeDoc = await ReferralCode.findOne({
+          code: appliedCode,
+          is_active: true,
+          $or: [
+            { expires_at: { $exists: false } },
+            { expires_at: { $gt: new Date() } }
+          ]
+        });
+
+        if (validCodeDoc) {
+          const referrerUser = await User.findById(validCodeDoc.referrer_id);
+          if (referrerUser) {
+            referredByObj = {
+              referrerId: referrerUser._id,
+              referrerEmail: referrerUser.email
+            };
+            referrerName = [referrerUser.firstName, referrerUser.lastName].filter(Boolean).join(' ').trim();
+          }
+        }
+      }
+    } catch (cookieErr) {
+      console.warn('Could not read referral cookie during wishlist registration:', cookieErr);
+    }
+
     if (!user) {
       isNewUser = true;
 
@@ -75,7 +112,9 @@ export async function POST(req: Request) {
         password: defaultPassword,
         role: 'customer',
         status: 'active', // active immediately for direct login access
-        emailVerified: true // Bypass verification since phone/WhatsApp validation handles it
+        emailVerified: true, // Bypass verification since phone/WhatsApp validation handles it
+        referredBy: referredByObj,
+        source: referrerName || 'website_enquiry'
       });
 
       // Generate active referral code for this new user client
@@ -109,10 +148,38 @@ export async function POST(req: Request) {
       subscription: subscriptionList || 'Custom Subscriptions',
       message: other.trim() || undefined,
       status: 'pending',
-      client_id: user._id
+      client_id: user._id,
+      referralCode: appliedCode || undefined,
+      referredBy: referredByObj
     });
 
     await enquiry.save();
+
+    // Create conversion funnel logs
+    if (isNewUser && validCodeDoc && referredByObj) {
+      try {
+        const ipHeader = req.headers.get('x-forwarded-for') || '127.0.0.1';
+        const clientIp = ipHeader.split(',')[0].trim();
+
+        await ReferralConversion.create({
+          referral_code: validCodeDoc.code,
+          referrer_id: validCodeDoc.referrer_id,
+          prospect_id: user._id,
+          prospect_email: user.email,
+          conversion_stage: 'signed_up',
+          timeline: {
+            clicked_at: new Date(),
+            signed_up_at: new Date()
+          },
+          metadata: {
+            ip_address: clientIp,
+            user_agent: req.headers.get('user-agent') || 'unknown'
+          }
+        });
+      } catch (err) {
+        console.error('Error logging wishlist signup conversion:', err);
+      }
+    }
 
     // Trigger in-app notifications
     try {

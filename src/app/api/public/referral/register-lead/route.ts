@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import User from '@/features/shared/model/user';
+import User, { IUser } from '@/features/shared/model/user';
 import ReferralCode from '@/features/shared/model/referral-code';
 import ReferralConversion from '@/features/shared/model/referral-conversion';
 import { getOrCreateRewardLedger } from '@/features/shared/model/referral-reward';
@@ -49,19 +49,6 @@ export async function POST(req: Request) {
     const firstName = nameParts[0] || 'Client';
     const lastName = nameParts.slice(1).join(' ') || '.';
 
-    // Generate unique placeholder email if omitted
-    let defaultEmail = cleanEmail;
-    if (!defaultEmail) {
-      const sanitizedPhoneNum = cleanPhone.replace(/\D/g, '') || Math.floor(Math.random() * 10000000).toString();
-      defaultEmail = `${sanitizedPhoneNum}@spentsmart.local`;
-
-      // Double-check placeholder email uniqueness
-      const checkEmailConflict = await User.findOne({ email: defaultEmail });
-      if (checkEmailConflict) {
-        defaultEmail = `${sanitizedPhoneNum}_${Math.floor(Math.random() * 1000)}@spentsmart.local`;
-      }
-    }
-
     // Define a default login password
     const rawNumberDigits = cleanPhone.replace(/\D/g, '') || '123456';
     const defaultPassword = `Welcome@${rawNumberDigits}`;
@@ -70,6 +57,7 @@ export async function POST(req: Request) {
     let appliedCode = '';
     let referredByObj = undefined;
     let validCodeDoc = null;
+    let referrerName = undefined;
 
     try {
       const cookieStore = await cookies();
@@ -92,6 +80,7 @@ export async function POST(req: Request) {
               referrerId: referrerUser._id,
               referrerEmail: referrerUser.email
             };
+            referrerName = [referrerUser.firstName, referrerUser.lastName].filter(Boolean).join(' ').trim();
           }
         }
       }
@@ -100,17 +89,25 @@ export async function POST(req: Request) {
     }
 
     // Create user model
-    const user = new User({
+    const userPayload: Partial<IUser> = {
       firstName,
       lastName,
-      email: defaultEmail,
       phone: cleanPhone,
       password: defaultPassword,
       role: 'customer',
       status: 'active', // active immediately for direct login access
       emailVerified: true, // Bypass verification since phone/WhatsApp validation handles it
-      referredBy: referredByObj
-    });
+      referredBy: referredByObj,
+      source: referrerName ? 'referral' : 'website_enquiry'
+    };
+    let finalEmail = cleanEmail;
+    if (!finalEmail) {
+      const sanitizedPhoneNum = cleanPhone.replace(/\D/g, '') || Math.floor(Math.random() * 10000000).toString();
+      finalEmail = `${sanitizedPhoneNum}@spentsmart.local`;
+    }
+    userPayload.email = finalEmail;
+    
+    const user = new User(userPayload);
 
     // Generate active referral code for this new user client
     let userReferralCode = '';
@@ -220,7 +217,7 @@ export async function POST(req: Request) {
       message: 'Account created and referral link generated successfully!',
       loginCredentials: {
         username: cleanPhone,
-        email: defaultEmail,
+        email: finalEmail,
         password: defaultPassword
       },
       referralLink: finalReferralLink,

@@ -10,6 +10,7 @@ import { AuthInput } from '@/components/auth/auth-input';
 import { AuthPasswordInput } from '@/components/auth/auth-password-input';
 import { AuthButton } from '@/components/auth/auth-button';
 import { AuthAlert } from '@/components/auth/auth-alert';
+import { Button } from '@/components/ui/button';
 
 function LoginForm() {
   const router = useRouter();
@@ -36,7 +37,7 @@ function LoginForm() {
 
   const [error, setError] = useState(
     callbackUrlError === 'CredentialsSignin'
-      ? 'Invalid email or password.'
+      ? 'Invalid email, mobile number, or password.'
       : callbackUrlError || ''
   );
 
@@ -54,7 +55,7 @@ function LoginForm() {
     setInfoMessage('');
 
     if (!formData.email || !formData.password) {
-      setError('Please enter both email and password.');
+      setError('Please enter both email/mobile and password.');
       return;
     }
 
@@ -116,7 +117,7 @@ function LoginForm() {
 
       {/* Client / Admin Tabs */}
       <div className="relative flex p-1 bg-soft/40 border border-border/15 rounded-xl mb-6">
-        <button
+        <Button
           type="button"
           onClick={() => setActiveTab('client')}
           className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 cursor-pointer focus:outline-none ${
@@ -127,8 +128,8 @@ function LoginForm() {
         >
           <User className="h-4 w-4" />
           Client
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           onClick={() => setActiveTab('admin')}
           className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 cursor-pointer focus:outline-none ${
@@ -139,20 +140,20 @@ function LoginForm() {
         >
           <ShieldEllipsis className="h-4 w-4" />
           Admin
-        </button>
+        </Button>
       </div>
 
       <form className="space-y-5" onSubmit={handleSubmit}>
         <AuthInput
           id="email"
           name="email"
-          label="Email Address"
-          type="email"
-          autoComplete="email"
+          label="Email or Mobile Number"
+          type="text"
+          autoComplete="username"
           required
           value={formData.email}
           onChange={handleInputChange}
-          placeholder="you@example.com"
+          placeholder="Enter email or mobile"
         />
 
         <AuthPasswordInput

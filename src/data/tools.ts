@@ -4,7 +4,6 @@ import { StaticImageData } from "next/image";
 
 const LOGOS = RAW_LOGOS as Record<string, StaticImageData>;
 
-const courseraLogo = LOGOS["coursera"];
 
 const marqueeLogo = (name: string) =>
   LOGOS[`marquee-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`];

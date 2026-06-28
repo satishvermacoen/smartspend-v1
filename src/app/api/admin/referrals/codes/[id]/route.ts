@@ -53,7 +53,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
     const { id } = await params;
     const body = await req.json();
-    const { is_active, expires_at, reward } = body;
+    const { is_active, expires_at, reward, name } = body;
 
     await connectDB();
 
@@ -63,6 +63,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     }
 
     if (is_active !== undefined) codeDoc.is_active = is_active;
+    if (name !== undefined) codeDoc.name = name;
     if (expires_at !== undefined) codeDoc.expires_at = expires_at ? new Date(expires_at) : undefined;
     
     if (reward) {

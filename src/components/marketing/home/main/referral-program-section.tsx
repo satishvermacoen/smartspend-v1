@@ -150,7 +150,7 @@ export function ReferralProgramSection() {
               href="/referral"
               className="inline-flex items-center gap-3 rounded-full bg-primary px-8 py-4 text-base font-bold text-primary-foreground shadow-md transition hover:bg-primary/95"
             >
-              Register & Get My Link
+              Register and Connect with Us
               <ArrowRight className="h-5 w-5" />
             </Link>
           </div>

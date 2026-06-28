@@ -28,6 +28,7 @@ import {
   DialogTitle 
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface EnquiryItem {
   _id: string;
@@ -54,6 +55,9 @@ export default function EnquiryPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
+  const [dateRange, setDateRange] = useState("all");
+  const [subscription, setSubscription] = useState("all");
+  const [sortOrder, setSortOrder] = useState("desc");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [stats, setStats] = useState<Stats>({ total: 0, pending: 0, contacted: 0, resolved: 0 });
@@ -68,7 +72,7 @@ export default function EnquiryPage() {
     setLoading(true);
     try {
       const res = await fetch(
-        `/api/admin/enquiry?status=${status}&search=${encodeURIComponent(search)}&page=${page}&limit=10`
+        `/api/admin/enquiry?status=${status}&search=${encodeURIComponent(search)}&dateRange=${dateRange}&subscription=${encodeURIComponent(subscription)}&sort=${sortOrder}&page=${page}&limit=10`
       );
       const data = await res.json();
 
@@ -98,7 +102,7 @@ export default function EnquiryPage() {
     } finally {
       setLoading(false);
     }
-  }, [status, search, page]);
+  }, [status, search, dateRange, subscription, sortOrder, page]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -249,20 +253,17 @@ export default function EnquiryPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
         <div>
-          <h2 className="text-3xl font-display font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-display font-bold tracking-tight text-foreground">
             Enquiries Manager
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            Manage, organize, and follow up on customer subscription requests.
-          </p>
         </div>
-        <button
+        <Button
           onClick={fetchEnquiries}
           className="inline-flex items-center gap-2 rounded-xl border border-border/15 bg-card/40 backdrop-blur-md px-4 py-2 text-sm font-medium text-foreground hover:bg-card/70 hover:-translate-y-0.5 active:scale-[0.98] transition-all cursor-pointer shadow-soft"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
           Refresh
-        </button>
+        </Button>
       </div>
 
       {/* KPI Stats Cards */}
@@ -313,40 +314,98 @@ export default function EnquiryPage() {
       </div>
 
       {/* Filters and Actions Block */}
-      <div className="bg-card/30 backdrop-blur-xl border border-border/10 rounded-2xl p-4 shadow-elegant flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
-        {/* Status Tabs */}
-        <div className="flex flex-wrap items-center gap-1.5 bg-soft/30 border border-border/5 p-1 rounded-xl w-full md:w-auto">
-          {["all", "pending", "contacted", "resolved", "ignored"].map(tab => (
-            <button
-              key={tab}
-              onClick={() => {
-                setStatus(tab);
+      <div className="bg-card/30 backdrop-blur-xl border border-border/10 rounded-2xl p-4 shadow-elegant flex flex-col gap-4 relative z-10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          {/* Status Tabs */}
+          <div className="flex flex-wrap items-center gap-1.5 bg-soft/30 border border-border/5 p-1 rounded-xl w-full md:w-auto">
+            {["all", "pending", "contacted", "resolved", "ignored"].map(tab => (
+              <Button
+                key={tab}
+                onClick={() => {
+                  setStatus(tab);
+                  setPage(1);
+                }}
+                className={`px-4 py-2 text-xs font-semibold rounded-lg capitalize transition-all cursor-pointer ${
+                  status === tab
+                    ? "bg-brand/10 text-brand shadow-sm font-bold"
+                    : "text-muted-foreground hover:text-foreground hover:bg-soft/50"
+                }`}
+              >
+                {tab}
+              </Button>
+            ))}
+          </div>
+
+          {/* Search */}
+          <div className="relative w-full md:max-w-sm">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search name, phone, email, subscription..."
+              value={search}
+              onChange={e => {
+                setSearch(e.target.value);
                 setPage(1);
               }}
-              className={`px-4 py-2 text-xs font-semibold rounded-lg capitalize transition-all cursor-pointer ${
-                status === tab
-                  ? "bg-brand/10 text-brand shadow-sm font-bold"
-                  : "text-muted-foreground hover:text-foreground hover:bg-soft/50"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+              className="w-full bg-soft/50 border border-border/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-brand/40 focus:ring-1 focus:ring-brand/40 focus:outline-none transition-all"
+            />
+          </div>
         </div>
 
-        {/* Search */}
-        <div className="relative w-full md:max-w-sm">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Search name, phone, email, subscription..."
-            value={search}
-            onChange={e => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-            className="w-full bg-soft/50 border border-border/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-brand/40 focus:ring-1 focus:ring-brand/40 focus:outline-none transition-all"
-          />
+        {/* Extra Filters */}
+        <div className="flex flex-wrap items-center gap-4 border-t border-border/5 pt-4">
+          {/* Date Range */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Date:</span>
+            <select
+              value={dateRange}
+              onChange={e => {
+                setDateRange(e.target.value);
+                setPage(1);
+              }}
+              className="bg-soft/50 border border-border/10 rounded-lg px-3 py-1.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-brand/40 cursor-pointer"
+            >
+              <option value="all">All Time</option>
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+            </select>
+          </div>
+
+          {/* Subscription */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Interested Package:</span>
+            <select
+              value={subscription}
+              onChange={e => {
+                setSubscription(e.target.value);
+                setPage(1);
+              }}
+              className="bg-soft/50 border border-border/10 rounded-lg px-3 py-1.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-brand/40 cursor-pointer"
+            >
+              <option value="all">All Packages</option>
+              <option value="Premium">Premium</option>
+              <option value="Basic">Basic</option>
+              <option value="Standard">Standard</option>
+              <option value="Enterprise">Enterprise</option>
+            </select>
+          </div>
+
+          {/* Sort */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Sort:</span>
+            <select
+              value={sortOrder}
+              onChange={e => {
+                setSortOrder(e.target.value);
+                setPage(1);
+              }}
+              className="bg-soft/50 border border-border/10 rounded-lg px-3 py-1.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-brand/40 cursor-pointer"
+            >
+              <option value="desc">Newest First</option>
+              <option value="asc">Oldest First</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -421,13 +480,13 @@ export default function EnquiryPage() {
                     {/* Actions */}
                     <td className="px-6 py-4 text-right whitespace-nowrap">
                       <div className="flex justify-end gap-2">
-                        <button
+                        <Button
                           onClick={() => openDetails(item)}
                           title="View Details"
                           className="h-8 w-8 rounded-lg border border-border/15 bg-soft/20 text-foreground flex items-center justify-center hover:bg-brand/10 hover:text-brand transition-all cursor-pointer"
                         >
                           <Eye className="h-4 w-4" />
-                        </button>
+                        </Button>
                         <a
                           href={getWhatsAppLink(item.mobile, item.name, item.subscription)}
                           target="_blank"
@@ -437,13 +496,13 @@ export default function EnquiryPage() {
                         >
                           <MessageCircle className="h-4 w-4" />
                         </a>
-                        <button
+                        <Button
                           onClick={() => handleDeleteEnquiry(item._id)}
                           title="Delete Enquiry"
                           className="h-8 w-8 rounded-lg border border-destructive/20 bg-destructive/10 text-destructive flex items-center justify-center hover:bg-destructive/20 transition-all cursor-pointer"
                         >
                           <Trash2 className="h-4 w-4" />
-                        </button>
+                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -460,20 +519,20 @@ export default function EnquiryPage() {
               Page {page} of {totalPages}
             </span>
             <div className="flex gap-2">
-              <button
+              <Button
                 disabled={page === 1}
                 onClick={() => setPage(p => Math.max(1, p - 1))}
                 className="px-3 py-1.5 rounded-lg border border-border/15 text-xs text-foreground bg-soft/10 hover:bg-soft/30 disabled:opacity-40 disabled:pointer-events-none cursor-pointer transition-all"
               >
                 Previous
-              </button>
-              <button
+              </Button>
+              <Button
                 disabled={page === totalPages}
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                 className="px-3 py-1.5 rounded-lg border border-border/15 text-xs text-foreground bg-soft/10 hover:bg-soft/30 disabled:opacity-40 disabled:pointer-events-none cursor-pointer transition-all"
               >
                 Next
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -537,7 +596,7 @@ export default function EnquiryPage() {
                 </div>
                 <div className="flex gap-2">
                   {['pending', 'contacted', 'resolved', 'ignored'].map(s => (
-                    <button
+                    <Button
                       key={s}
                       onClick={() => handleStatusChange(selectedEnquiry._id, s)}
                       className={`px-3 py-1.5 text-xs font-medium rounded-lg capitalize cursor-pointer transition-all ${
@@ -550,7 +609,7 @@ export default function EnquiryPage() {
                       }`}
                     >
                       {s}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>
@@ -579,7 +638,7 @@ export default function EnquiryPage() {
                 >
                   <MessageCircle className="h-4 w-4" /> Follow Up on WhatsApp
                 </a>
-                <button
+                <Button
                   type="button"
                   disabled={savingNotes}
                   onClick={handleSaveNotes}
@@ -593,7 +652,7 @@ export default function EnquiryPage() {
                   ) : (
                     "Save Notes"
                   )}
-                </button>
+                </Button>
               </div>
             </div>
           )}

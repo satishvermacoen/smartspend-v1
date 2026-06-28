@@ -3,7 +3,7 @@ import connectDB from '@/lib/mongodb';
 import Enquiry from '@/features/shared/model/enquiry';
 import ReferralCode from '@/features/shared/model/referral-code';
 import ReferralConversion from '@/features/shared/model/referral-conversion';
-import User from '@/features/shared/model/user';
+import User, { IUser } from '@/features/shared/model/user';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
 
@@ -35,9 +35,23 @@ export async function POST(req: Request) {
     // Connect to database
     await connectDB();
 
+    const cleanPhone = mobile.trim();
+    const cleanEmail = email ? email.toLowerCase().trim() : '';
+
+    const queryConditions: Array<{ phone: string } | { email: string }> = [{ phone: cleanPhone }];
+    if (cleanEmail) {
+      queryConditions.push({ email: cleanEmail });
+    }
+
+    const existingUser = await User.findOne({
+      $or: queryConditions
+    });
+
+
     // Check for referral cookie to attribute this lead/enquiry
     let appliedCode = '';
     let referredByObj = undefined;
+    let referrerName = undefined;
 
     try {
       const cookieStore = await cookies();
@@ -60,12 +74,53 @@ export async function POST(req: Request) {
               referrerId: referrerUser._id,
               referrerEmail: referrerUser.email
             };
+            referrerName = [referrerUser.firstName, referrerUser.lastName].filter(Boolean).join(' ').trim();
           }
         }
       }
     } catch (cookieErr) {
       console.warn('Could not read referral cookie during enquiry submission:', cookieErr);
     }
+
+    let newCredentials = null;
+
+    if (!existingUser) {
+      const nameParts = name.trim().split(/\s+/);
+      const firstName = nameParts[0] || 'Client';
+      const lastName = nameParts.slice(1).join(' ') || '.';
+
+      const rawNumberDigits = cleanPhone.replace(/\D/g, '') || '123456';
+      const defaultPassword = `Welcome@${rawNumberDigits}`;
+
+      const userPayload: Partial<IUser> = {
+        firstName,
+        lastName,
+        phone: cleanPhone,
+        password: defaultPassword,
+        role: 'customer',
+        status: 'active',
+        emailVerified: true,
+        source: referrerName ? 'referral' : 'website_enquiry',
+        referredBy: referredByObj
+      };
+      let finalEmail = cleanEmail;
+      if (!finalEmail) {
+        const sanitizedPhoneNum = cleanPhone.replace(/\D/g, '') || Math.floor(Math.random() * 10000000).toString();
+        finalEmail = `${sanitizedPhoneNum}@spentsmart.local`;
+      }
+      userPayload.email = finalEmail;
+
+      const user = new User(userPayload);
+
+      await user.save();
+
+      newCredentials = {
+        username: cleanPhone,
+        email: finalEmail,
+        password: defaultPassword
+      };
+    }
+
 
     // Create and save enquiry
     const enquiry = new Enquiry({
@@ -131,7 +186,8 @@ export async function POST(req: Request) {
       { 
         success: true, 
         message: 'Enquiry submitted successfully.', 
-        enquiryId: enquiry._id 
+        enquiryId: enquiry._id,
+        loginCredentials: newCredentials
       },
       { status: 201 }
     );

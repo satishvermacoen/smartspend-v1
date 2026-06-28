@@ -1,6 +1,7 @@
 "use client";
 
 import { MARQUEE_TOOLS } from "@/data/tools";
+import Image from "next/image";
 
 export function MarqueeSection() {
   return (
@@ -32,7 +33,9 @@ export function MarqueeSection() {
                 >
                   {/* Circular Logo Frame with white background to make brand logos look perfect */}
                   <div className="relative grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white p-1.5 shadow-md ring-1 ring-border/10 overflow-hidden">
-                    <img
+                    <Image
+                      width={48}
+                      height={48}
                       src={logoSrc}
                       alt={t.name}
                       loading="lazy"
