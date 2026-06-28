@@ -81,7 +81,7 @@ export default function HowPricesAreLowerPage() {
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary backdrop-blur mb-5">
               <Sparkles className="h-3.5 w-3.5" /> Pricing Transparency
             </span>
-            <h1 className="font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl leading-tight">
+            <h1 className="font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl leading-tight">
               How Our Prices <span className="bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent font-extrabold">Are Lower?</span>
             </h1>
             <p className="mx-auto mt-5 text-base text-muted-foreground sm:text-lg">
@@ -135,7 +135,7 @@ export default function HowPricesAreLowerPage() {
               <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary backdrop-blur mb-5">
                 <Sparkles className="h-3.5 w-3.5" /> Activation Guide
               </span>
-              <h2 className="font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl leading-tight">
+              <h2 className="font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl leading-tight">
                 How Activation <span className="bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent font-extrabold">Works</span>
               </h2>
               <p className="mx-auto mt-5 text-base text-muted-foreground sm:text-lg">

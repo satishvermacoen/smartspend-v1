@@ -15,7 +15,7 @@ export function ReferralProgramSection() {
           <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/5 px-5 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-brand backdrop-blur sm:text-base">
             <Share2 className="h-4 w-4 sm:h-5 sm:w-5" /> Referral Program
           </span>
-          <h2 className="mt-5 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-4xl">
+          <h2 className="mt-5 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-4xl">
             Share the Savings. <span className="bg-gradient-to-r from-primary to-brand bg-clip-text text-transparent font-extrabold">Earn Rewards.</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground leading-relaxed">

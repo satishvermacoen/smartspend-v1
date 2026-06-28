@@ -15,7 +15,7 @@ export function TopDemandSection() {
         <p className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-primary sm:text-sm">
           Top Demanded Subscriptions
         </p>
-        <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
           Professional, AI &amp; Creative Tools
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">

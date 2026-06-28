@@ -74,7 +74,7 @@ export default function FaqPage() {
         {/* HERO SECTION */}
         <section className="relative overflow-hidden border-b border-border bg-gradient-hero py-12 sm:py-16">
           <div className="mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="font-display text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            <h1 className="font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
               Frequently Asked <span className="bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent font-extrabold">Questions</span>
             </h1>
             <p className="mt-5 max-w-2xl mx-auto text-base text-muted-foreground sm:text-lg">

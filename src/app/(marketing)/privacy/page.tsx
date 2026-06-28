@@ -13,7 +13,7 @@ export default function PrivacyPage() {
       <main className="flex-1">
         <section className="border-b border-border bg-gradient-soft">
           <div className="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8">
-            <h1 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+            <h1 className="font-display text-3xl font-bold tracking-tight sm:text-5xl">
               Privacy <span className="text-gradient">Policy</span>
             </h1>
             <p className="mt-3 text-sm text-muted-foreground">Last Updated: June 2026</p>

@@ -27,7 +27,7 @@ export function HeroSection() {
             Stop overpaying for subscriptions
           </span>
 
-          <h1 className="mt-3.5 font-display text-5xl sm:text-6.5xl lg:text-7.5xl xl:text-8.5xl font-extrabold leading-[1.08] tracking-tight text-foreground">
+          <h1 className="mt-3.5 font-display text-[2rem] sm:text-6.5xl lg:text-7.5xl xl:text-8.5xl font-extrabold leading-[1.08] tracking-tight text-foreground">
             Same Subscriptions.
             <br />
             <span className="bg-gradient-to-r from-primary via-emerald-500 to-teal-500 bg-clip-text text-transparent drop-shadow-sm">
