@@ -29,10 +29,10 @@ export async function POST(req: NextRequest) {
       }
 
       // Check if user already exists with phone or email
-      const query: any[] = [{ phone }];
+      const query: Record<string, string>[] = [{ phone }];
       if (email) query.push({ email });
 
-      let existingUser = await User.findOne({ $or: query });
+      const existingUser = await User.findOne({ $or: query });
       if (existingUser) {
         targetUserId = existingUser._id;
       } else {
@@ -81,8 +81,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, referralCode: newCode });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Generate Referral Link Error:", error);
-    return NextResponse.json({ error: error.message || "Failed to generate referral link" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to generate referral link";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

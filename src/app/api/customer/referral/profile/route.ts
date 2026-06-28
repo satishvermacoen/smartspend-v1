@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/mongodb";
@@ -6,7 +6,7 @@ import User from "@/features/shared/model/user";
 import ReferralConversion from "@/features/shared/model/referral-conversion";
 import ReferralReward from "@/features/shared/model/referral-reward";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user?.id) {
@@ -33,10 +33,10 @@ export async function GET(req: NextRequest) {
 
     const reward = await ReferralReward.findOne({ customer_id: user._id }).lean();
 
-    let sourceDisplay = user.source || "website_enquiry";
+    let sourceDisplay: string = user.source || "website_enquiry";
     if (user.source === "referral" && user.referredBy?.referrerId) {
-      const referrer = user.referredBy.referrerId as any;
-      sourceDisplay = `Referred by: ${referrer.firstName || ""} ${referrer.lastName || ""}`.trim() || referrer.email;
+      const referrer = user.referredBy.referrerId as { firstName?: string; lastName?: string; email?: string };
+      sourceDisplay = `Referred by: ${referrer.firstName || ""} ${referrer.lastName || ""}`.trim() || referrer.email || "Unknown";
     }
 
     const profileData = {
@@ -59,8 +59,9 @@ export async function GET(req: NextRequest) {
     };
 
     return NextResponse.json(profileData);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Fetch Customer Profile Error:", error);
-    return NextResponse.json({ error: error.message || "Failed to fetch profile" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to fetch profile";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -5,8 +5,7 @@ import connectDB from "@/lib/mongodb";
 import User from "@/features/shared/model/user";
 import ReferralSetting from "@/features/shared/model/referral-setting";
 import ReferralReward from "@/features/shared/model/referral-reward";
-import ClientPurchase from "@/features/shared/model/client-purchase";
-import mongoose from "mongoose";
+import ClientPurchase, { IClientPurchase } from "@/features/shared/model/client-purchase";
 
 export async function GET(req: NextRequest) {
   try {
@@ -24,12 +23,13 @@ export async function GET(req: NextRequest) {
 
     await connectDB();
 
-    const purchases = await ClientPurchase.find({ client_id: clientId }).sort({ purchase_date: -1 }).lean();
+    const purchases: IClientPurchase[] = await ClientPurchase.find({ client_id: clientId }).sort({ purchase_date: -1 }).lean();
 
     return NextResponse.json({ success: true, purchases });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Fetch Purchases Error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to fetch purchases";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
             customer_id: referrerId,
             total_earned: 0,
             cash_earned: 0,
-            subscription_months_earned: 0,
+            subscription_months: 0,
             pending_cash: 0
           });
         }
@@ -114,8 +114,9 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, purchase: newPurchase });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Add Purchase Error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Failed to add purchase";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

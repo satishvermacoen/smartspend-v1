@@ -6,7 +6,7 @@ import User from "@/features/shared/model/user";
 import ReferralCode from "@/features/shared/model/referral-code";
 import ReferralConversion from "@/features/shared/model/referral-conversion";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user?.id) {
@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
       success: true,
       referralCodes: enrichedCodes
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Customer get referral codes error:", error);
     return NextResponse.json(
       { error: "An unexpected error occurred while fetching your referral codes." },
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, referralCode: newCode });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Customer create referral code error:", error);
     return NextResponse.json(
       { error: "An unexpected error occurred while creating your referral code." },

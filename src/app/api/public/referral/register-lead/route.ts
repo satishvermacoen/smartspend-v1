@@ -98,7 +98,7 @@ export async function POST(req: Request) {
       status: 'active', // active immediately for direct login access
       emailVerified: true, // Bypass verification since phone/WhatsApp validation handles it
       referredBy: referredByObj,
-      source: referrerName || 'website_enquiry'
+      source: referrerName ? 'referral' : 'website_enquiry'
     };
     let finalEmail = cleanEmail;
     if (!finalEmail) {

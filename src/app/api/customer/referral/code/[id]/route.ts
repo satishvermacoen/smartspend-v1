@@ -40,10 +40,11 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       code: codeDoc
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Customer patch code error:", error);
+    const message = error instanceof Error ? error.message : "An unexpected error occurred while updating referral code.";
     return NextResponse.json(
-      { error: error.message || "An unexpected error occurred while updating referral code." },
+      { error: message },
       { status: 500 }
     );
   }
@@ -86,10 +87,11 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
       message: `Referral code "${codeDoc.code}" deleted successfully.`
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Customer delete code error:", error);
+    const message = error instanceof Error ? error.message : "An unexpected error occurred while deleting referral code.";
     return NextResponse.json(
-      { error: error.message || "An unexpected error occurred while deleting referral code." },
+      { error: message },
       { status: 500 }
     );
   }

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/mongodb";
@@ -7,7 +7,7 @@ import ReferralConversion from "@/features/shared/model/referral-conversion";
 import ReferralReward from "@/features/shared/model/referral-reward";
 import ClientPurchase from "@/features/shared/model/client-purchase";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session || session.user.role !== "admin") {

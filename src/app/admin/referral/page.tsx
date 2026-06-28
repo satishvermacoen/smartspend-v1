@@ -2,23 +2,14 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { 
-  Users, 
-  Settings, 
   TrendingUp, 
   RefreshCw, 
-  Search, 
-  Trash2, 
   CheckCircle2,   
-  ToggleLeft, 
-  ToggleRight, 
-  Plus, 
   Loader2, 
   Coins,
-  Clipboard,
-  MessageCircle
-} from "lucide-react";
+  Clipboard} from "lucide-react";
 import { toast } from "sonner";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { 
   AdminKPIs, CodeItem, ConversionItem, PendingApprovalItem, ProgramSettings, ClientItem,

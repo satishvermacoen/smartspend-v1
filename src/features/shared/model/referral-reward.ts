@@ -14,6 +14,7 @@ export interface IReferralReward extends Document {
   total_earned: number;
   cash_earned: number;
   subscription_months: number;
+  pending_cash: number;
   redemptions: IRedemption[];
   preferred_reward_type: 'cash' | 'subscription';
   createdAt?: Date;
@@ -33,6 +34,7 @@ const ReferralRewardSchema = new Schema<IReferralReward>({
   total_earned: { type: Number, default: 0 },
   cash_earned: { type: Number, default: 0 },
   subscription_months: { type: Number, default: 0 },
+  pending_cash: { type: Number, default: 0 },
   redemptions: [RedemptionSchema],
   preferred_reward_type: { type: String, enum: ['cash', 'subscription'], default: 'cash' }
 }, {
@@ -57,6 +59,7 @@ export async function getOrCreateRewardLedger(customerId: string | mongoose.Type
       total_earned: 0,
       cash_earned: 0,
       subscription_months: 0,
+      pending_cash: 0,
       redemptions: [],
       preferred_reward_type: 'cash'
     });

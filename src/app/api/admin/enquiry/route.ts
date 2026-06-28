@@ -28,7 +28,7 @@ export async function GET(req: Request) {
     const skip = (page - 1) * limit;
 
     // 4. Construct query filters
-    const query: Record<string, any> = {};
+    const query: Record<string, unknown> = {};
 
     // Filter by status if not "all"
     if (status !== 'all') {
@@ -43,7 +43,7 @@ export async function GET(req: Request) {
     // Filter by date range
     if (dateRange !== 'all') {
       const now = new Date();
-      let startDate = new Date();
+      const startDate = new Date();
       if (dateRange === 'today') {
         startDate.setHours(0, 0, 0, 0);
       } else if (dateRange === 'week') {
@@ -66,10 +66,10 @@ export async function GET(req: Request) {
     }
 
     // 5. Fetch enquiries and total count
-    const sortConfig: Record<string, 1 | -1> = { createdAt: sortOrder === 'asc' ? 1 : -1 };
+    const sortConfig: Record<string, 'asc' | 'desc'> = { createdAt: sortOrder === 'asc' ? 'asc' : 'desc' };
     
     const enquiries = await Enquiry.find(query)
-      .sort(sortConfig as any)
+      .sort(sortConfig)
       .skip(skip)
       .limit(limit);
 

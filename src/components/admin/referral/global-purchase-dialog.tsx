@@ -71,7 +71,7 @@ export function GlobalPurchaseDialog({
       } else {
         toast.error(data.error || "Failed to record purchase");
       }
-    } catch (err) {
+    } catch {
       toast.error("An error occurred while adding purchase");
     } finally {
       setAddingPurchase(false);

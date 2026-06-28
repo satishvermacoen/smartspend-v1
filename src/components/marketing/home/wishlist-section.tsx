@@ -28,17 +28,6 @@ const CATEGORY_ORDER = [
   "Platform Credits",
 ];
 
-interface WishlistResponse {
-  success: boolean;
-  message: string;
-  isNewUser: boolean;
-  loginCredentials: {
-    username: string;
-    email: string;
-    password: string;
-  } | null;
-}
-
 export function WishlistSection() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -49,7 +38,6 @@ export function WishlistSection() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [responseData, setResponseData] = useState<WishlistResponse | null>(null);
 
   const uniqueTools = useMemo(() => {
     const seen = new Set<string>();
@@ -138,7 +126,6 @@ export function WishlistSection() {
         throw new Error(json.error || "Failed to submit wishlist.");
       }
 
-      setResponseData(json);
       setSubmitted(true);
       toast.success(json.message || "Wishlist submitted successfully!");
     } catch (err) {

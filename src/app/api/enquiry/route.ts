@@ -100,7 +100,7 @@ export async function POST(req: Request) {
         role: 'customer',
         status: 'active',
         emailVerified: true,
-        source: referrerName || 'website_enquiry',
+        source: referrerName ? 'referral' : 'website_enquiry',
         referredBy: referredByObj
       };
       let finalEmail = cleanEmail;
