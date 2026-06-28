@@ -40,7 +40,7 @@ export function SiteHeader() {
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
 
   return (
-    <header className="sticky top-4 z-40 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-4 z-40 mx-auto w-full max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 sm:px-6 lg:px-8">
       <div className="relative flex h-16 items-center justify-between px-6 bg-background/90 backdrop-blur-md border border-border/10 rounded-2xl shadow-soft">
         <Link href="/" className="flex items-center gap-2.5" aria-label="SpendSmart Subscriptions">
           <span className="relative grid h-9 w-9 shrink-0 place-items-center sm:h-10 sm:w-10">
@@ -162,7 +162,7 @@ export function SiteFooter({
       {!hideFloatingSocials && <FloatingSocials />}
       <footer className="border-t border-border bg-card text-foreground">
 
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-12">
             {/* Brand Col */}
             <div className="lg:col-span-5 space-y-4 lg:-mt-2">

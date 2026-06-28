@@ -45,7 +45,7 @@ export function ContactSection() {
       <div className="absolute right-10 top-1/4 h-80 w-80 rounded-full bg-primary/5 blur-3xl opacity-40 pointer-events-none" />
       <div className="absolute left-10 bottom-1/4 h-80 w-80 rounded-full bg-emerald-500/5 blur-3xl opacity-30 pointer-events-none" />
  
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary backdrop-blur">
             Contact

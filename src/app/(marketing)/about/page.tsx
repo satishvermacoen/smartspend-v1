@@ -52,14 +52,14 @@ export default function AboutPage() {
       <SiteHeader />
       <main className="flex-1">
         <section className="relative overflow-hidden border-b border-border bg-gradient-hero py-12 sm:py-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <div className="mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="font-display text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
               About <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">Us</span>
             </h1>
           </div>
         </section>
 
-        <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <section className="mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 py-12 sm:px-6 lg:px-8">
           {/* Stats Boxes at the top */}
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-12">
             {STATS.map((s) => (

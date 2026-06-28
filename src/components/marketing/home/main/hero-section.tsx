@@ -20,7 +20,7 @@ export function HeroSection() {
       <div className="absolute left-10 top-20 h-96 w-96 rounded-full bg-primary/10 opacity-30 blur-3xl" />
       <div className="absolute right-10 bottom-10 h-[400px] w-[400px] rounded-full bg-emerald-500/5 opacity-25 blur-3xl" />
 
-      <div className="relative mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:items-center lg:gap-8 lg:px-8">
+      <div className="relative mx-auto grid max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:items-center lg:gap-8 lg:px-8">
         {/* Left Side Content */}
         <div className="lg:col-span-7 flex flex-col justify-center">
           <span className="block font-display text-xs font-bold uppercase tracking-[0.25em] text-primary sm:text-sm">

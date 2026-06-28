@@ -9,7 +9,7 @@ export function ReferralProgramSection() {
       <div className="absolute -left-24 top-20 h-64 w-64 rounded-full bg-brand-soft/10 blur-3xl" />
       <div className="absolute -right-24 bottom-10 h-64 w-64 rounded-full bg-brand-soft/10 blur-3xl" />
       
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 sm:px-6 lg:px-8">
         {/* SECTION HEADER */}
         <div className="text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/5 px-5 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-brand backdrop-blur sm:text-base">

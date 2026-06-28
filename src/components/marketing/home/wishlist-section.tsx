@@ -185,7 +185,7 @@ export function WishlistSection() {
       <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-primary/5 blur-3xl opacity-30 pointer-events-none" />
       <div className="absolute left-0 bottom-0 h-96 w-96 rounded-full bg-emerald-500/5 blur-3xl opacity-35 pointer-events-none" />
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-12 items-stretch">
           {/* LEFT COLUMN: WISHLIST FORM */}
           <div className="lg:col-span-7 flex flex-col justify-start">

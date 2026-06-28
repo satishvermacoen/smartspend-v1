@@ -21,7 +21,7 @@ export default function ReferralPage() {
         <section className="relative overflow-hidden border-b border-border bg-gradient-hero py-12 sm:py-16">
           <div className="absolute -left-32 top-16 h-72 w-72 rounded-full bg-brand-soft opacity-40 blur-3xl" />
           <div className="absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-gold opacity-20 blur-3xl" />
-          <div className="relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <div className="relative mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 text-center sm:px-6 lg:px-8">
             <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/5 px-5 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-brand backdrop-blur sm:text-base">
               <Share2 className="h-4 w-4 sm:h-5 sm:w-5" /> Referral Program
             </span>
@@ -36,7 +36,7 @@ export default function ReferralPage() {
         </section>
 
         {/* REWARDS SECTION */}
-        <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <section className="mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 py-14 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/5 px-5 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-brand backdrop-blur sm:text-base">
               Rewards
