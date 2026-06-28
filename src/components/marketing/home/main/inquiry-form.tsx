@@ -6,6 +6,7 @@ import { ALL_TOOLS } from "@/data/tools";
 import { ToolLogo } from "@/components/marketing/layout/tool-logo";
 import { toast } from "sonner";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
  
 // Deduplicate tool names and filter out invalid values
 const uniqueTools = Array.from(
@@ -263,7 +264,7 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <button
+              <Button
                 onClick={() => {
                   const text = `Hey! Check out SpentSmart to manage and optimize your premium subscriptions.`;
                   window.open(`https://wa.me/${loginCredentials.username}?text=${encodeURIComponent(text)}`, "_blank");
@@ -271,7 +272,7 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
                 className="flex-1 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-brand hover:bg-brand/90 text-white font-bold text-sm shadow-soft transition-all cursor-pointer"
               >
                 <MessageSquare className="h-4.5 w-4.5" /> Share on WhatsApp
-              </button>
+              </Button>
               <Link
                 href="/login"
                 className="flex-1 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-card border border-border hover:bg-soft text-foreground font-bold text-sm shadow-soft transition-all"
@@ -345,7 +346,7 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
         <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5 transition-colors group-focus-within:text-brand">
           Select Subscription <span className="text-brand font-bold">*</span>
         </label>
-        <button
+        <Button
           type="button"
           onClick={() => setDropdownOpen(!dropdownOpen)}
           className="w-full text-left pl-10 pr-10 py-3 rounded-xl border border-border/10 bg-soft/20 text-sm text-foreground focus:border-brand/40 focus:ring-1 focus:ring-brand/40 focus:outline-none transition-all duration-200 cursor-pointer shadow-sm relative h-12"
@@ -363,7 +364,7 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
           <span className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
             <ChevronDown className={`h-4 w-4 text-muted-foreground/50 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
           </span>
-        </button>
+        </Button>
  
         {dropdownOpen && (
           <div 
@@ -451,7 +452,7 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
         </div>
       </div>
  
-      <button
+      <Button
         type="submit"
         disabled={submitting || !!mobileError}
         className="w-full h-12 bg-gradient-brand hover:brightness-110 active:scale-[0.99] text-primary-foreground font-bold rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-card cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
@@ -467,7 +468,7 @@ export function InquiryForm({ onSuccess }: InquiryFormProps) {
             Submit
           </>
         )}
-      </button>
+      </Button>
     </form>
   );
 }

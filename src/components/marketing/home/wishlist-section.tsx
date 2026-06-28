@@ -1,12 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Check, Plus, Search, Send, Sparkles, X, Loader2, KeyRound, ExternalLink, MessageSquare, Copy } from "lucide-react";
+import { Check, Plus, Search, Send, Sparkles, X, Loader2, MessageSquare } from "lucide-react";
 import { ALL_TOOLS } from "@/data/tools";
 import { ToolLogo } from "@/components/marketing/layout/tool-logo";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import Link from "next/link";
 import { WhatsAppIcon } from "@/components/marketing/layout/site-chrome";
 
 const WA_NUMBER = "918770066995";
@@ -50,7 +49,6 @@ export function WishlistSection() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [responseData, setResponseData] = useState<WishlistResponse | null>(null);
 
   const uniqueTools = useMemo(() => {
@@ -152,13 +150,6 @@ export function WishlistSection() {
     }
   }
 
-  const handleCopyPassword = () => {
-    if (!responseData?.loginCredentials?.password) return;
-    navigator.clipboard.writeText(responseData.loginCredentials.password);
-    setCopied(true);
-    toast.success("Password copied!");
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   const handleWhatsAppShare = () => {
     const lines = [
@@ -205,12 +196,12 @@ export function WishlistSection() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 pt-2 w-full max-w-xs">
-                  <button
+                  <Button
                     onClick={handleWhatsAppShare}
                     className="w-full inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-soft transition-all cursor-pointer"
                   >
                     <MessageSquare className="h-4.5 w-4.5" /> Share on WhatsApp
-                  </button>
+                  </Button>
                 </div>
               </div>
             ) : (

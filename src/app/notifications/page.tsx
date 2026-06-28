@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface NotificationItem {
   _id: string;
@@ -216,26 +217,26 @@ export default function NotificationsPage() {
         </div>
 
         <div className="flex gap-2 w-full sm:w-auto">
-          <button
+          <Button
             disabled={unreadCount === 0}
             onClick={handleMarkAllRead}
             className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 rounded-xl border border-border/15 bg-card/45 px-4 py-2 text-xs font-semibold text-foreground hover:bg-card/75 disabled:opacity-40 disabled:pointer-events-none transition-all cursor-pointer shadow-soft"
           >
             <CheckCheck className="h-4 w-4" /> Mark all read
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleClearRead}
             className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/15 transition-all cursor-pointer shadow-soft"
           >
             <Trash2 className="h-4 w-4" /> Clear read history
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Filter Tabs */}
       <div className="bg-card/30 backdrop-blur-xl border border-border/10 rounded-xl p-1.5 shadow-elegant flex items-center gap-1 max-w-[240px] relative z-10">
         {(['all', 'unread'] as const).map(f => (
-          <button
+          <Button
             key={f}
             onClick={() => { setFilter(f); setPage(1); }}
             className={`flex-1 px-4 py-2 text-xs font-semibold rounded-lg capitalize transition-all cursor-pointer ${
@@ -245,7 +246,7 @@ export default function NotificationsPage() {
             }`}
           >
             {f} Notifications
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -318,14 +319,14 @@ export default function NotificationsPage() {
                 </div>
 
                 {/* Individual delete action */}
-                <button
+                <Button
                   type="button"
                   onClick={(e) => handleDeleteIndividual(e, item._id)}
                   className="h-8 w-8 rounded-lg border border-border/15 bg-card/45 hover:bg-destructive/10 hover:text-destructive flex items-center justify-center text-muted-foreground opacity-0 group-hover:opacity-100 transition-all shrink-0 self-center"
                   title="Clear notification"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
-                </button>
+                </Button>
               </div>
             ))}
 
@@ -336,20 +337,20 @@ export default function NotificationsPage() {
                   Page {page} of {totalPages}
                 </span>
                 <div className="flex gap-2">
-                  <button
+                  <Button
                     disabled={page === 1}
                     onClick={() => setPage(p => Math.max(1, p - 1))}
                     className="px-3 py-1.5 rounded-lg border border-border/15 text-foreground bg-soft/10 hover:bg-soft/30 disabled:opacity-40 disabled:pointer-events-none cursor-pointer transition-all font-semibold"
                   >
                     Previous
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     disabled={page === totalPages}
                     onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                     className="px-3 py-1.5 rounded-lg border border-border/15 text-foreground bg-soft/10 hover:bg-soft/30 disabled:opacity-40 disabled:pointer-events-none cursor-pointer transition-all font-semibold"
                   >
                     Next
-                  </button>
+                  </Button>
                 </div>
               </div>
             )}

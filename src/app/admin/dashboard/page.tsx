@@ -13,7 +13,9 @@ import {
   Calendar,
   MessageSquare,
   UserPlus,
-  DollarSign
+  DollarSign,
+  Coins,
+  CheckCircle2
 } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +32,7 @@ import {
   Cell
 } from "recharts";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface RecentSignup {
   _id: string;
@@ -54,6 +57,37 @@ interface RecentEnquiry {
   subscription?: string;
   status: string;
   createdAt: string;
+}
+
+interface AdminKPIs {
+  activeCodes: number;
+  clicks: number;
+  signups: number;
+  purchases: number;
+  revenue: number;
+  cashPaid: number;
+  subscriptionMonths: number;
+}
+
+interface LeaderboardItem {
+  referrerId: string;
+  name: string;
+  email: string;
+  referralCode: string;
+  earnings: number;
+  conversionsCount: number;
+  conversionRate: number;
+}
+
+interface RecentConversion {
+  _id: string;
+  referralCode: string;
+  purchasedAt: string;
+  amount: number;
+  referrerReward: number;
+  referrerRewardType: 'cash' | 'subscription';
+  referrerName: string;
+  prospectName: string;
 }
 
 interface DashboardData {
@@ -81,6 +115,12 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
 
+  // Referral analytics state
+  const [refKpis, setRefKpis] = useState<AdminKPIs | null>(null);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardItem[]>([]);
+  const [recentConversions, setRecentConversions] = useState<RecentConversion[]>([]);
+  const [loadingReferrals, setLoadingReferrals] = useState(true);
+
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
@@ -99,10 +139,32 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const fetchReferralAnalytics = async () => {
+    try {
+      const res = await fetch("/api/admin/referrals/analytics");
+      const json = await res.json();
+      if (json.success) {
+        setRefKpis(json.kpis);
+        setLeaderboard(json.leaderboard);
+        setRecentConversions(json.recentConversions);
+      }
+    } catch (err) {
+      console.error("Error loading referral analytics:", err);
+    } finally {
+      setLoadingReferrals(false);
+    }
+  };
+
+  const handleRefresh = () => {
+    fetchDashboardData();
+    fetchReferralAnalytics();
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setMounted(true);
       fetchDashboardData();
+      fetchReferralAnalytics();
     }, 0);
   }, []);
 
@@ -143,12 +205,12 @@ export default function AdminDashboardPage() {
         <Activity className="h-12 w-12 opacity-30 text-destructive mb-3 animate-pulse" />
         <h4 className="font-semibold text-lg text-foreground">Failed to Load Dashboard</h4>
         <p className="text-sm max-w-sm mt-1">Please check your network and authorization permissions before trying again.</p>
-        <button
+        <Button
           onClick={fetchDashboardData}
           className="mt-4 px-4 py-2 text-xs font-semibold rounded-xl bg-card border border-border/15 text-foreground hover:bg-soft"
         >
           Try Again
-        </button>
+        </Button>
       </div>
     );
   }
@@ -171,13 +233,13 @@ export default function AdminDashboardPage() {
             System overview, client metrics, sales charts, and acquisition funnels.
           </p>
         </div>
-        <button
-          onClick={fetchDashboardData}
+        <Button
+          onClick={handleRefresh}
           className="inline-flex items-center gap-2 rounded-xl border border-border/15 bg-card/40 backdrop-blur-md px-4 py-2 text-sm font-medium text-foreground hover:bg-card/70 hover:-translate-y-0.5 active:scale-[0.98] transition-all cursor-pointer shadow-soft"
         >
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 ${loading || loadingReferrals ? 'animate-spin' : ''}`} />
           Refresh
-        </button>
+        </Button>
       </div>
 
       {/* KPI stats grid */}
@@ -378,6 +440,125 @@ export default function AdminDashboardPage() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Referral Program Analytics Section */}
+      <div className="relative z-10 pt-6">
+        <h3 className="text-xl font-display font-bold tracking-tight text-foreground mb-4">
+          Referral Program Overview
+        </h3>
+        
+        {loadingReferrals ? (
+          <div className="flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin text-brand" /></div>
+        ) : refKpis ? (
+          <div className="space-y-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-card/25 backdrop-blur-xl border border-border/10 rounded-2xl p-5 shadow-elegant flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Total Referrals</p>
+                  <h3 className="text-2xl font-bold font-display text-foreground mt-2">{refKpis.signups}</h3>
+                </div>
+                <div className="h-10 w-10 rounded-xl bg-brand/10 flex items-center justify-center text-brand">
+                  <Users className="h-5 w-5" />
+                </div>
+              </div>
+              <div className="bg-card/25 backdrop-blur-xl border border-border/10 rounded-2xl p-5 shadow-elegant flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Conversions</p>
+                  <h3 className="text-2xl font-bold font-display text-emerald-400 mt-2">{refKpis.purchases}</h3>
+                </div>
+                <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                  <CheckCircle2 className="h-5 w-5" />
+                </div>
+              </div>
+              <div className="bg-card/25 backdrop-blur-xl border border-border/10 rounded-2xl p-5 shadow-elegant flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Total Sales Revenue</p>
+                  <h3 className="text-2xl font-bold font-display text-emerald-400 mt-2">₹{refKpis.revenue}</h3>
+                </div>
+                <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+                  <Coins className="h-5 w-5" />
+                </div>
+              </div>
+              <div className="bg-card/25 backdrop-blur-xl border border-border/10 rounded-2xl p-5 shadow-elegant flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Avg Conv Rate</p>
+                  <h3 className="text-2xl font-bold font-display text-purple-400 mt-2">
+                    {refKpis.clicks > 0 ? ((refKpis.purchases / refKpis.clicks) * 100).toFixed(1) : 0}%
+                  </h3>
+                </div>
+                <div className="h-10 w-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400">
+                  <TrendingUp className="h-5 w-5" />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="bg-card/30 backdrop-blur-xl border border-border/10 rounded-2xl p-6 shadow-elegant lg:col-span-1">
+                <div className="flex items-center gap-2 mb-4">
+                  <ArrowUpRight className="h-5 w-5 text-brand" />
+                  <h3 className="font-bold">Top Referrers Leaderboard</h3>
+                </div>
+                {leaderboard.length === 0 ? (
+                  <div className="py-10 text-center text-xs text-muted-foreground">No earnings data loaded yet.</div>
+                ) : (
+                  <div className="space-y-4">
+                    {leaderboard.map((item, idx) => (
+                      <div key={item.referrerId || idx} className="flex items-center justify-between p-3 rounded-xl border border-border/5 bg-soft/10">
+                        <div className="space-y-1">
+                          <div className="text-xs font-bold text-muted-foreground">Rank #{idx + 1}</div>
+                          <div className="font-semibold text-foreground text-sm">{item.name}</div>
+                          <div className="text-[10px] font-mono text-brand font-bold">{item.referralCode}</div>
+                        </div>
+                        <div className="text-right space-y-1">
+                          <div className="font-bold text-foreground text-sm">₹{item.earnings}</div>
+                          <div className="text-[10px] text-muted-foreground">{item.conversionsCount} sales ({item.conversionRate}%)</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="bg-card/30 backdrop-blur-xl border border-border/10 rounded-2xl p-6 shadow-elegant lg:col-span-2">
+                <div className="flex items-center gap-2 mb-4">
+                  <Users className="h-5 w-5 text-brand" />
+                  <h3 className="font-bold">Recent Purchased Conversions</h3>
+                </div>
+                {recentConversions.length === 0 ? (
+                  <div className="py-14 text-center text-muted-foreground text-sm">No purchases recorded yet.</div>
+                ) : (
+                  <div className="overflow-y-auto max-h-[350px]">
+                    <table className="w-full text-left text-sm">
+                      <thead>
+                        <tr className="border-b border-border/10 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                          <th className="py-2">Date</th>
+                          <th className="py-2">Prospect</th>
+                          <th className="py-2">Referrer</th>
+                          <th className="py-2 text-right">Net Value</th>
+                          <th className="py-2 text-right">Reward</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border/5">
+                        {recentConversions.map(c => (
+                          <tr key={c._id} className="hover:bg-soft/5">
+                            <td className="py-3 text-xs text-muted-foreground">{formatDate(c.purchasedAt)}</td>
+                            <td className="py-3 font-semibold text-foreground text-xs">{c.prospectName}</td>
+                            <td className="py-3 text-xs text-muted-foreground">{c.referrerName} ({c.referralCode})</td>
+                            <td className="py-3 text-right text-xs font-mono">₹{c.amount}</td>
+                            <td className="py-3 text-right text-xs font-bold text-brand">
+                              {c.referrerRewardType === 'cash' ? `₹${c.referrerReward}` : `${c.referrerReward} Mos`}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );

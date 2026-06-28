@@ -2,8 +2,9 @@ import { useState } from "react";
 import { logoUrl } from "@/data/tools";
 import { Tool } from "@/types";
 import { LOGOS } from "@/data/logo-map";
+import Image, { StaticImageData } from "next/image";
 
-const LOGO_OVERRIDES: Record<string, any> = {
+const LOGO_OVERRIDES: Record<string, string | StaticImageData> = {
   // Developer Tools
   "Firecrawl": "https://logos.hunter.io/firecrawl.dev",
   "Firecrawl Credits": "https://logos.hunter.io/firecrawl.dev",
@@ -13,7 +14,7 @@ const LOGO_OVERRIDES: Record<string, any> = {
   "Bolt": "https://www.google.com/s2/favicons?domain=bolt.new&sz=128",
 
   // Design & Creative Tools
-  "Adobe Creative Cloud": LOGOS["adobe-cc"],
+  "Adobe Creative Cloud": LOGOS["adobe-cc"] as StaticImageData,
   "Canva Pro": "https://logos.hunter.io/canva.com",
   "Canva Business + Leonardo AI": "https://logos.hunter.io/canva.com",
   "CapCut": "https://logos.hunter.io/capcut.com",
@@ -39,7 +40,7 @@ const LOGO_OVERRIDES: Record<string, any> = {
 
   // Platform Credits
   "OpenAI Credits": "https://logos.hunter.io/openai.com",
-  "AWS Credits": LOGOS["aws-credits"],
+  "AWS Credits": LOGOS["aws-credits"] as StaticImageData,
   "MongoDB Credits": "https://logos.hunter.io/mongodb.com",
   "Vapi Credits": "https://logos.hunter.io/vapi.ai",
   "Airtable Credits": "https://logos.hunter.io/airtable.com",
@@ -60,7 +61,7 @@ export function ToolLogo({
   let primary: string | undefined = undefined;
   const override = LOGO_OVERRIDES[tool.name];
   if (override) {
-    primary = typeof override === "object" && override !== null && "src" in override ? override.src : override;
+    primary = typeof override === "object" && override !== null && "src" in override ? (override as { src: string }).src : (override as string);
   } else if (tool.logo) {
     primary = typeof tool.logo === "object" && tool.logo !== null && "src" in tool.logo ? tool.logo.src : tool.logo;
   } else if (tool.slug) {
@@ -105,7 +106,9 @@ export function ToolLogo({
 
   return (
     <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
-      <img
+      <Image
+        width={48}
+        height={48}
         src={primary}
         alt={tool.name}
         loading={tool.logo ? "eager" : "lazy"}

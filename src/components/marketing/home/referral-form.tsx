@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Copy, Check, Loader2, Sparkles, KeyRound, ExternalLink, MessageSquare } from "lucide-react";
+import { ArrowRight, Copy, Check, Loader2, KeyRound, ExternalLink, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface RegistrationData {
   referralLink: string;
@@ -103,13 +104,13 @@ export function ReferralForm() {
           <label className="block text-xs font-bold uppercase tracking-wider text-muted-foreground">Your Invite Link</label>
           <div className="flex items-center border border-border bg-background rounded-xl px-4 py-3 justify-between font-mono text-sm font-bold text-foreground">
             <span className="truncate mr-2">{regData.referralLink}</span>
-            <button 
+            <Button
               onClick={handleCopyLink} 
               className="text-brand hover:text-brand/80 transition-colors cursor-pointer shrink-0"
               title="Copy Referral Link"
             >
               {copied ? <Check className="h-4.5 w-4.5 text-brand" /> : <Copy className="h-4.5 w-4.5" />}
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -132,12 +133,12 @@ export function ReferralForm() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
-          <button
+          <Button
             onClick={handleWhatsAppShare}
             className="flex-1 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-brand hover:bg-brand/90 text-white font-bold text-sm shadow-soft transition-all cursor-pointer"
           >
             <MessageSquare className="h-4.5 w-4.5" /> Share on WhatsApp
-          </button>
+          </Button>
           <Link
             href="/login"
             className="flex-1 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-card border border-border hover:bg-soft text-foreground font-bold text-sm shadow-soft transition-all"
@@ -187,7 +188,7 @@ export function ReferralForm() {
         />
       </div>
 
-      <button
+      <Button
         type="submit"
         disabled={loading}
         className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md transition hover:bg-primary/95 disabled:opacity-50 cursor-pointer h-12 font-display"
@@ -201,7 +202,7 @@ export function ReferralForm() {
             Register &amp; Get My Link <ArrowRight className="h-4 w-4" />
           </>
         )}
-      </button>
+      </Button>
       <p className="text-center text-xs text-muted-foreground">
         Registration creates your credentials and generates your link instantly.
       </p>

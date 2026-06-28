@@ -54,7 +54,7 @@ export function ContactSection() {
             Get In <span className="bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent font-extrabold">Touch</span>
           </h2>
           <p className="mt-4 text-base text-muted-foreground sm:text-lg">
-            Questions? Ready to save? We're one message away.
+            Questions? Ready to save? We&apos;re one message away.
           </p>
         </div>
  
@@ -315,7 +315,7 @@ function BookCallForm({ onSuccess }: { onSuccess: () => void }) {
           className="w-full px-4 py-2.5 rounded-xl border border-border/10 bg-soft/20 text-sm text-foreground placeholder:text-muted-foreground/45 focus:border-brand/40 focus:ring-1 focus:ring-brand/40 focus:outline-none transition-all resize-none shadow-sm"
         />
       </div>
-      <button
+      <Button
         type="submit"
         disabled={submitting}
         className="w-full h-11 mt-2 bg-gradient-brand hover:brightness-110 active:scale-[0.99] text-primary-foreground font-bold rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-card cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
@@ -328,7 +328,7 @@ function BookCallForm({ onSuccess }: { onSuccess: () => void }) {
         ) : (
           "Book Call"
         )}
-      </button>
+      </Button>
     </form>
   );
 }

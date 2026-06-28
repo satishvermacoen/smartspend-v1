@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface ProfileData {
   id: string;
@@ -244,7 +245,7 @@ export default function AccountSettingsPage() {
         <div className="lg:col-span-8 space-y-6">
           {/* Form Tabs selectors */}
           <div className="flex border-b border-border/10 gap-6">
-            <button
+            <Button
               onClick={() => setActiveTab('personal')}
               className={`pb-3 text-sm font-semibold transition-all relative cursor-pointer ${
                 activeTab === 'personal' 
@@ -256,8 +257,8 @@ export default function AccountSettingsPage() {
               {activeTab === 'personal' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand rounded-full" />
               )}
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => setActiveTab('security')}
               className={`pb-3 text-sm font-semibold transition-all relative cursor-pointer ${
                 activeTab === 'security' 
@@ -269,7 +270,7 @@ export default function AccountSettingsPage() {
               {activeTab === 'security' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand rounded-full" />
               )}
-            </button>
+            </Button>
           </div>
 
           {/* Settings forms panels */}
@@ -368,7 +369,7 @@ export default function AccountSettingsPage() {
 
                 {/* Save button */}
                 <div className="flex justify-end pt-2 border-t border-border/10 mt-6">
-                  <button
+                  <Button
                     type="submit"
                     disabled={savingProfile}
                     className="inline-flex items-center gap-2 rounded-xl bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md hover:brightness-110 active:scale-[0.99] disabled:opacity-50 cursor-pointer transition-all"
@@ -383,7 +384,7 @@ export default function AccountSettingsPage() {
                         <Save className="h-4 w-4" /> Save Information
                       </>
                     )}
-                  </button>
+                  </Button>
                 </div>
               </form>
             ) : (
@@ -440,7 +441,7 @@ export default function AccountSettingsPage() {
 
                 {/* Save button */}
                 <div className="flex justify-end pt-2 border-t border-border/10 mt-6">
-                  <button
+                  <Button
                     type="submit"
                     disabled={savingPassword}
                     className="inline-flex items-center gap-2 rounded-xl bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md hover:brightness-110 active:scale-[0.99] disabled:opacity-50 cursor-pointer transition-all"
@@ -455,7 +456,7 @@ export default function AccountSettingsPage() {
                         <UserCheck className="h-4 w-4" /> Change Password
                       </>
                     )}
-                  </button>
+                  </Button>
                 </div>
               </form>
             )}

@@ -298,12 +298,9 @@ export default function AllClientsPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
         <div>
-          <h2 className="text-3xl font-display font-bold tracking-tight text-foreground">
+          <h2 className="text-xl font-display font-bold tracking-tight text-foreground">
             Client Management
           </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            Monitor and administer system signups, referral links, and subscription tiers.
-          </p>
         </div>
         <Button
           onClick={fetchUsers}

@@ -20,6 +20,7 @@ import {
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface SubscriptionItem {
   _id?: string;
@@ -162,12 +163,12 @@ export default function ClientDashboardPage() {
         <CreditCard className="h-12 w-12 opacity-30 text-destructive mb-3" />
         <h4 className="font-semibold text-lg text-foreground">Failed to Load Dashboard</h4>
         <p className="text-sm max-w-sm mt-1">Please try refreshing or log back in to review your profile billing details.</p>
-        <button
+        <Button
           onClick={fetchDashboardData}
           className="mt-4 px-4 py-2 text-xs font-semibold rounded-xl bg-card border border-border/15 text-foreground hover:bg-soft"
         >
           Try Again
-        </button>
+        </Button>
       </div>
     );
   }
@@ -188,13 +189,13 @@ export default function ClientDashboardPage() {
             Check your active subscriptions validity, monitor wallet rewards, and invite friends.
           </p>
         </div>
-        <button
+        <Button
           onClick={fetchDashboardData}
           className="inline-flex items-center gap-2 rounded-xl border border-border/15 bg-card/40 backdrop-blur-md px-4 py-2 text-sm font-medium text-foreground hover:bg-card/70 hover:-translate-y-0.5 active:scale-[0.98] transition-all cursor-pointer shadow-soft"
         >
           <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
           Refresh
-        </button>
+        </Button>
       </div>
 
       {/* KPI Stats Grid */}
@@ -352,18 +353,18 @@ export default function ClientDashboardPage() {
 
                 {/* Actions */}
                 <div className="grid grid-cols-2 gap-2">
-                  <button
+                  <Button
                     onClick={handleCopyLink}
                     className="h-10 text-xs font-semibold rounded-xl border border-border/15 bg-card/45 hover:bg-card/75 text-foreground flex items-center justify-center gap-1.5 cursor-pointer shadow-soft transition-all"
                   >
                     <Copy className="h-3.5 w-3.5" /> {copied ? 'Copied' : 'Copy Link'}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={handleWhatsAppShare}
                     className="h-10 text-xs font-semibold rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/10 flex items-center justify-center gap-1.5 cursor-pointer transition-all"
                   >
                     <MessageSquare className="h-3.5 w-3.5" /> WhatsApp
-                  </button>
+                  </Button>
                 </div>
               </div>
             ) : (

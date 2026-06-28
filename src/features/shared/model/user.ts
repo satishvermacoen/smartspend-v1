@@ -46,9 +46,13 @@ export interface IUser extends Document {
     referrerId?: mongoose.Types.ObjectId;
     referrerEmail?: string;
   };
+  source?: 'referral' | 'website_enquiry' | 'admin';
+  isDeleted?: boolean;
   accountBalance: number;
   subscriptions: ISubscription[];
   loginHistory: ILoginHistory[];
+  createdAt?: Date;
+  updatedAt?: Date;
   
   // Virtuals
   fullName: string;
@@ -122,6 +126,8 @@ const UserSchema = new Schema<IUser, IUserModel>({
     referrerId: { type: Schema.Types.ObjectId, ref: 'User' },
     referrerEmail: { type: String }
   },
+  source: { type: String, enum: ['referral', 'website_enquiry', 'admin'], default: 'website_enquiry' },
+  isDeleted: { type: Boolean, default: false },
   accountBalance: { type: Number, default: 0 },
   subscriptions: [SubscriptionSchema],
   loginHistory: [LoginHistorySchema]
@@ -277,6 +283,7 @@ UserSchema.methods.sanitize = function(this: IUser): Record<string, unknown> {
   delete obj.loginAttempts;
   delete obj.lockUntil;
   delete obj.isSuperAdmin;
+  delete obj.isDeleted;
   return obj;
 };
 
@@ -315,6 +322,7 @@ UserSchema.statics.searchUsers = async function(this: IUserModel, query: string,
   const searchRegex = new RegExp(query, 'i');
   return this.find({
     ...filters,
+    isDeleted: { $ne: true },
     $or: [
       { email: searchRegex },
       { firstName: searchRegex },
@@ -324,11 +332,12 @@ UserSchema.statics.searchUsers = async function(this: IUserModel, query: string,
 };
 
 UserSchema.statics.getAdminStats = async function(this: IUserModel): Promise<Record<string, unknown>> {
-  const totalUsers = await this.countDocuments();
-  const activeUsers = await this.countDocuments({ status: 'active' });
-  const customersCount = await this.countDocuments({ role: 'customer' });
-  const adminsCount = await this.countDocuments({ role: 'admin' });
-  const verifiedEmails = await this.countDocuments({ emailVerified: true });
+  const baseFilter = { isDeleted: { $ne: true } };
+  const totalUsers = await this.countDocuments(baseFilter);
+  const activeUsers = await this.countDocuments({ ...baseFilter, status: 'active' });
+  const customersCount = await this.countDocuments({ ...baseFilter, role: 'customer' });
+  const adminsCount = await this.countDocuments({ ...baseFilter, role: 'admin' });
+  const verifiedEmails = await this.countDocuments({ ...baseFilter, emailVerified: true });
 
   const activeSubscriptionsCount = await this.countDocuments({
     'subscriptions.status': 'active',
