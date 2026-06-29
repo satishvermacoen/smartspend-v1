@@ -2,9 +2,118 @@
  
 import { BadgePercent, Tag, BellRing, Plus, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { ToolLogo } from "@/components/marketing/layout/tool-logo";
 import { TOP_DEMAND_CATEGORIES } from "@/data/tools";
- 
+import { useState } from "react";
+import Image from "next/image";
+import { LOGOS } from "@/data/logo-map";
+
+function TopDemandToolLogo({ tool, className = "h-full w-full" }: { tool: any; className?: string }) {
+  const nameLower = tool.name.toLowerCase();
+  const [failed, setFailed] = useState(false);
+
+  // Resolve source and scale specifically for Top Demand section
+  let src: any = undefined;
+  let scaleClass = "scale-[1.0]";
+
+  if (nameLower.includes("coursera")) {
+    src = "https://upload.wikimedia.org/wikipedia/commons/9/97/Coursera-Logo_Symbol.svg";
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("nordvpn") || nameLower.includes("nord vpn")) {
+    src = "https://cdn.simpleicons.org/nordvpn/4687FF";
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("coderabbit") || nameLower.includes("code rabbit")) {
+    src = "https://www.google.com/s2/favicons?domain=coderabbit.ai&sz=128";
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("claude credits")) {
+    src = LOGOS["marquee-claude-credits"] || LOGOS["claude-pro"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("firecrawl")) {
+    src = LOGOS["firecrawl"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("cursor")) {
+    src = "https://upload.wikimedia.org/wikipedia/commons/e/e0/Cursor_logo.svg";
+    scaleClass = "scale-[0.85]";
+  } else {
+    // For all other tools, fallback to standard LOGO_OVERRIDES local logic or tool.logo
+    const LOGO_OVERRIDES_LOCAL: Record<string, any> = {
+      "LinkedIn Premium": LOGOS["linkedin-premium"],
+      "Microsoft Office": LOGOS["ms-office"],
+      "Rezi - Resume builder": LOGOS["marquee-rezi"],
+      "ChatGPT Plus": LOGOS["chatgpt-plus"],
+      "Claude AI": LOGOS["claude-pro"],
+      "Google Gemini": LOGOS["gemini-pro"],
+      "Perplexity Pro": LOGOS["perplexity"],
+      "Grok": LOGOS["grok"],
+      "ElevenLabs": LOGOS["eleven-labs"],
+      "Notion Business + AI": LOGOS["notion-business"],
+      "Manus pro": LOGOS["marquee-manus-pro"],
+      "Fireflies Pro": LOGOS["marquee-fireflies-pro"],
+      "Wispr Flow": LOGOS["whisper-flow"],
+      "Cursor Pro": LOGOS["cursor-pro"],
+      "GitHub Copilot": LOGOS["github"],
+      "Lovable Pro & Lite": LOGOS["lovable-pro"],
+      "Replit": LOGOS["replit"],
+      "Bolt": LOGOS["bolt"],
+      "Supabase Pro": LOGOS["supabase-pro"],
+      "N8N": LOGOS["n8n"],
+      "Adobe Creative Cloud": LOGOS["adobe-cc"],
+      "Canva Pro/Business": LOGOS["canva-pro"],
+      "Envato Elements": LOGOS["elements"],
+      "Descript": LOGOS["descript"],
+      "Gamma Pro": LOGOS["gamma-pro"],
+      "AWS Credits": LOGOS["aws-credits"],
+      "Lovable Credits": LOGOS["lovable-pro"],
+      "Apify Credits": LOGOS["apify-credits"],
+      "V0 Credits": LOGOS["marquee-v0-credits"],
+      "Cursor Credits": LOGOS["cursor-pro"],
+    };
+
+    const override = LOGO_OVERRIDES_LOCAL[tool.name];
+    if (override) {
+      src = override;
+    } else if (tool.logo) {
+      src = tool.logo;
+    } else if (tool.slug) {
+      src = `https://cdn.simpleicons.org/${tool.slug}/${tool.color ?? "0A66C2"}`;
+    }
+  }
+
+  // Resolve StaticImageData path if it's an object
+  const resolvedSrc = src && typeof src === "object" && "src" in src ? src.src : src;
+
+  if (!resolvedSrc || failed) {
+    return (
+      <div
+        className="grid h-full w-full place-items-center rounded-md font-display text-[11px] font-extrabold uppercase tracking-tight text-white"
+        style={{ backgroundColor: `#${tool.color ?? "0A66C2"}` }}
+        title={tool.name}
+      >
+        {tool.name
+          .replace(/\b(Pro|Plus|Premium|Cloud|Credits|Business|Elements|Flow|Labs)\b/gi, "")
+          .trim()
+          .split(/\s+/)
+          .map((w: string) => w[0])
+          .join("")
+          .slice(0, 2)}
+      </div>
+    );
+  }
+
+  return (
+    <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
+      <Image
+        unoptimized
+        width={96}
+        height={96}
+        src={resolvedSrc}
+        alt={tool.name}
+        className={`block h-full w-full object-contain object-center transition-transform ${scaleClass}`}
+        onError={() => setFailed(true)}
+      />
+    </div>
+  );
+}
+
 export function TopDemandSection() {
 
  
@@ -40,7 +149,7 @@ export function TopDemandSection() {
 
  
                   <div className={`flex h-20 w-20 items-center justify-center rounded-lg p-3 sm:h-24 sm:w-24 ${tool.slug === "github" ? "" : "bg-secondary/40"}`}>
-                    <ToolLogo tool={tool} className="h-full w-full" />
+                    <TopDemandToolLogo tool={tool} className="h-full w-full" />
                   </div>
                   <div className="text-center text-sm font-semibold text-foreground" title={tool.name}>
                     {tool.name}

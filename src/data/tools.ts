@@ -110,7 +110,7 @@ export const TOP_DEMAND_TOOLS: Tool[] = [
   { name: "Claude Credits", slug: "anthropic", color: "D97757", category: "Credits", logo: LOGOS["marquee-claude-credits"] },
   { name: "Lovable Credits", slug: "", color: "FF4D8D", category: "Credits", logo: LOGOS["lovable-pro"] },
   { name: "Apify Credits", slug: "apify", color: "F86606", category: "Credits", logo: LOGOS["apify-credits"] },
-  { name: "V0 Credits", slug: "vercel", color: "000000", category: "Credits", logo: LOGOS["marquee-v0-credits"] },
+  { name: "Cursor Credits", slug: "cursor", color: "000000", category: "Credits", logo: LOGOS["cursor-pro"] },
 ];
 
 const T = (name: string): Tool =>
@@ -174,7 +174,7 @@ export const TOP_DEMAND_CATEGORIES: { title: string; tools: Tool[] }[] = [
       T("Claude Credits"),
       T("Lovable Credits"),
       T("Apify Credits"),
-      T("V0 Credits"),
+      T("Cursor Credits"),
     ],
   },
 ];
