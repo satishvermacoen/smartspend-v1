@@ -1,15 +1,14 @@
 "use client";
 
 import { useEffect, useState, use, useMemo } from "react";
-import { Gift, Loader2, Sparkles, AlertCircle, ShieldCheck } from "lucide-react";
+import { Loader2, AlertCircle, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { InquiryForm } from "@/components/marketing/home/main/inquiry-form";
-import { ALL_TOOLS, logoUrl } from "@/data/tools";
+import { ALL_TOOLS } from "@/data/tools";
 import { Tool } from "@/types";
-import { LOGOS } from "@/data/logo-map";
 import { SiteHeader, SiteFooter } from "@/components/marketing/layout/site-chrome";
-import Image, { StaticImageData } from "next/image";
+import { ToolLogo } from "@/components/marketing/layout/tool-logo";
 
 const CATEGORIES = ["All", "Developer", "Creative", "Product/Marketing", "Business/Operations", "OTT", "Credits"] as const;
 type Category = (typeof CATEGORIES)[number];
@@ -23,46 +22,13 @@ const CATEGORY_LABELS: Record<Category, string> = {
   OTT: "OTT Platforms",
   Credits: "Platform Credits",
 };
- 
-const LOGO_OVERRIDES: Record<string, string | StaticImageData> = {
-  "Firecrawl": "https://logos.hunter.io/firecrawl.dev",
-  "Firecrawl Credits": "https://logos.hunter.io/firecrawl.dev",
-  "Railway": "https://logos.hunter.io/railway.app",
-  "Factory": "https://logos.hunter.io/factory.ai",
-  "Warpbuild": "https://logos.hunter.io/warpbuild.com",
-  "Bolt": "https://www.google.com/s2/favicons?domain=bolt.new&sz=128",
-  "Adobe Creative Cloud": LOGOS["adobe-cc"] as StaticImageData,
-  "Canva Pro": "https://logos.hunter.io/canva.com",
-  "Canva Business + Leonardo AI": "https://logos.hunter.io/canva.com",
-  "CapCut": "https://logos.hunter.io/capcut.com",
-  "InVideo": "https://logos.hunter.io/invideo.io",
-  "Gamma": "https://logos.hunter.io/gamma.app",
-  "Descript": "https://logos.hunter.io/descript.com",
-  "Leonardo AI": "https://logos.hunter.io/leonardo.ai",
-  "Customer.io": "https://logos.hunter.io/customer.io",
-  "Mobbin Team": "https://logos.hunter.io/mobbin.com",
-  "Guidless Pro": "https://logos.hunter.io/guideless.ai",
-  "Lead.CM": "https://www.google.com/s2/favicons?domain=leads.cm&sz=128",
-  "TextShift": "https://www.google.com/s2/favicons?domain=textshift.org&sz=128",
-  "Amazon Prime Video": "https://logos.hunter.io/primevideo.com",
-  "JioHotstar": "https://logos.hunter.io/jiocinema.com",
-  "SonyLIV": "https://upload.wikimedia.org/wikipedia/commons/f/f7/SonyLIV_2020.png",
-  "ZEE 5": "https://logos.hunter.io/zee5.com",
-  "OpenAI Credits": "https://logos.hunter.io/openai.com",
-  "AWS Credits": LOGOS["aws-credits"] as StaticImageData,
-  "MongoDB Credits": "https://logos.hunter.io/mongodb.com",
-  "Vapi Credits": "https://logos.hunter.io/vapi.ai",
-  "Airtable Credits": "https://logos.hunter.io/airtable.com",
-  "Render Credits": "https://logos.hunter.io/render.com",
-  "Scalingo Credits": "https://logos.hunter.io/scalingo.com",
-};
 
 export default function RefCodeLandingPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = use(params);
   const uppercaseCode = code.toUpperCase();
   
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
-  const [discountAmount, setDiscountAmount] = useState(500);
+  const [, setDiscountAmount] = useState(500);
 
   useEffect(() => {
     async function trackClickAndValidate() {
@@ -148,42 +114,34 @@ export default function RefCodeLandingPage({ params }: { params: Promise<{ code:
             transition={{ duration: 0.4 }}
             className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start"
           >
-            {/* LEFT COLUMN: Inquiry Form & Bonus */}
+            {/* LEFT COLUMN: Inquiry Form */}
             <div className="space-y-8">
-              {/* Reward/Bonus Highlight */}
-              <div className="bg-card/25 border border-border/10 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-elegant relative overflow-hidden">
-                <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-gradient-brand opacity-15 blur-2xl pointer-events-none" />
-                
-                <div className="flex flex-col items-center text-center gap-4">
-                  <div className="h-14 w-14 rounded-2xl bg-gradient-brand text-primary-foreground flex items-center justify-center shadow-soft relative">
-                    <Gift className="h-7 w-7" />
-                    <span className="absolute -top-1 -right-1 h-4 w-4 bg-gold text-brand font-bold text-[8px] rounded-full flex items-center justify-center animate-bounce">
-                      <Sparkles className="h-2 w-2" />
-                    </span>
-                  </div>
-                  
-                  <div className="space-y-1">
-                    <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-                      <ShieldCheck className="h-3.5 w-3.5" /> Referral Active
-                    </span>
-                    <h1 className="text-2xl sm:text-3xl font-display font-extrabold tracking-tight mt-2">
-                      You&apos;re Invited to <span className="text-gradient">SpendSmart</span>
-                    </h1>
-                  </div>
-
-                  <div className="w-full bg-soft/20 border border-border/5 rounded-2xl p-4 flex flex-col items-center gap-1 mt-2">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Your Signup Bonus</span>
-                    <span className="text-3xl font-display font-black text-foreground">₹{discountAmount} OFF</span>
-                    <span className="text-xs text-muted-foreground mt-1">Automatically deducted from your first subscription purchase.</span>
-                  </div>
-                </div>
+              {/* Clean Header */}
+              <div className="space-y-2">
+                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
+                  <ShieldCheck className="h-3.5 w-3.5" /> Referral Active
+                </span>
+                <h1 className="text-3xl font-display font-extrabold tracking-tight mt-2 text-foreground">
+                  Claim your discount
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Fill out the form below to get started with your premium subscriptions.
+                </p>
               </div>
 
-              {/* Inquiry Form */}
+              {/* Inquiry Form Wrapper */}
               <div className="bg-card/25 border border-border/10 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-elegant">
-                <h2 className="text-xl font-display font-bold mb-2">Claim your discount</h2>
-                <p className="text-sm text-muted-foreground mb-4">Fill out the form below to get started with your premium subscriptions.</p>
                 <InquiryForm />
+                
+                {/* Visit Website Link */}
+                <div className="mt-6 pt-6 border-t border-border/10">
+                  <Link
+                    href="/"
+                    className="w-full h-12 inline-flex items-center justify-center rounded-xl border border-border/15 bg-card/40 backdrop-blur-md text-sm font-semibold text-foreground hover:bg-card/70 hover:-translate-y-0.5 active:scale-[0.98] transition-all cursor-pointer shadow-soft"
+                  >
+                    Visit Website
+                  </Link>
+                </div>
               </div>
             </div>
 
@@ -221,59 +179,11 @@ export default function RefCodeLandingPage({ params }: { params: Promise<{ code:
   );
 }
 
-function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; className?: string }) {
-  const [failed, setFailed] = useState(false);
-  
-  let primary: string | undefined = undefined;
-  const override = LOGO_OVERRIDES[tool.name];
-  if (override) {
-    primary = typeof override === "object" && override !== null && "src" in override ? override.src : override;
-  } else if (tool.logo) {
-    primary = typeof tool.logo === "object" && tool.logo !== null && "src" in tool.logo ? tool.logo.src : tool.logo;
-  } else if (tool.slug) {
-    primary = logoUrl(tool);
-  } else if (tool.domain) {
-    primary = `https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128`;
-  }
- 
-  if (!primary || failed) {
-    return (
-      <div
-        className={`grid place-items-center rounded-md font-display text-[10px] font-extrabold uppercase tracking-tight text-white ${className}`}
-        style={{ backgroundColor: `#${tool.color ?? "0A66C2"}` }}
-        title={tool.name}
-      >
-        {tool.name
-          .replace(/\b(Pro|Plus|Premium|Cloud|Credits|Business|Elements|Flow|Labs)\b/gi, "")
-          .trim()
-          .split(/\s+/)
-          .map((w) => w[0])
-          .join("")
-          .slice(0, 2)}
-      </div>
-    );
-  }
- 
-  return (
-    <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
-      <Image
-        width={64}
-        height={64} 
-        src={primary}
-        alt={tool.name}
-        loading="lazy"
-        className="block h-full w-full object-contain object-center transition-transform"
-        onError={() => setFailed(true)}
-      />
-    </div>
-  );
-}
- 
 function ToolTile({ tool }: { tool: Tool }) {
   return (
     <div className="group flex flex-col items-center gap-2 rounded-xl border border-border bg-card/60 p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md duration-200">
       <div className="flex h-12 w-12 items-center justify-center rounded-lg p-2 bg-secondary/40">
-        <AllSubscriptionsLogo tool={tool} className="h-full w-full" />
+        <ToolLogo tool={tool} className="h-full w-full" />
       </div>
       <div className="text-center text-xs font-semibold text-foreground min-w-0 w-full truncate" title={tool.name}>
         {tool.name}
