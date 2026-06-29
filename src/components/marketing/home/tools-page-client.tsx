@@ -14,14 +14,14 @@ type Category = (typeof CATEGORIES)[number];
  
 const CATEGORY_LABELS: Record<Category, string> = {
   All: "All",
-  Professional: "Professional",
+  Professional: "Professional Tools",
   AI: "AI Assistants",
-  Developer: "Developer",
-  Creative: "Creative",
-  "Product/Marketing": "Marketing",
-  "Business/Operations": "Business/Ops",
-  OTT: "OTT",
-  Credits: "Credits",
+  Developer: "Developer Tools",
+  Creative: "Design & Creative Tools",
+  "Product/Marketing": "Product, Marketing & Growth",
+  "Business/Operations": "Business & Operations",
+  OTT: "OTT Platforms",
+  Credits: "Platform Credits",
 };
  
 const LOGO_OVERRIDES: Record<string, string> = {
