@@ -58,13 +58,13 @@ export function HowActivationWorksSection() {
       <div className="absolute -left-32 top-10 h-96 w-96 rounded-full bg-primary/10 blur-3xl opacity-40 pointer-events-none" />
       <div className="absolute -right-32 bottom-10 h-96 w-96 rounded-full bg-emerald-500/5 blur-3xl opacity-30 pointer-events-none" />
 
-      <div className="relative mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* SECTION HEADER */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary backdrop-blur">
             <Sparkles className="h-3.5 w-3.5" /> Activation Guide
           </span>
-          <h2 className="mt-5 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-4xl leading-tight">
+          <h2 className="mt-5 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-4xl leading-tight">
             How Activation <span className="bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent font-extrabold">Works</span>
           </h2>
           <p className="mt-4 text-base text-muted-foreground sm:text-lg">

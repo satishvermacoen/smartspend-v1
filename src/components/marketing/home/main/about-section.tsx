@@ -39,12 +39,12 @@ const STATS = [
 
 export function AboutSection() {
   return (
-    <section id="about" className="mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 py-20 sm:px-6 lg:px-8 border-t border-border/30">
+    <section id="about" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 border-t border-border/30">
       <div className="text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary backdrop-blur">
-          Our Journey
+          Our Story
         </span>
-        <h2 className="mt-5 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-4xl">
+        <h2 className="mt-5 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-4xl">
           About <span className="bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent font-extrabold">Us</span>
         </h2>
       </div>

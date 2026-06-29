@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export function MarqueeSection() {
   return (
-    <section className="relative mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 pb-16 sm:px-6 lg:px-8 overflow-hidden">
+    <section className="relative mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8 overflow-hidden">
 
 
       {/* Marquee Track container */}

@@ -9,13 +9,13 @@ export function ReferralProgramSection() {
       <div className="absolute -left-24 top-20 h-64 w-64 rounded-full bg-brand-soft/10 blur-3xl" />
       <div className="absolute -right-24 bottom-10 h-64 w-64 rounded-full bg-brand-soft/10 blur-3xl" />
       
-      <div className="relative mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* SECTION HEADER */}
         <div className="text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/5 px-5 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-brand backdrop-blur sm:text-base">
             <Share2 className="h-4 w-4 sm:h-5 sm:w-5" /> Referral Program
           </span>
-          <h2 className="mt-5 font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-4xl">
+          <h2 className="mt-5 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-4xl">
             Share the Savings. <span className="bg-gradient-to-r from-primary to-brand bg-clip-text text-transparent font-extrabold">Earn Rewards.</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground leading-relaxed">

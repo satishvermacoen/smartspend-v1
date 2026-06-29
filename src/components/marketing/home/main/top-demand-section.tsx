@@ -9,12 +9,12 @@ export function TopDemandSection() {
 
  
   return (
-    <section className="mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 py-16 sm:px-6 lg:px-8 relative">
+    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 relative">
       <div className="text-center">
         <p className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-primary sm:text-sm">
           Top Demanded Subscriptions
         </p>
-        <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
           Professional, AI &amp; Creative Tools
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
@@ -49,10 +49,10 @@ export function TopDemandSection() {
                     href={`https://wa.me/918770066995?text=${encodeURIComponent(`Hi, I'm looking for the following subscription(s): ${tool.name}. Could you please help me with the details?`)}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-auto inline-flex w-full items-center justify-center gap-0.5 sm:gap-1 flex-wrap sm:flex-nowrap whitespace-normal sm:whitespace-nowrap rounded-full border border-primary/20 bg-secondary px-1.5 py-1 sm:px-2.5 sm:py-1.5 text-[8.5px] sm:text-[10px] font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground hover:border-transparent text-center leading-tight"
+                    className="mt-auto inline-flex w-full items-center justify-center gap-1 whitespace-nowrap rounded-full border border-primary/20 bg-secondary px-2.5 py-1.5 text-[10px] font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground hover:border-transparent"
                   >
-                    <span>Get subscription details</span>
-                    <ArrowRight className="h-2.5 w-2.5 sm:h-3 sm:w-3 shrink-0" />
+                    Get subscription details
+                    <ArrowRight className="h-3 w-3" />
                   </a>
                 </div>
               ))}

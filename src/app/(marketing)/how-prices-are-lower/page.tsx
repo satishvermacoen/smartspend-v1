@@ -72,7 +72,7 @@ export default function HowPricesAreLowerPage() {
       <SiteHeader />
       <main className="flex-1">
         {/* SECTION 1: HOW OUR PRICES ARE LOWER */}
-        <section className="relative overflow-hidden mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 py-16 sm:px-6 lg:px-8">
+        <section className="relative overflow-hidden mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           {/* Background Glows */}
           <div className="absolute -right-32 top-10 h-96 w-96 rounded-full bg-primary/10 blur-3xl opacity-40 pointer-events-none" />
           <div className="absolute -left-32 bottom-10 h-96 w-96 rounded-full bg-emerald-500/5 blur-3xl opacity-30 pointer-events-none" />
@@ -81,7 +81,7 @@ export default function HowPricesAreLowerPage() {
             <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary backdrop-blur mb-5">
               <Sparkles className="h-3.5 w-3.5" /> Pricing Transparency
             </span>
-            <h1 className="font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl leading-tight">
+            <h1 className="font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl leading-tight">
               How Our Prices <span className="bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent font-extrabold">Are Lower?</span>
             </h1>
             <p className="mx-auto mt-5 text-base text-muted-foreground sm:text-lg">
@@ -130,12 +130,12 @@ export default function HowPricesAreLowerPage() {
  
         {/* SECTION 2: HOW ACTIVATIONS WORK */}
         <section className="border-t border-border bg-secondary/20 py-16">
-           <div className="mx-auto max-w-7xl xl:max-w-[85rem] 2xl:max-w-[90rem] px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary backdrop-blur mb-5">
                 <Sparkles className="h-3.5 w-3.5" /> Activation Guide
               </span>
-              <h2 className="font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl leading-tight">
+              <h2 className="font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl leading-tight">
                 How Activation <span className="bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent font-extrabold">Works</span>
               </h2>
               <p className="mx-auto mt-5 text-base text-muted-foreground sm:text-lg">
