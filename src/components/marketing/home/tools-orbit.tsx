@@ -11,7 +11,13 @@ function OrbitToolLogo({ tool, className = "h-7 w-7 sm:h-10 sm:w-10" }: { tool: 
   // Resolve image source
   let src: string | undefined = undefined;
   if (name.includes("coursera")) {
-    src = "https://upload.wikimedia.org/wikipedia/commons/9/97/Coursera-Logo_Symbol.svg";
+    src = "https://cdn.simpleicons.org/coursera/0056D2";
+  } else if (name.includes("perplexity")) {
+    src = "https://cdn.simpleicons.org/perplexity/1F1F1F";
+  } else if (name.includes("nordvpn") || name.includes("nord vpn")) {
+    src = "https://cdn.simpleicons.org/nordvpn/4687FF";
+  } else if (name.includes("invideo")) {
+    src = "https://cdn.simpleicons.org/invideo/3B82F6";
   } else if (tool.logo) {
     src = typeof tool.logo === "object" && tool.logo !== null && "src" in tool.logo ? tool.logo.src : tool.logo;
   } else if (tool.slug) {
@@ -43,15 +49,15 @@ function OrbitToolLogo({ tool, className = "h-7 w-7 sm:h-10 sm:w-10" }: { tool: 
   // Adjust scaling for perfect centering and display in Orbit circle container
   let scaleClass = "scale-[1.0]";
   if (name.includes("coursera")) {
-    scaleClass = "scale-[1.2]";
+    scaleClass = "scale-[0.85]";
   } else if (name.includes("perplexity")) {
-    scaleClass = "scale-[1.4]";
+    scaleClass = "scale-[0.85]";
   } else if (name.includes("copilot") || name.includes("github")) {
-    scaleClass = "scale-[1.3]";
+    scaleClass = "scale-[0.9]";
   } else if (name.includes("nordvpn") || name.includes("nord vpn")) {
-    scaleClass = "scale-[1.4]";
+    scaleClass = "scale-[0.85]";
   } else if (name.includes("invideo")) {
-    scaleClass = "scale-[1.3]";
+    scaleClass = "scale-[0.85]";
   } else if (name.includes("manus")) {
     scaleClass = "scale-[2.0]";
   } else if (name.includes("fireflies")) {
@@ -60,7 +66,7 @@ function OrbitToolLogo({ tool, className = "h-7 w-7 sm:h-10 sm:w-10" }: { tool: 
     scaleClass = "scale-[2.2]";
   }
 
-  const isInverted = tool.color === "000000" || name.includes("perplexity") || name.includes("github") || name.includes("copilot");
+  const isInverted = name.includes("perplexity") || name.includes("github") || name.includes("copilot");
 
   return (
     <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
