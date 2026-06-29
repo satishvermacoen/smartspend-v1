@@ -70,7 +70,7 @@ export const TOP_DEMAND_TOOLS: Tool[] = [
   // PROFESSIONAL TOOLS
   { name: "LinkedIn Premium", slug: "linkedin", color: "0A66C2", category: "Professional", logo: LOGOS["linkedin-premium"] },
   { name: "Microsoft Office", slug: "microsoftoffice", color: "D83B01", category: "Professional", logo: LOGOS["ms-office"] },
-  { name: "Coursera Plus", slug: "coursera", color: "0056D2", category: "Professional", logo: "https://upload.wikimedia.org/wikipedia/commons/9/97/Coursera-Logo_Symbol.svg" as any },
+  { name: "Coursera Plus", slug: "coursera", color: "0056D2", category: "Professional", logo: LOGOS["coursera"] },
   { name: "Rezi - Resume builder", slug: "rezi", color: "1F2937", category: "Professional", logo: LOGOS["marquee-rezi"] },
   { name: "NordVPN", slug: "nordvpn", color: "4687FF", category: "Professional", logo: LOGOS["nordvpn"] },
 
@@ -298,7 +298,7 @@ const RAW_ALL_TOOLS: Tool[] = [
   // BUSINESS & OPERATIONS & PROFESSIONAL
   { name: "LinkedIn Premium", slug: "linkedin", color: "0A66C2", category: "Business/Operations", logo: LOGOS["linkedin-premium"] },
   { name: "Microsoft Office", slug: "microsoftoffice", color: "D83B01", category: "Business/Operations", logo: LOGOS["ms-office"] },
-  { name: "Coursera Plus", slug: "coursera", color: "0056D2", category: "Business/Operations", logo: "https://upload.wikimedia.org/wikipedia/commons/9/97/Coursera-Logo_Symbol.svg" as any },
+  { name: "Coursera Plus", slug: "coursera", color: "0056D2", category: "Business/Operations", logo: LOGOS["coursera"] },
   { name: "NordVPN", slug: "nordvpn", color: "4687FF", category: "Business/Operations", logo: LOGOS["nordvpn"] },
   { name: "Notion Business", slug: "notion", color: "000000", category: "Business/Operations", logo: LOGOS["notion-business"] },
   { name: "Airtable", slug: "airtable", color: "18BFFF", category: "Business/Operations", logo: LOGOS["marquee-airtable"] },
