@@ -223,20 +223,124 @@ export default function RefCodeLandingPage({ params }: { params: Promise<{ code:
 
 function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; className?: string }) {
   const [failed, setFailed] = useState(false);
-  
-  let primary: string | undefined = undefined;
-  const override = LOGO_OVERRIDES[tool.name];
-  if (override) {
-    primary = typeof override === "object" && override !== null && "src" in override ? override.src : override;
-  } else if (tool.logo) {
-    primary = typeof tool.logo === "object" && tool.logo !== null && "src" in tool.logo ? tool.logo.src : tool.logo;
-  } else if (tool.slug) {
-    primary = logoUrl(tool);
-  } else if (tool.domain) {
-    primary = `https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128`;
+  const nameLower = tool.name.toLowerCase();
+
+  let src: any = undefined;
+  let scaleClass = "scale-[1.0]";
+
+  // 1. Resolve source specifically for all subscriptions section to use official/HD logos
+  if (nameLower.includes("coursera")) {
+    src = "https://upload.wikimedia.org/wikipedia/commons/9/97/Coursera-Logo_Symbol.svg";
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("nordvpn") || nameLower.includes("nord vpn")) {
+    src = "https://cdn.simpleicons.org/nordvpn/4687FF";
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("coderabbit") || nameLower.includes("code rabbit")) {
+    src = "https://www.google.com/s2/favicons?domain=coderabbit.ai&sz=128";
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("claude credits")) {
+    src = LOGOS["marquee-claude-credits"] || LOGOS["claude-pro"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("cursor")) {
+    src = "https://upload.wikimedia.org/wikipedia/commons/e/e0/Cursor_logo.svg";
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("invideo")) {
+    src = LOGOS["invideo"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("firecrawl")) {
+    src = LOGOS["firecrawl"];
+    scaleClass = "scale-[0.85]";
+  } else {
+    // Local overrides for all other tools to prevent loading failures on strict network
+    const LOCAL_OVERRIDES: Record<string, any> = {
+      "LinkedIn Premium": LOGOS["linkedin-premium"],
+      "Microsoft Office": LOGOS["ms-office"],
+      "Rezi - Resume builder": LOGOS["marquee-rezi"],
+      "ChatGPT Plus": LOGOS["chatgpt-plus"],
+      "Claude AI": LOGOS["claude-pro"],
+      "Google Gemini": LOGOS["gemini-pro"],
+      "Perplexity Pro": LOGOS["perplexity"],
+      "Grok": LOGOS["grok"],
+      "ElevenLabs": LOGOS["eleven-labs"],
+      "Notion Business + AI": LOGOS["notion-business"],
+      "Notion Business": LOGOS["notion-business"],
+      "Manus pro": LOGOS["marquee-manus-pro"],
+      "Manus Pro": LOGOS["marquee-manus-pro"],
+      "Fireflies Pro": LOGOS["marquee-fireflies-pro"],
+      "Wispr Flow": LOGOS["whisper-flow"],
+      "Cursor Pro": LOGOS["cursor-pro"],
+      "GitHub Copilot": LOGOS["github"],
+      "Lovable Pro & Lite": LOGOS["lovable-pro"],
+      "Lovable Pro": LOGOS["lovable-pro"],
+      "Replit": LOGOS["replit"],
+      "Bolt": LOGOS["bolt"],
+      "Supabase Pro": LOGOS["supabase-pro"],
+      "N8N": LOGOS["n8n"],
+      "n8n": LOGOS["n8n"],
+      "Adobe Creative Cloud": LOGOS["adobe-cc"],
+      "Canva Pro/Business": LOGOS["canva-pro"],
+      "Canva Pro": LOGOS["canva-pro"],
+      "Envato Elements": LOGOS["elements"],
+      "Descript": LOGOS["descript"],
+      "Gamma Pro": LOGOS["gamma-pro"],
+      "Gamma": LOGOS["gamma-pro"],
+      "AWS Credits": LOGOS["aws-credits"],
+      "Lovable Credits": LOGOS["lovable-pro"],
+      "Apify Credits": LOGOS["apify-credits"],
+      "V0 Credits": LOGOS["marquee-v0-credits"],
+      "Cursor Credits": LOGOS["cursor-pro"],
+      "Customer.io": LOGOS["marquee-customer-io"],
+      "Mobbin Team": LOGOS["marquee-mobbin-team"],
+      "Guidless Pro": LOGOS["marquee-guidless-pro"],
+      "Lead.CM": LOGOS["marquee-lead-cm"],
+      "TextShift": LOGOS["marquee-textshift"],
+      "Amazon Prime Video": LOGOS["marquee-prime-video"],
+      "JioHotstar": LOGOS["marquee-hotstar"],
+      "SonyLIV": LOGOS["marquee-sony-liv"],
+      "ZEE 5": LOGOS["marquee-zee5"],
+      "OpenAI Credits": LOGOS["marquee-openai-credits"],
+      "MongoDB Credits": LOGOS["marquee-mongodb-credits"],
+      "Vapi Credits": LOGOS["marquee-vapi-credits"],
+      "Airtable Credits": LOGOS["marquee-airtable-credits"],
+      "Render Credits": LOGOS["marquee-render-credits"],
+      "Scalingo Credits": LOGOS["marquee-scalingo-credits"],
+    };
+
+    const override = LOCAL_OVERRIDES[tool.name];
+    if (override) {
+      src = override;
+    } else if (tool.logo) {
+      src = typeof tool.logo === "object" && tool.logo !== null && "src" in tool.logo ? tool.logo.src : tool.logo;
+    } else if (tool.slug) {
+      src = `https://cdn.simpleicons.org/${tool.slug}/${tool.color ?? "0A66C2"}`;
+    } else if (tool.domain) {
+      src = `https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128`;
+    }
   }
- 
-  if (!primary || failed) {
+
+  // Define scaling rules for better visual consistency
+  if (scaleClass === "scale-[1.0]") {
+    if (nameLower.includes("manus")) {
+      scaleClass = "scale-[2.0]";
+    } else if (nameLower.includes("fireflies")) {
+      scaleClass = "scale-[2.2]";
+    } else if (nameLower.includes("rezi")) {
+      scaleClass = "scale-[2.2]";
+    } else if (
+      nameLower.includes("perplexity") ||
+      nameLower.includes("copilot") ||
+      nameLower.includes("github") ||
+      nameLower.includes("claude") ||
+      nameLower.includes("anthropic")
+    ) {
+      scaleClass = "scale-[0.85]";
+    }
+  }
+
+  // Resolve StaticImageData path if it's an object
+  const resolvedSrc = src && typeof src === "object" && "src" in src ? src.src : src;
+
+  if (!resolvedSrc || failed) {
     return (
       <div
         className={`grid place-items-center rounded-md font-display text-[10px] font-extrabold uppercase tracking-tight text-white ${className}`}
@@ -253,16 +357,17 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
       </div>
     );
   }
- 
+
   return (
     <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
       <Image
-        width={64}
-        height={64} 
-        src={primary}
+        unoptimized
+        width={96}
+        height={96}
+        src={resolvedSrc}
         alt={tool.name}
         loading="lazy"
-        className="block h-full w-full object-contain object-center transition-transform"
+        className={`block h-full w-full object-contain object-center transition-transform ${scaleClass}`}
         onError={() => setFailed(true)}
       />
     </div>
