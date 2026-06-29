@@ -26,8 +26,11 @@ import linkedinPremiumLogo from "@/assets/logos/linkedin-premium.png";
 import lovableProLogo from "@/assets/logos/lovable-pro.png";
 import marqueeAirtableCreditsLogo from "@/assets/logos/marquee-airtable-credits.png";
 import marqueeAirtableLogo from "@/assets/logos/marquee-airtable.png";
+import airtableLogo from "@/assets/logos/airtable.svg";
 import marqueeAsanaLogo from "@/assets/logos/marquee-asana.png";
+import asanaLogo from "@/assets/logos/asana.svg";
 import marqueeAutodeskLogo from "@/assets/logos/marquee-autodesk.png";
+import autodeskLogo from "@/assets/logos/autodesk.svg";
 import marqueeCanvaBusinessLogo from "@/assets/logos/marquee-canva-business.png";
 import marqueeCapcutProLogo from "@/assets/logos/marquee-capcut-pro.png";
 import marqueeChatprdLogo from "@/assets/logos/marquee-chatprd.png";
@@ -36,14 +39,17 @@ import marqueeCustomerIoLogo from "@/assets/logos/marquee-customer-io.png";
 import marqueeDescriptLogo from "@/assets/logos/marquee-descript.png";
 import marqueeDisneyPlusLogo from "@/assets/logos/marquee-disney-plus.png";
 import marqueeEdxTeamsLogo from "@/assets/logos/marquee-edx-teams.png";
+import edxLogo from "@/assets/logos/edx.svg";
 import marqueeFactoryLogo from "@/assets/logos/marquee-factory.png";
 import marqueeFeatureFmLogo from "@/assets/logos/marquee-feature-fm.png";
 import marqueeFilmoraLogo from "@/assets/logos/marquee-filmora.png";
 import marqueeFirecrawlLogo from "@/assets/logos/marquee-firecrawl.png";
 import marqueeFirefliesProLogo from "@/assets/logos/marquee-fireflies-pro.png";
 import marqueeFramerProLogo from "@/assets/logos/marquee-framer-pro.png";
+import framerLogo from "@/assets/logos/framer.svg";
 import marqueeFreepikLogo from "@/assets/logos/marquee-freepik.png";
 import marqueeGithubLogo from "@/assets/logos/marquee-github.png";
+import linearLogo from "@/assets/logos/linear.svg";
 import marqueeGranolaLogo from "@/assets/logos/marquee-granola.png";
 import marqueeGrokLogo from "@/assets/logos/marquee-grok.png";
 import marqueeGuidlessProLogo from "@/assets/logos/marquee-guidless-pro.png";
@@ -72,6 +78,7 @@ import marqueePosthogLogo from "@/assets/logos/marquee-posthog.png";
 import marqueePrimeVideoLogo from "@/assets/logos/marquee-prime-video.png";
 import marqueeRailwayLogo from "@/assets/logos/marquee-railway.png";
 import marqueeRaycastLogo from "@/assets/logos/marquee-raycast.png";
+import raycastLogo from "@/assets/logos/raycast.svg";
 import marqueeRenderCreditsLogo from "@/assets/logos/marquee-render-credits.png";
 import marqueeReziLogo from "@/assets/logos/marquee-rezi.png";
 import marqueeScalingoCreditsLogo from "@/assets/logos/marquee-scalingo-credits.png";
@@ -87,12 +94,15 @@ import n8nLogo from "@/assets/logos/n8n.png";
 import nordvpnLogo from "@/assets/logos/nordvpn.png";
 import notionBusinessLogo from "@/assets/logos/notion-business.png";
 import openaiLogo from "@/assets/logos/openai.svg";
-import perplexityLogo from "@/assets/logos/perplexity.webp";
+import perplexityLogo from "@/assets/logos/perplexity.svg";
+import mongodbLogo from "@/assets/logos/mongodb.svg";
 import replicaiLogo from "@/assets/logos/replicai.png";
 import replitLogo from "@/assets/logos/replit.png";
+import railwayLogo from "@/assets/logos/railway.svg";
 import supabaseProLogo from "@/assets/logos/supabase-pro.png";
 import whisperFlowLogo from "@/assets/logos/whisper-flow.png";
 import grokLogo from "@/assets/logos/grok.svg";
+import spotifyLogo from "@/assets/logos/spotify.svg";
 import firecrawlLogo from "@/assets/logos/firecrawl.svg";
 import claudeLogo from "@/assets/logos/claude.svg";
 import v0Logo from "@/assets/logos/v0.svg";
@@ -102,7 +112,10 @@ import elevenLabsSvg from "@/assets/logos/eleven-labs.svg";
 
 export const LOGOS: Record<string, unknown> = {
   "adobe-cc": adobeCcLogo,
+  "airtable": airtableLogo,
   "anytime-invent": anytimeInventLogo,
+  "asana": asanaLogo,
+  "autodesk": autodeskLogo,
   "apify-credits": apifyCreditsLogo,
   "apify": apifyLogo,
   "aws-credits": awsCreditsLogo,
@@ -118,9 +131,11 @@ export const LOGOS: Record<string, unknown> = {
   "github-copilot": copilotLogo,
   "manus-pro": manusLogo,
   "descript": descriptLogo,
+  "edx": edxLogo,
   "elements": elementsLogo,
   "eleven-labs": elevenLabsSvg,
   "figma": figmaLogo,
+  "framer": framerLogo,
   "grok": grokLogo,
   "firecrawl": firecrawlLogo,
   "gamma-pro": gammaProLogo,
@@ -131,6 +146,7 @@ export const LOGOS: Record<string, unknown> = {
   "itn": itnLogo,
   "level-pro": levelProLogo,
   "linkedin-premium": linkedinPremiumLogo,
+  "linear": linearLogo,
   "lovable-pro": lovableProLogo,
   "marquee-airtable-credits": marqueeAirtableCreditsLogo,
   "marquee-airtable": marqueeAirtableLogo,
@@ -196,10 +212,14 @@ export const LOGOS: Record<string, unknown> = {
   "n8n": n8nLogo,
   "nordvpn": nordvpnLogo,
   "notion-business": notionBusinessLogo,
+  "mongodb": mongodbLogo,
   "openai": openaiLogo,
   "perplexity": perplexityLogo,
   "replicai": replicaiLogo,
   "replit": replitLogo,
+  "railway": railwayLogo,
+  "raycast": raycastLogo,
+  "spotify": spotifyLogo,
   "supabase-pro": supabaseProLogo,
   "whisper-flow": whisperFlowLogo,
 };

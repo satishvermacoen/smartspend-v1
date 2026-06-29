@@ -14,14 +14,14 @@ type Category = (typeof CATEGORIES)[number];
  
 const CATEGORY_LABELS: Record<Category, string> = {
   All: "All",
-  Professional: "Professional Tools",
+  Professional: "Professional",
   AI: "AI Assistants",
-  Developer: "Developer Tools",
-  Creative: "Design & Creative Tools",
-  "Product/Marketing": "Product, Marketing & Growth",
-  "Business/Operations": "Business & Operations",
-  OTT: "OTT Platforms",
-  Credits: "Platform Credits",
+  Developer: "Developer",
+  Creative: "Creative",
+  "Product/Marketing": "Marketing",
+  "Business/Operations": "Business/Ops",
+  OTT: "OTT",
+  Credits: "Credits",
 };
  
 const LOGO_OVERRIDES: Record<string, string> = {
@@ -137,15 +137,14 @@ export function ToolsPageClient() {
               />
             </div>
  
-            {/* categories */}
-            <div className="mt-6 -mx-4 overflow-x-auto px-4 pb-1">
-              <div className="flex w-max gap-2">
+            <div className="mt-6">
+              <div className="flex flex-wrap gap-1.5">
                 {CATEGORIES.map((c) => (
                   <Button
                     key={c}
                     onClick={() => setCat(c)}
                     type="button"
-                    className={`whitespace-nowrap rounded-full border px-4.5 py-2 text-sm font-semibold transition ${
+                    className={`whitespace-nowrap rounded-full border px-2.5 py-1 text-xs font-semibold transition ${
                       cat === c
                         ? "border-transparent bg-primary text-primary-foreground shadow-sm"
                         : "border-border bg-card text-muted-foreground hover:text-foreground hover:bg-secondary/50"
@@ -222,19 +221,19 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
 
   // 1. Resolve source specifically for all subscriptions section to use official/HD logos
   if (nameLower.includes("coursera")) {
-    src = "https://upload.wikimedia.org/wikipedia/commons/9/97/Coursera-Logo_Symbol.svg";
+    src = LOGOS["coursera"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("nordvpn") || nameLower.includes("nord vpn")) {
-    src = "https://cdn.simpleicons.org/nordvpn/4687FF";
+    src = LOGOS["nordvpn"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("coderabbit") || nameLower.includes("code rabbit")) {
-    src = "https://www.google.com/s2/favicons?domain=coderabbit.ai&sz=128";
-    scaleClass = "scale-[0.85]";
+    src = LOGOS["marquee-coderabbit-pro"];
+    scaleClass = "scale-[2.2]";
   } else if (nameLower.includes("claude credits")) {
-    src = LOGOS["marquee-claude-credits"] || LOGOS["claude-pro"];
+    src = LOGOS["claude-pro"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("cursor")) {
-    src = "https://upload.wikimedia.org/wikipedia/commons/e/e0/Cursor_logo.svg";
+    src = LOGOS["cursor"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("invideo")) {
     src = LOGOS["invideo"];
@@ -242,6 +241,147 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
   } else if (nameLower.includes("firecrawl")) {
     src = LOGOS["firecrawl"];
     scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("speechify")) {
+    src = LOGOS["marquee-speechify"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("granola")) {
+    src = LOGOS["marquee-granola"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("perplexity")) {
+    src = LOGOS["perplexity"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("manus")) {
+    src = LOGOS["manus-pro"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("gemini")) {
+    src = LOGOS["gemini-pro"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("copilot") || nameLower.includes("github")) {
+    src = LOGOS["github-copilot"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("railway")) {
+    src = LOGOS["railway"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("warpbuild")) {
+    src = LOGOS["marquee-warpbuild"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("factory")) {
+    src = LOGOS["marquee-factory"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("spotify")) {
+    src = LOGOS["spotify"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("youtube")) {
+    src = LOGOS["marquee-youtube-premium"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("prime video") || nameLower.includes("amazon")) {
+    src = LOGOS["marquee-prime-video"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("hotstar") || nameLower.includes("jio")) {
+    src = LOGOS["marquee-hotstar"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("sonyliv") || nameLower.includes("sony")) {
+    src = LOGOS["marquee-sony-liv"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("zee5") || nameLower.includes("zee 5")) {
+    src = LOGOS["marquee-zee5"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("mongodb")) {
+    src = LOGOS["mongodb"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("openai")) {
+    src = LOGOS["openai"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("scalingo")) {
+    src = LOGOS["marquee-scalingo-credits"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("render")) {
+    src = LOGOS["marquee-render-credits"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("vapi")) {
+    src = LOGOS["marquee-vapi-credits"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("autodesk")) {
+    src = LOGOS["autodesk"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("canva business") || nameLower.includes("leonardo")) {
+    src = LOGOS["marquee-canva-business"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("higgsfield")) {
+    src = LOGOS["marquee-higgsfield"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("capcut")) {
+    src = LOGOS["marquee-capcut-pro"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("freepik")) {
+    src = LOGOS["marquee-freepik"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("pngtree") || nameLower.includes("png tree")) {
+    src = LOGOS["marquee-pngtree"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("framer")) {
+    src = LOGOS["framer"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("linear")) {
+    src = LOGOS["linear"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("mobbin")) {
+    src = LOGOS["marquee-mobbin-team"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("intercom")) {
+    src = LOGOS["marquee-intercom"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("loom")) {
+    src = LOGOS["marquee-loom"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("make.com") || nameLower.includes("make")) {
+    src = LOGOS["marquee-make-com"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("magicpattern")) {
+    src = LOGOS["marquee-magicpattern"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("posthog")) {
+    src = LOGOS["marquee-posthog"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("customer.io") || nameLower.includes("customerio")) {
+    src = LOGOS["marquee-customer-io"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("hootsuite")) {
+    src = LOGOS["marquee-hootsuite"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("chatprd")) {
+    src = LOGOS["marquee-chatprd"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("miro")) {
+    src = LOGOS["marquee-miro-starter"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("feature.fm") || nameLower.includes("featurefm")) {
+    src = LOGOS["marquee-feature-fm"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("airtable")) {
+    src = LOGOS["airtable"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("asana")) {
+    src = LOGOS["asana"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("raycast")) {
+    src = LOGOS["raycast"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("lead.cm") || nameLower.includes("leadcm")) {
+    src = LOGOS["marquee-lead-cm"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("gumloop")) {
+    src = LOGOS["marquee-gumloop"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("textshift")) {
+    src = LOGOS["marquee-textshift"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("lightfield")) {
+    src = LOGOS["marquee-lightfield-crm"];
+    scaleClass = "scale-[2.2]";
+  } else if (nameLower.includes("indy")) {
+    src = LOGOS["marquee-indy"];
+    scaleClass = "scale-[2.2]";
   } else {
     // Local overrides for all other tools to prevent loading failures on strict network
     const LOCAL_OVERRIDES: Record<string, any> = {

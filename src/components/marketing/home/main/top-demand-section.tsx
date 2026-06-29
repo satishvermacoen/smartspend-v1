@@ -16,8 +16,13 @@ function TopDemandToolLogo({ tool, className = "h-full w-full" }: { tool: any; c
   let scaleClass = "scale-[1.0]";
 
   if (nameLower.includes("coursera")) {
-    src = LOGOS["coursera"];
-    scaleClass = "scale-[1.0]";
+    return (
+      <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#0056D2" className="block h-full w-full object-contain">
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.566 17.518c-1.398.818-3.037 1.257-4.735 1.257-5.066 0-9.18-4.115-9.18-9.18 0-5.066 4.114-9.18 9.18-9.18 1.698 0 3.337.44 4.735 1.258l-1.95 3.378c-.787-.454-1.687-.696-2.607-.696-2.924 0-5.302 2.378-5.302 5.302 0 2.924 2.378 5.302 5.302 5.302.92 0 1.82-.242 2.607-.697l1.95 3.378zM24 12c0 .918-.112 1.802-.32 2.647l-3.378-1.95c.08-.225.132-.456.132-.697 0-1.215-.986-2.202-2.202-2.202-1.215 0-2.202.987-2.202 2.202 0 1.216.987 2.202 2.202 2.202.241 0 .472-.052.697-.132l1.95 3.378C18.66 20.89 15.5 22.427 12 22.427v-3.486c2.096 0 3.978-1.036 5.116-2.646l2.977 1.719c1.233-1.696 1.907-3.766 1.907-5.998 0-2.231-.674-4.301-1.907-5.998l-2.977 1.72c-1.138-1.61-3.02-2.647-5.116-2.647V1.573c3.5 0 6.66 1.537 8.79 4.02l-1.95 3.378c-.225-.08-.456-.132-.697-.132-1.215 0-2.202.986-2.202 2.202 0 1.215.987 2.202 2.202 2.202.241 0 .472-.052.697-.132L23.68 9.353c.208.845.32 1.729.32 2.647z"/>
+        </svg>
+      </div>
+    );
   } else if (nameLower.includes("nordvpn") || nameLower.includes("nord vpn")) {
     src = LOGOS["nordvpn"];
     scaleClass = "scale-[1.0]";
@@ -43,11 +48,36 @@ function TopDemandToolLogo({ tool, className = "h-full w-full" }: { tool: any; c
     src = LOGOS["marquee-fireflies-pro"];
     scaleClass = "scale-[2.2]";
   } else if (nameLower.includes("perplexity")) {
-    src = LOGOS["perplexity"];
-    scaleClass = "scale-[1.0]";
+    return (
+      <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#1F1F1F" className="block h-full w-full object-contain">
+          <path d="M19.785 0v7.272H22.5V17.62h-2.935V24l-7.037-6.194v6.145h-1.091v-6.152L4.392 24v-6.465H1.5V7.188h2.884V0l7.053 6.494V.19h1.09v6.49L19.786 0zm-7.257 9.044v7.319l5.946 5.234V14.44l-5.946-5.397zm-1.099-.08l-5.946 5.398v7.235l5.946-5.234V8.965zm8.136 7.58h1.844V8.349H13.46l6.105 5.54v2.655zm-8.982-8.28H2.59v8.195h1.8v-2.576l6.192-5.62zM5.475 2.476v4.71h5.115l-5.115-4.71zm13.219 0l-5.115 4.71h5.115v-4.71z"/>
+        </svg>
+      </div>
+    );
+  } else if (nameLower.includes("gemini")) {
+    return (
+      <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="block h-full w-full object-contain">
+          <defs>
+            <linearGradient id="geminiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#9b72f3"/>
+              <stop offset="50%" stop-color="#4285f4"/>
+              <stop offset="100%" stop-color="#2b76f9"/>
+            </linearGradient>
+          </defs>
+          <path d="M20.616 10.835a14.147 14.147 0 01-4.45-3.001 14.111 14.111 0 01-3.678-6.452.503.503 0 00-.975 0 14.134 14.134 0 01-3.679 6.452 14.155 14.155 0 01-4.45 3.001c-.65.28-1.318.505-2.002.678a.502.502 0 000 .975c.684.172 1.35.397 2.002.677a14.147 14.147 0 014.45 3.001 14.112 14.112 0 013.679 6.453.502.502 0 00.975 0c.172-.685.397-1.351.677-2.003a14.145 14.145 0 013.001-4.45 14.113 14.113 0 016.453-3.678.503.503 0 000-.975 13.245 13.245 0 01-2.003-.678z" fill="url(#geminiGradient)"/>
+        </svg>
+      </div>
+    );
   } else if (nameLower.includes("copilot") || nameLower.includes("github")) {
-    src = LOGOS["github-copilot"];
-    scaleClass = "scale-[1.0]";
+    return (
+      <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#24292F" className="block h-full w-full object-contain">
+          <path d="M9 23l.073-.001a2.53 2.53 0 01-2.347-1.838l-.697-2.433a2.529 2.529 0 00-2.426-1.839h-.497l-.104-.002c-4.485 0-2.935-5.278-1.75-9.225l.162-.525C2.412 3.99 3.883 1 6.25 1h8.86c1.12 0 2.106.745 2.422 1.829l.715 2.453a2.53 2.53 0 002.247 1.823l.147.005.534.001c3.557.115 3.088 3.745 2.156 7.206l-.113.413c-.154.548-.315 1.089-.47 1.607l-.163.525C21.588 20.01 20.116 23 17.75 23h-8.75zm8.22-15.89l-3.856.001a2.526 2.526 0 00-2.35 1.615L9.21 15.04a2.529 2.529 0 01-2.43 1.847l3.853.002c1.056 0 1.992-.661 2.361-1.644l1.796-6.287a2.529 2.529 0 012.43-1.848z"/>
+        </svg>
+      </div>
+    );
   } else {
     // For all other tools, fallback to standard LOGO_OVERRIDES local logic or tool.logo
     const LOGO_OVERRIDES_LOCAL: Record<string, any> = {

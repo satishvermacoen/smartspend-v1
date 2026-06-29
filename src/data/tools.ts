@@ -82,13 +82,13 @@ export const TOP_DEMAND_TOOLS: Tool[] = [
   { name: "Grok", slug: "grok", color: "000000", category: "AI", logo: LOGOS["grok"] },
   { name: "ElevenLabs", slug: "elevenlabs", color: "000000", category: "AI", domain: "elevenlabs.io", logo: LOGOS["eleven-labs"] },
   { name: "Notion Business + AI", slug: "notion", color: "000000", category: "Productivity", logo: LOGOS["notion-business"] },
-  { name: "Manus pro", slug: "manus", color: "111827", category: "AI", logo: LOGOS["marquee-manus-pro"] },
+  { name: "Manus pro", slug: "manus", color: "111827", category: "AI", logo: LOGOS["manus-pro"] },
   { name: "Fireflies Pro", slug: "fireflies", color: "F59E0B", category: "Productivity", logo: LOGOS["marquee-fireflies-pro"] },
   { name: "Wispr Flow", slug: "", color: "6366F1", category: "AI", logo: LOGOS["whisper-flow"] },
 
   // DEVELOPER TOOLS
-  { name: "Cursor Pro", slug: "cursor", color: "000000", category: "Developer", logo: LOGOS["cursor-pro"] },
-  { name: "GitHub Copilot", slug: "github", color: "24292e", category: "Developer", logo: LOGOS["github"] },
+  { name: "Cursor Pro", slug: "cursor", color: "000000", category: "Developer", logo: LOGOS["cursor"] },
+  { name: "GitHub Copilot", slug: "github", color: "24292e", category: "Developer", logo: LOGOS["github-copilot"] },
   { name: "Lovable Pro & Lite", slug: "", color: "FF4D8D", category: "Developer", logo: LOGOS["lovable-pro"] },
   { name: "Replit", slug: "replit", color: "F26207", category: "Developer", logo: LOGOS["replit"] },
   { name: "Bolt", slug: "", color: "1389FD", category: "Developer", logo: LOGOS["bolt"] },
@@ -107,10 +107,10 @@ export const TOP_DEMAND_TOOLS: Tool[] = [
 
   // PLATFORM CREDITS
   { name: "AWS Credits", slug: "amazonwebservices", color: "FF9900", category: "Credits", logo: LOGOS["aws-credits"] },
-  { name: "Claude Credits", slug: "anthropic", color: "D97757", category: "Credits", logo: LOGOS["marquee-claude-credits"] },
+  { name: "Claude Credits", slug: "anthropic", color: "D97757", category: "Credits", logo: LOGOS["claude-pro"] },
   { name: "Lovable Credits", slug: "", color: "FF4D8D", category: "Credits", logo: LOGOS["lovable-pro"] },
   { name: "Apify Credits", slug: "apify", color: "F86606", category: "Credits", logo: LOGOS["apify-credits"] },
-  { name: "Cursor Credits", slug: "cursor", color: "000000", category: "Credits", logo: LOGOS["cursor-pro"] },
+  { name: "Cursor Credits", slug: "cursor", color: "000000", category: "Credits", logo: LOGOS["cursor"] },
 ];
 
 const T = (name: string): Tool =>
@@ -249,18 +249,18 @@ const RAW_ALL_TOOLS: Tool[] = [
   { name: "Coursera Plus", slug: "coursera", color: "0056D2", category: "Professional", logo: LOGOS["coursera"] },
   { name: "NordVPN", slug: "nordvpn", color: "4687FF", category: "Professional", logo: LOGOS["nordvpn"] },
   { name: "Rezi - Resume builder", slug: "rezi", color: "1F2937", category: "Professional", logo: LOGOS["marquee-rezi"] },
-  { name: "EdX Subscription", slug: "edx", color: "A51C30", category: "Professional", logo: LOGOS["marquee-edx-teams"] },
+  { name: "EdX Subscription", slug: "edx", color: "A51C30", category: "Professional", logo: LOGOS["edx"] },
 
   // AI ASSISTANTS
-  { name: "ChatGPT", slug: "openai", color: "10A37F", category: "AI", logo: LOGOS["chatgpt-plus"] },
+  { name: "ChatGPT Plus", slug: "openai", color: "10A37F", category: "AI", logo: LOGOS["chatgpt-plus"] },
   { name: "Claude AI", slug: "anthropic", color: "D97757", category: "AI", logo: LOGOS["claude-pro"] },
   { name: "Google Gemini", slug: "googlegemini", color: "4285F4", category: "AI", logo: LOGOS["gemini-pro"] },
-  { name: "Perplexity", slug: "perplexity", color: "1F1F1F", category: "AI", logo: LOGOS["perplexity"] },
+  { name: "Perplexity Pro", slug: "perplexity", color: "1F1F1F", category: "AI", logo: LOGOS["perplexity"] },
   { name: "Grok", slug: "grok", color: "000000", category: "AI", logo: LOGOS["grok"] },
   { name: "ElevenLabs", slug: "elevenlabs", color: "000000", category: "AI", logo: LOGOS["eleven-labs"] },
-  { name: "Manus", slug: "manus", color: "111827", category: "AI", logo: LOGOS["manus-pro"] },
-  { name: "Notion AI", slug: "notion", color: "000000", category: "AI", logo: LOGOS["notion-business"] },
-  { name: "Fireflies AI", slug: "fireflies", color: "4F46E5", category: "AI", logo: LOGOS["marquee-fireflies-pro"] },
+  { name: "Manus Pro", slug: "manus", color: "111827", category: "AI", logo: LOGOS["manus-pro"] },
+  { name: "Notion Business +AI", slug: "notion", color: "000000", category: "AI", logo: LOGOS["notion-business"] },
+  { name: "Fireflies Pro", slug: "fireflies", color: "4F46E5", category: "AI", logo: LOGOS["marquee-fireflies-pro"] },
   { name: "Wispr Flow", slug: "wispr", color: "0EA5E9", category: "AI", logo: LOGOS["whisper-flow"] },
   { name: "Otter.ai", slug: "otter", color: "0052CC", category: "AI", logo: LOGOS["marquee-otter-ai"] },
   { name: "Granola", slug: "granola", color: "111827", category: "AI", logo: LOGOS["marquee-granola"] },
@@ -272,18 +272,18 @@ const RAW_ALL_TOOLS: Tool[] = [
   { name: "Lovable Pro / Lite", slug: "lovable", color: "FF4D8D", category: "Developer", logo: LOGOS["lovable-pro"] },
   { name: "Replit", slug: "replit", color: "F26207", category: "Developer", logo: LOGOS["replit"] },
   { name: "Bolt", slug: "bolt", color: "1389FD", category: "Developer", logo: LOGOS["bolt"] },
-  { name: "Supabase", slug: "supabase", color: "3FCF8E", category: "Developer", logo: LOGOS["supabase-pro"] },
+  { name: "Supabase Pro", slug: "supabase", color: "3FCF8E", category: "Developer", logo: LOGOS["supabase-pro"] },
   { name: "N8N", slug: "n8n", color: "EA4B71", category: "Developer", logo: LOGOS["n8n"] },
   { name: "Coderabbit", slug: "coderabbit", color: "F97316", category: "Developer", logo: LOGOS["marquee-coderabbit-pro"] },
   { name: "Firecrawl", slug: "firecrawl", color: "F97316", category: "Developer", logo: LOGOS["firecrawl"] },
-  { name: "Railway", slug: "railway", color: "0B0D0E", category: "Developer", logo: LOGOS["marquee-railway"] },
+  { name: "Railway", slug: "railway", color: "0B0D0E", category: "Developer", logo: LOGOS["railway"] },
   { name: "Warpbuild", slug: "warpbuild", color: "01A4FF", category: "Developer", logo: LOGOS["marquee-warpbuild"] },
   { name: "Factory", slug: "factory", color: "111827", category: "Developer", logo: LOGOS["marquee-factory"] },
 
   // DESIGN & CREATIVE TOOLS
   { name: "Adobe Creative Cloud", slug: "adobecreativecloud", color: "DA1F26", category: "Creative", logo: LOGOS["adobe-cc"] },
-  { name: "Canva", slug: "canva", color: "00C4CC", category: "Creative", logo: LOGOS["canva-pro"] },
-  { name: "Figma", slug: "figma", color: "F24E1E", category: "Creative", logo: LOGOS["figma"] },
+  { name: "Canva Pro", slug: "canva", color: "00C4CC", category: "Creative", logo: LOGOS["canva-pro"] },
+  { name: "Figma Professional", slug: "figma", color: "F24E1E", category: "Creative", logo: LOGOS["figma"] },
   { name: "Canva Business + Leonardo AI", slug: "canva", color: "00C4CC", category: "Creative", logo: LOGOS["marquee-canva-business"] },
   { name: "Envato Elements", slug: "envato", color: "82B541", category: "Creative", logo: LOGOS["elements"] },
   { name: "CapCut", slug: "capcut", color: "000000", category: "Creative", logo: LOGOS["marquee-capcut-pro"] },
@@ -291,15 +291,15 @@ const RAW_ALL_TOOLS: Tool[] = [
   { name: "Gamma", slug: "gamma", color: "8B5CF6", category: "Creative", logo: LOGOS["gamma-pro"] },
   { name: "Descript", slug: "descript", color: "1B1A1F", category: "Creative", logo: LOGOS["descript"] },
   { name: "Freepik", slug: "freepik", color: "1273EB", category: "Creative", logo: LOGOS["marquee-freepik"] },
-  { name: "Autodesk", slug: "autodesk", color: "0696D7", category: "Creative", logo: LOGOS["marquee-autodesk"] },
+  { name: "Autodesk", slug: "autodesk", color: "0696D7", category: "Creative", logo: LOGOS["autodesk"] },
   { name: "PNGTree", slug: "pngtree", color: "F97316", category: "Creative", logo: LOGOS["marquee-pngtree"] },
   { name: "Higgsfield", slug: "higgsfield", color: "111827", category: "Creative", logo: LOGOS["marquee-higgsfield"] },
 
   // PRODUCT, MARKETING & GROWTH
   { name: "Mobbin", slug: "mobbin", color: "111827", category: "Product/Marketing", logo: LOGOS["marquee-mobbin-team"] },
-  { name: "Framer", slug: "framer", color: "0055FF", category: "Product/Marketing", logo: LOGOS["marquee-framer-pro"] },
+  { name: "Framer", slug: "framer", color: "0055FF", category: "Product/Marketing", logo: LOGOS["framer"] },
   { name: "Intercom", slug: "intercom", color: "1F8DED", category: "Product/Marketing", logo: LOGOS["marquee-intercom"] },
-  { name: "Linear", slug: "linear", color: "5E6AD2", category: "Product/Marketing", logo: LOGOS["marquee-linear"] },
+  { name: "Linear", slug: "linear", color: "5E6AD2", category: "Product/Marketing", logo: LOGOS["linear"] },
   { name: "Loom AI", slug: "loom", color: "625DF5", category: "Product/Marketing", logo: LOGOS["marquee-loom"] },
   { name: "Make.com", slug: "make", color: "6D00CC", category: "Product/Marketing", logo: LOGOS["marquee-make-com"] },
   { name: "MagicPattern", slug: "magicpattern", color: "8B5CF6", category: "Product/Marketing", logo: LOGOS["marquee-magicpattern"] },
@@ -312,14 +312,14 @@ const RAW_ALL_TOOLS: Tool[] = [
   { name: "Guidless", slug: "guidless", color: "111827", category: "Product/Marketing", logo: LOGOS["marquee-guidless-pro"] },
 
   // BUSINESS & OPERATIONS
-  { name: "Airtable", slug: "airtable", color: "18BFFF", category: "Business/Operations", logo: LOGOS["marquee-airtable"] },
-  { name: "Asana", slug: "asana", color: "F06A6A", category: "Business/Operations", logo: LOGOS["marquee-asana"] },
+  { name: "Airtable", slug: "airtable", color: "18BFFF", category: "Business/Operations", logo: LOGOS["airtable"] },
+  { name: "Asana", slug: "asana", color: "F06A6A", category: "Business/Operations", logo: LOGOS["asana"] },
   { name: "Lead.CM", slug: "leadcm", color: "0EA5E9", category: "Business/Operations", logo: LOGOS["marquee-lead-cm"] },
   { name: "Gumloop", slug: "gumloop", color: "EC4899", category: "Business/Operations", logo: LOGOS["marquee-gumloop"] },
   { name: "TextShift", slug: "textshift", color: "0EA5E9", category: "Business/Operations", logo: LOGOS["marquee-textshift"] },
   { name: "Lightfield CRM", slug: "lightfieldcrm", color: "6366F1", category: "Business/Operations", logo: LOGOS["marquee-lightfield-crm"] },
   { name: "Indy", slug: "indy", color: "EC4899", category: "Business/Operations", logo: LOGOS["marquee-indy"] },
-  { name: "Raycast", slug: "raycast", color: "FF6363", category: "Business/Operations", logo: LOGOS["marquee-raycast"] },
+  { name: "Raycast", slug: "raycast", color: "FF6363", category: "Business/Operations", logo: LOGOS["raycast"] },
 
   // OTT PLATFORMS
   { name: "YouTube Premium", slug: "youtube", color: "FF0000", category: "OTT", logo: LOGOS["marquee-youtube-premium"] },
@@ -338,7 +338,7 @@ const RAW_ALL_TOOLS: Tool[] = [
   { name: "Apify Credits", slug: "apify", color: "F86606", category: "Credits", logo: LOGOS["apify-credits"] },
   { name: "V0 Credits", slug: "vercel", color: "000000", category: "Credits", logo: LOGOS["marquee-v0-credits"] },
   { name: "Firecrawl Credits", slug: "firecrawl", color: "F97316", category: "Credits", logo: LOGOS["firecrawl"] },
-  { name: "MongoDB Credits", slug: "mongodb", color: "47A248", category: "Credits", logo: LOGOS["marquee-mongodb-credits"] },
+  { name: "MongoDB Credits", slug: "mongodb", color: "47A248", category: "Credits", logo: LOGOS["mongodb"] },
   { name: "Vapi Credits", slug: "vapi", color: "10B981", category: "Credits", logo: LOGOS["marquee-vapi-credits"] },
   { name: "Airtable Credits", slug: "airtable", color: "18BFFF", category: "Credits", logo: LOGOS["marquee-airtable-credits"] },
   { name: "Render Credits", slug: "render", color: "46E3B7", category: "Credits", logo: LOGOS["marquee-render-credits"] },
