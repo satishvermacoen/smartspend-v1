@@ -49,7 +49,7 @@ export const ORBIT_OUTER: Tool[] = [
   { name: "n8n", slug: "n8n", color: "EA4B71", category: "Developer", logo: LOGOS["n8n"] },
   { name: "Bolt", slug: "", color: "111827", category: "Developer", logo: LOGOS["bolt"] },
   { name: "Whispr Flow", slug: "", color: "111827", category: "AI", logo: LOGOS["whisper-flow"] },
-  { name: "InVideo", slug: "invideo", color: "3B82F6", category: "Creative" },
+  { name: "InVideo", slug: "invideo", color: "3B82F6", category: "Creative", logo: LOGOS["invideo"] },
   { name: "Gamma Pro", slug: "gamma", color: "8B5CF6", category: "Productivity", logo: LOGOS["gamma-pro"] },
   { name: "Envato", slug: "envato", color: "8B5CF6", category: "Creative", logo: LOGOS["elements"] },
   { name: "AWS Credits", slug: "amazonwebservices", color: "FF9900", category: "Credits", logo: LOGOS["aws-credits"] },

@@ -16,8 +16,6 @@ function OrbitToolLogo({ tool, className = "h-7 w-7 sm:h-10 sm:w-10" }: { tool: 
     src = "https://cdn.simpleicons.org/perplexity/1F1F1F";
   } else if (name.includes("nordvpn") || name.includes("nord vpn")) {
     src = "https://cdn.simpleicons.org/nordvpn/4687FF";
-  } else if (name.includes("invideo")) {
-    src = "https://cdn.simpleicons.org/invideo/3B82F6";
   } else if (tool.logo) {
     src = typeof tool.logo === "object" && tool.logo !== null && "src" in tool.logo ? tool.logo.src : tool.logo;
   } else if (tool.slug) {
