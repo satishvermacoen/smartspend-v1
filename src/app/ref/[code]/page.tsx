@@ -5,10 +5,11 @@ import { Gift, Loader2, Sparkles, AlertCircle, ShieldCheck } from "lucide-react"
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { InquiryForm } from "@/components/marketing/home/main/inquiry-form";
-import { ALL_TOOLS } from "@/data/tools";
+import { ALL_TOOLS, logoUrl } from "@/data/tools";
 import { Tool } from "@/types";
+import { LOGOS } from "@/data/logo-map";
 import { SiteHeader, SiteFooter } from "@/components/marketing/layout/site-chrome";
-import { ToolLogo } from "@/components/marketing/layout/tool-logo";
+import Image, { StaticImageData } from "next/image";
 
 const CATEGORIES = ["All", "Developer", "Creative", "Product/Marketing", "Business/Operations", "OTT", "Credits"] as const;
 type Category = (typeof CATEGORIES)[number];
@@ -21,6 +22,39 @@ const CATEGORY_LABELS: Record<Category, string> = {
   "Business/Operations": "Business & Operations",
   OTT: "OTT Platforms",
   Credits: "Platform Credits",
+};
+ 
+const LOGO_OVERRIDES: Record<string, string | StaticImageData> = {
+  "Firecrawl": "https://logos.hunter.io/firecrawl.dev",
+  "Firecrawl Credits": "https://logos.hunter.io/firecrawl.dev",
+  "Railway": "https://logos.hunter.io/railway.app",
+  "Factory": "https://logos.hunter.io/factory.ai",
+  "Warpbuild": "https://logos.hunter.io/warpbuild.com",
+  "Bolt": "https://www.google.com/s2/favicons?domain=bolt.new&sz=128",
+  "Adobe Creative Cloud": LOGOS["adobe-cc"] as StaticImageData,
+  "Canva Pro": "https://logos.hunter.io/canva.com",
+  "Canva Business + Leonardo AI": "https://logos.hunter.io/canva.com",
+  "CapCut": "https://logos.hunter.io/capcut.com",
+  "InVideo": "https://logos.hunter.io/invideo.io",
+  "Gamma": "https://logos.hunter.io/gamma.app",
+  "Descript": "https://logos.hunter.io/descript.com",
+  "Leonardo AI": "https://logos.hunter.io/leonardo.ai",
+  "Customer.io": "https://logos.hunter.io/customer.io",
+  "Mobbin Team": "https://logos.hunter.io/mobbin.com",
+  "Guidless Pro": "https://logos.hunter.io/guideless.ai",
+  "Lead.CM": "https://www.google.com/s2/favicons?domain=leads.cm&sz=128",
+  "TextShift": "https://www.google.com/s2/favicons?domain=textshift.org&sz=128",
+  "Amazon Prime Video": "https://logos.hunter.io/primevideo.com",
+  "JioHotstar": "https://logos.hunter.io/jiocinema.com",
+  "SonyLIV": "https://upload.wikimedia.org/wikipedia/commons/f/f7/SonyLIV_2020.png",
+  "ZEE 5": "https://logos.hunter.io/zee5.com",
+  "OpenAI Credits": "https://logos.hunter.io/openai.com",
+  "AWS Credits": LOGOS["aws-credits"] as StaticImageData,
+  "MongoDB Credits": "https://logos.hunter.io/mongodb.com",
+  "Vapi Credits": "https://logos.hunter.io/vapi.ai",
+  "Airtable Credits": "https://logos.hunter.io/airtable.com",
+  "Render Credits": "https://logos.hunter.io/render.com",
+  "Scalingo Credits": "https://logos.hunter.io/scalingo.com",
 };
 
 export default function RefCodeLandingPage({ params }: { params: Promise<{ code: string }> }) {
@@ -187,11 +221,59 @@ export default function RefCodeLandingPage({ params }: { params: Promise<{ code:
   );
 }
 
+function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; className?: string }) {
+  const [failed, setFailed] = useState(false);
+  
+  let primary: string | undefined = undefined;
+  const override = LOGO_OVERRIDES[tool.name];
+  if (override) {
+    primary = typeof override === "object" && override !== null && "src" in override ? override.src : override;
+  } else if (tool.logo) {
+    primary = typeof tool.logo === "object" && tool.logo !== null && "src" in tool.logo ? tool.logo.src : tool.logo;
+  } else if (tool.slug) {
+    primary = logoUrl(tool);
+  } else if (tool.domain) {
+    primary = `https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128`;
+  }
+ 
+  if (!primary || failed) {
+    return (
+      <div
+        className={`grid place-items-center rounded-md font-display text-[10px] font-extrabold uppercase tracking-tight text-white ${className}`}
+        style={{ backgroundColor: `#${tool.color ?? "0A66C2"}` }}
+        title={tool.name}
+      >
+        {tool.name
+          .replace(/\b(Pro|Plus|Premium|Cloud|Credits|Business|Elements|Flow|Labs)\b/gi, "")
+          .trim()
+          .split(/\s+/)
+          .map((w) => w[0])
+          .join("")
+          .slice(0, 2)}
+      </div>
+    );
+  }
+ 
+  return (
+    <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
+      <Image
+        width={64}
+        height={64} 
+        src={primary}
+        alt={tool.name}
+        loading="lazy"
+        className="block h-full w-full object-contain object-center transition-transform"
+        onError={() => setFailed(true)}
+      />
+    </div>
+  );
+}
+ 
 function ToolTile({ tool }: { tool: Tool }) {
   return (
     <div className="group flex flex-col items-center gap-2 rounded-xl border border-border bg-card/60 p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md duration-200">
       <div className="flex h-12 w-12 items-center justify-center rounded-lg p-2 bg-secondary/40">
-        <ToolLogo tool={tool} className="h-full w-full" />
+        <AllSubscriptionsLogo tool={tool} className="h-full w-full" />
       </div>
       <div className="text-center text-xs font-semibold text-foreground min-w-0 w-full truncate" title={tool.name}>
         {tool.name}
