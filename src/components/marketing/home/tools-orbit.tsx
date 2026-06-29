@@ -1,6 +1,84 @@
 import { ORBIT_INNER, ORBIT_OUTER } from "@/data/tools";
 import { ToolLogo } from "@/components/marketing/layout/tool-logo";
 import { Tool } from "@/types";
+import { LOGOS } from "@/data/logo-map";
+import Image from "next/image";
+
+function OrbitToolLogo({ tool, className = "h-7 w-7 sm:h-10 sm:w-10" }: { tool: Tool; className?: string }) {
+  const name = tool.name.toLowerCase();
+  
+  if (name.includes("coursera")) {
+    return (
+      <div className={`grid place-items-center overflow-hidden ${className}`}>
+        <Image
+          src={LOGOS["coursera"] as any}
+          alt={tool.name}
+          width={48}
+          height={48}
+          className="block h-full w-full object-contain object-center scale-[1.5] transition-transform"
+        />
+      </div>
+    );
+  }
+  
+  if (name.includes("perplexity")) {
+    return (
+      <div className={`grid place-items-center overflow-hidden ${className}`}>
+        <Image
+          src={LOGOS["perplexity"] as any}
+          alt={tool.name}
+          width={48}
+          height={48}
+          className="block h-full w-full object-contain object-center scale-[1.4] dark:invert transition-transform"
+        />
+      </div>
+    );
+  }
+  
+  if (name.includes("copilot") || name.includes("github")) {
+    return (
+      <div className={`grid place-items-center overflow-hidden ${className}`}>
+        <Image
+          src={LOGOS["github"] as any}
+          alt={tool.name}
+          width={48}
+          height={48}
+          className="block h-full w-full object-contain object-center scale-[1.3] dark:invert transition-transform"
+        />
+      </div>
+    );
+  }
+  
+  if (name.includes("nordvpn") || name.includes("nord vpn")) {
+    return (
+      <div className={`grid place-items-center overflow-hidden ${className}`}>
+        <Image
+          src={LOGOS["nordvpn"] as any}
+          alt={tool.name}
+          width={48}
+          height={48}
+          className="block h-full w-full object-contain object-center scale-[1.4] transition-transform"
+        />
+      </div>
+    );
+  }
+  
+  if (name.includes("invideo")) {
+    return (
+      <div className={`grid place-items-center overflow-hidden ${className}`}>
+        <Image
+          src={LOGOS["invideo"] as any}
+          alt={tool.name}
+          width={48}
+          height={48}
+          className="block h-full w-full object-contain object-center scale-[1.3] transition-transform"
+        />
+      </div>
+    );
+  }
+
+  return <ToolLogo tool={tool} className={className} />;
+}
 
 export function ToolsOrbit() {
   return (
@@ -68,7 +146,7 @@ function Ring({
                   title={t.name}
                 >
                   <div className="absolute inset-0 rounded-full bg-primary opacity-0 transition group-hover:opacity-[0.06]" />
-                  <ToolLogo tool={t} className="h-7 w-7 sm:h-10 sm:w-10" />
+                  <OrbitToolLogo tool={t} className="h-7 w-7 sm:h-10 sm:w-10" />
                 </div>
                 <span className="hidden sm:block max-w-[96px] whitespace-nowrap text-center text-[9px] font-semibold leading-tight text-muted-foreground sm:max-w-[120px] sm:text-[11px]">
                   {t.name}
