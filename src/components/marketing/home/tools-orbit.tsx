@@ -1,4 +1,5 @@
-import { ORBIT_INNER, ORBIT_OUTER } from "@/data/tools";
+import { useState } from "react";
+import { ORBIT_INNER, ORBIT_OUTER, logoUrl } from "@/data/tools";
 import { ToolLogo } from "@/components/marketing/layout/tool-logo";
 import { Tool } from "@/types";
 import { LOGOS } from "@/data/logo-map";
@@ -7,77 +8,73 @@ import Image from "next/image";
 function OrbitToolLogo({ tool, className = "h-7 w-7 sm:h-10 sm:w-10" }: { tool: Tool; className?: string }) {
   const name = tool.name.toLowerCase();
   
+  // Resolve image source
+  let src: string | undefined = undefined;
   if (name.includes("coursera")) {
-    return (
-      <div className={`grid place-items-center overflow-hidden ${className}`}>
-        <Image
-          src={LOGOS["coursera"] as any}
-          alt={tool.name}
-          width={48}
-          height={48}
-          className="block h-full w-full object-contain object-center scale-[1.5] transition-transform"
-        />
-      </div>
-    );
+    src = "https://upload.wikimedia.org/wikipedia/commons/9/97/Coursera-Logo_Symbol.svg";
+  } else if (tool.logo) {
+    src = typeof tool.logo === "object" && tool.logo !== null && "src" in tool.logo ? tool.logo.src : tool.logo;
+  } else if (tool.slug) {
+    src = logoUrl(tool);
+  } else if (tool.domain) {
+    src = `https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128`;
   }
-  
-  if (name.includes("perplexity")) {
+
+  const [failed, setFailed] = useState(false);
+
+  if (!src || failed) {
     return (
-      <div className={`grid place-items-center overflow-hidden ${className}`}>
-        <Image
-          src={LOGOS["perplexity"] as any}
-          alt={tool.name}
-          width={48}
-          height={48}
-          className="block h-full w-full object-contain object-center scale-[1.4] dark:invert transition-transform"
-        />
-      </div>
-    );
-  }
-  
-  if (name.includes("copilot") || name.includes("github")) {
-    return (
-      <div className={`grid place-items-center overflow-hidden ${className}`}>
-        <Image
-          src={LOGOS["github"] as any}
-          alt={tool.name}
-          width={48}
-          height={48}
-          className="block h-full w-full object-contain object-center scale-[1.3] dark:invert transition-transform"
-        />
-      </div>
-    );
-  }
-  
-  if (name.includes("nordvpn") || name.includes("nord vpn")) {
-    return (
-      <div className={`grid place-items-center overflow-hidden ${className}`}>
-        <Image
-          src={LOGOS["nordvpn"] as any}
-          alt={tool.name}
-          width={48}
-          height={48}
-          className="block h-full w-full object-contain object-center scale-[1.4] transition-transform"
-        />
-      </div>
-    );
-  }
-  
-  if (name.includes("invideo")) {
-    return (
-      <div className={`grid place-items-center overflow-hidden ${className}`}>
-        <Image
-          src={LOGOS["invideo"] as any}
-          alt={tool.name}
-          width={48}
-          height={48}
-          className="block h-full w-full object-contain object-center scale-[1.3] transition-transform"
-        />
+      <div
+        className={`grid place-items-center rounded-full font-display text-[11px] font-extrabold uppercase tracking-tight text-white ${className}`}
+        style={{ backgroundColor: `#${tool.color ?? "0A66C2"}` }}
+        title={tool.name}
+      >
+        {tool.name
+          .replace(/\b(Pro|Plus|Premium|Cloud|Credits|Business|Elements|Flow|Labs)\b/gi, "")
+          .trim()
+          .split(/\s+/)
+          .map((w) => w[0])
+          .join("")
+          .slice(0, 2)}
       </div>
     );
   }
 
-  return <ToolLogo tool={tool} className={className} />;
+  // Adjust scaling for perfect centering and display in Orbit circle container
+  let scaleClass = "scale-[1.0]";
+  if (name.includes("coursera")) {
+    scaleClass = "scale-[1.2]";
+  } else if (name.includes("perplexity")) {
+    scaleClass = "scale-[1.4]";
+  } else if (name.includes("copilot") || name.includes("github")) {
+    scaleClass = "scale-[1.3]";
+  } else if (name.includes("nordvpn") || name.includes("nord vpn")) {
+    scaleClass = "scale-[1.4]";
+  } else if (name.includes("invideo")) {
+    scaleClass = "scale-[1.3]";
+  } else if (name.includes("manus")) {
+    scaleClass = "scale-[2.0]";
+  } else if (name.includes("fireflies")) {
+    scaleClass = "scale-[2.2]";
+  } else if (name.includes("rezi")) {
+    scaleClass = "scale-[2.2]";
+  }
+
+  const isInverted = tool.color === "000000" || name.includes("perplexity") || name.includes("github") || name.includes("copilot");
+
+  return (
+    <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
+      <Image
+        unoptimized
+        width={96}
+        height={96}
+        src={src}
+        alt={tool.name}
+        className={`block h-full w-full object-contain object-center transition-transform ${scaleClass} ${isInverted ? "dark:invert" : ""}`}
+        onError={() => setFailed(true)}
+      />
+    </div>
+  );
 }
 
 export function ToolsOrbit() {

@@ -91,7 +91,7 @@ export function ToolLogo({
   }
 
   let scaleClass = "";
-  if (tool.logo) {
+  if (tool.logo || tool.slug) {
     const nameLower = tool.name.toLowerCase();
     if (nameLower.includes("manus")) {
       scaleClass = "scale-[2.0]";
@@ -99,6 +99,16 @@ export function ToolLogo({
       scaleClass = "scale-[2.2]";
     } else if (nameLower.includes("rezi")) {
       scaleClass = "scale-[2.2]";
+    } else if (nameLower.includes("coursera")) {
+      scaleClass = "scale-[1.2]";
+    } else if (nameLower.includes("perplexity")) {
+      scaleClass = "scale-[1.2]";
+    } else if (nameLower.includes("copilot") || nameLower.includes("github")) {
+      scaleClass = "scale-[1.2]";
+    } else if (nameLower.includes("nordvpn") || nameLower.includes("nord vpn")) {
+      scaleClass = "scale-[1.2]";
+    } else if (nameLower.includes("invideo")) {
+      scaleClass = "scale-[1.2]";
     }
   }
 
@@ -107,8 +117,9 @@ export function ToolLogo({
   return (
     <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
       <Image
-        width={48}
-        height={48}
+        unoptimized
+        width={96}
+        height={96}
         src={primary}
         alt={tool.name}
         loading={tool.logo ? "eager" : "lazy"}
