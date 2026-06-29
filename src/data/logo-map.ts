@@ -6,18 +6,14 @@ import apifyLogo from "@/assets/logos/apify.svg";
 import awsCreditsLogo from "@/assets/logos/aws-credits.png";
 import boltLogo from "@/assets/logos/bolt.png";
 import canvaProLogo from "@/assets/logos/canva-pro.png";
-import chatgptPlusLogo from "@/assets/logos/chatgpt-plus.png";
 import chatgptProLogo from "@/assets/logos/chatgpt-pro.png";
-import claudeProLogo from "@/assets/logos/claude-pro.png";
 import cloudProLogo from "@/assets/logos/cloud-pro.png";
 import courseraLogo from "@/assets/logos/coursera.png";
 import cursorProLogo from "@/assets/logos/cursor-pro.png";
 import descriptLogo from "@/assets/logos/descript.svg";
 import elementsLogo from "@/assets/logos/elements.png";
-import elevenLabsLogo from "@/assets/logos/eleven-labs.png";
 import figmaLogo from "@/assets/logos/figma.png";
 import gammaProLogo from "@/assets/logos/gamma-pro.png";
-import geminiProLogo from "@/assets/logos/gemini-pro.png";
 import githubLogo from "@/assets/logos/github.png";
 import hootsuiteLogo from "@/assets/logos/hootsuite.png";
 import invideoLogo from "@/assets/logos/invideo.png";
@@ -32,7 +28,6 @@ import marqueeAutodeskLogo from "@/assets/logos/marquee-autodesk.png";
 import marqueeCanvaBusinessLogo from "@/assets/logos/marquee-canva-business.png";
 import marqueeCapcutProLogo from "@/assets/logos/marquee-capcut-pro.png";
 import marqueeChatprdLogo from "@/assets/logos/marquee-chatprd.png";
-import marqueeClaudeCreditsLogo from "@/assets/logos/marquee-claude-credits.png";
 import marqueeCoderabbitProLogo from "@/assets/logos/marquee-coderabbit-pro.png";
 import marqueeCustomerIoLogo from "@/assets/logos/marquee-customer-io.png";
 import marqueeDescriptLogo from "@/assets/logos/marquee-descript.png";
@@ -80,7 +75,6 @@ import marqueeScalingoCreditsLogo from "@/assets/logos/marquee-scalingo-credits.
 import marqueeSonyLivLogo from "@/assets/logos/marquee-sony-liv.png";
 import marqueeSpeechifyLogo from "@/assets/logos/marquee-speechify.png";
 import marqueeTextshiftLogo from "@/assets/logos/marquee-textshift.png";
-import marqueeV0CreditsLogo from "@/assets/logos/marquee-v0-credits.png";
 import marqueeVapiCreditsLogo from "@/assets/logos/marquee-vapi-credits.png";
 import marqueeWarpbuildLogo from "@/assets/logos/marquee-warpbuild.png";
 import marqueeYoutubePremiumLogo from "@/assets/logos/marquee-youtube-premium.png";
@@ -95,6 +89,13 @@ import replicaiLogo from "@/assets/logos/replicai.png";
 import replitLogo from "@/assets/logos/replit.png";
 import supabaseProLogo from "@/assets/logos/supabase-pro.png";
 import whisperFlowLogo from "@/assets/logos/whisper-flow.png";
+import grokLogo from "@/assets/logos/grok.svg";
+import firecrawlLogo from "@/assets/logos/firecrawl.svg";
+import claudeLogo from "@/assets/logos/claude.svg";
+import v0Logo from "@/assets/logos/v0.svg";
+import chatgptSvg from "@/assets/logos/chatgpt.svg";
+import geminiSvg from "@/assets/logos/gemini.svg";
+import elevenLabsSvg from "@/assets/logos/eleven-labs.svg";
 
 export const LOGOS: Record<string, unknown> = {
   "adobe-cc": adobeCcLogo,
@@ -104,18 +105,20 @@ export const LOGOS: Record<string, unknown> = {
   "aws-credits": awsCreditsLogo,
   "bolt": boltLogo,
   "canva-pro": canvaProLogo,
-  "chatgpt-plus": chatgptPlusLogo,
+  "chatgpt-plus": chatgptSvg,
   "chatgpt-pro": chatgptProLogo,
-  "claude-pro": claudeProLogo,
+  "claude-pro": claudeLogo,
   "cloud-pro": cloudProLogo,
   "coursera": courseraLogo,
   "cursor-pro": cursorProLogo,
   "descript": descriptLogo,
   "elements": elementsLogo,
-  "eleven-labs": elevenLabsLogo,
+  "eleven-labs": elevenLabsSvg,
   "figma": figmaLogo,
+  "grok": grokLogo,
+  "firecrawl": firecrawlLogo,
   "gamma-pro": gammaProLogo,
-  "gemini-pro": geminiProLogo,
+  "gemini-pro": geminiSvg,
   "github": githubLogo,
   "hootsuite": hootsuiteLogo,
   "invideo": invideoLogo,
@@ -130,7 +133,7 @@ export const LOGOS: Record<string, unknown> = {
   "marquee-canva-business": marqueeCanvaBusinessLogo,
   "marquee-capcut-pro": marqueeCapcutProLogo,
   "marquee-chatprd": marqueeChatprdLogo,
-  "marquee-claude-credits": marqueeClaudeCreditsLogo,
+  "marquee-claude-credits": claudeLogo,
   "marquee-coderabbit-pro": marqueeCoderabbitProLogo,
   "marquee-customer-io": marqueeCustomerIoLogo,
   "marquee-descript": marqueeDescriptLogo,
@@ -178,7 +181,7 @@ export const LOGOS: Record<string, unknown> = {
   "marquee-sony-liv": marqueeSonyLivLogo,
   "marquee-speechify": marqueeSpeechifyLogo,
   "marquee-textshift": marqueeTextshiftLogo,
-  "marquee-v0-credits": marqueeV0CreditsLogo,
+  "marquee-v0-credits": v0Logo,
   "marquee-vapi-credits": marqueeVapiCreditsLogo,
   "marquee-warpbuild": marqueeWarpbuildLogo,
   "marquee-youtube-premium": marqueeYoutubePremiumLogo,
