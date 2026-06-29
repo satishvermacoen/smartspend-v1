@@ -91,7 +91,7 @@ export async function POST(req: Request) {
         title: 'Subscription Activated! 💳',
         message: `Your subscription to ${packageName} is now active. Validity: ${new Date(endDate).toLocaleDateString('en-IN')}.`,
         type: 'subscription',
-        actionUrl: '/client/dashboard'
+        actionUrl: '/partner/dashboard'
       });
 
       const admins = await User.find({ role: 'admin' });
@@ -251,7 +251,7 @@ export async function POST(req: Request) {
             title: 'Referral Reward Earned! 🎁',
             message: `Your friend ${user.fullName || user.email} just purchased ${packageName}. You've earned ${rewardType === 'cash' ? `₹${rewardAmount} Cash` : `${rewardMonths} Months free subscription extension`}!`,
             type: 'reward',
-            actionUrl: '/client/referral'
+            actionUrl: '/partner/referral'
           });
         }
       } catch (refErr) {

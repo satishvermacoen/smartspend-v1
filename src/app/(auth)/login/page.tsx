@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState<'client' | 'admin'>('client');
+  const [activeTab, setActiveTab] = useState<'partner' | 'admin'>('partner');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -62,7 +62,7 @@ function LoginForm() {
     setLoading(true);
 
     try {
-      const targetUrl = activeTab === 'admin' ? '/admin/dashboard' : '/client/dashboard';
+      const targetUrl = activeTab === 'admin' ? '/admin/dashboard' : '/partner/dashboard';
       const result = await signIn('credentials', {
         redirect: false,
         email: formData.email,
@@ -84,7 +84,7 @@ function LoginForm() {
           return;
         }
 
-        if (activeTab === 'client' && userRole === 'admin') {
+        if (activeTab === 'partner' && userRole === 'admin') {
           router.push('/admin/dashboard');
         } else {
           router.push(targetUrl);
@@ -115,19 +115,19 @@ function LoginForm() {
       <AuthAlert type="error" message={error} />
       <AuthAlert type="success" message={infoMessage} />
 
-      {/* Client / Admin Tabs */}
+      {/* Partner / Admin Tabs */}
       <div className="relative flex p-1 bg-soft/40 border border-border/15 rounded-xl mb-6">
         <Button
           type="button"
-          onClick={() => setActiveTab('client')}
+          onClick={() => setActiveTab('partner')}
           className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 cursor-pointer focus:outline-none ${
-            activeTab === 'client'
+            activeTab === 'partner'
               ? 'bg-gradient-brand text-primary-foreground shadow-soft scale-[1.02]'
               : 'text-muted-foreground hover:text-foreground'
           }`}
         >
           <User className="h-4 w-4" />
-          Client
+          Partner
         </Button>
         <Button
           type="button"

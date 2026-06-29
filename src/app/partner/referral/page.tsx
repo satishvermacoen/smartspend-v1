@@ -125,35 +125,35 @@ export default function ClientReferralPage() {
     }
     try {
       // 1. Get referral profile stats
-      const profileRes = await fetch("/api/customer/referral/profile");
+      const profileRes = await fetch("/api/partner/referral/profile");
       const profileData = await profileRes.json();
       if (profileData.stats) {
         setStats(profileData.stats);
       }
 
       // 2. Get referral codes (now enriched with stats)
-      const codesRes = await fetch("/api/customer/referral/code");
+      const codesRes = await fetch("/api/partner/referral/code");
       const codesData = await codesRes.json();
       if (codesData.referralCodes) {
         setCodes(codesData.referralCodes);
       }
 
       // 3. Get share links for the active code (or first)
-      const linksRes = await fetch("/api/customer/referral/share-links");
+      const linksRes = await fetch("/api/partner/referral/share-links");
       const linksData = await linksRes.json();
       if (linksData.shareLinks) {
         setShareLinks(linksData.shareLinks);
       }
 
       // 4. Get conversions (referral history)
-      const referralsRes = await fetch("/api/customer/referral/referrals");
+      const referralsRes = await fetch("/api/partner/referral/referrals");
       const referralsData = await referralsRes.json();
       if (referralsData.success && referralsData.referrals) {
         setConversions(referralsData.referrals);
       }
 
       // 5. Get reward ledger & active subscriptions
-      const rewardsRes = await fetch("/api/customer/referral/rewards");
+      const rewardsRes = await fetch("/api/partner/referral/rewards");
       const rewardsData = await rewardsRes.json();
       if (rewardsData.success) {
         setLedger(rewardsData.ledger);
@@ -185,7 +185,7 @@ export default function ClientReferralPage() {
     }
     setGeneratingCode(true);
     try {
-      const res = await fetch("/api/customer/referral/code", {
+      const res = await fetch("/api/partner/referral/code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ linkName: newLinkName })
@@ -208,7 +208,7 @@ export default function ClientReferralPage() {
   // Handle toggling referral link active status
   const handleToggleCodeStatus = async (id: string, currentStatus: boolean) => {
     try {
-      const res = await fetch(`/api/customer/referral/code/${id}`, {
+      const res = await fetch(`/api/partner/referral/code/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ is_active: !currentStatus })
@@ -229,7 +229,7 @@ export default function ClientReferralPage() {
   const handleDeleteCode = async (id: string) => {
     if (!confirm("Are you sure you want to permanently delete this referral link?")) return;
     try {
-      const res = await fetch(`/api/customer/referral/code/${id}`, {
+      const res = await fetch(`/api/partner/referral/code/${id}`, {
         method: "DELETE"
       });
       const data = await res.json();
@@ -247,7 +247,7 @@ export default function ClientReferralPage() {
   // Handle updating preferred reward type
   const handleUpdatePreference = async (newPreference: 'cash' | 'subscription') => {
     try {
-      const res = await fetch("/api/customer/referral/rewards", {
+      const res = await fetch("/api/partner/referral/rewards", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ preferredRewardType: newPreference })
@@ -279,7 +279,7 @@ export default function ClientReferralPage() {
 
     setProcessingClaim(true);
     try {
-      const res = await fetch("/api/customer/referral/rewards/claim-cash", {
+      const res = await fetch("/api/partner/referral/rewards/claim-cash", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount })
@@ -315,7 +315,7 @@ export default function ClientReferralPage() {
 
     setProcessingClaim(true);
     try {
-      const res = await fetch("/api/customer/referral/rewards/apply-subscription", {
+      const res = await fetch("/api/partner/referral/rewards/apply-subscription", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ subscriptionId: selectedSubId, months })

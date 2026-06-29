@@ -1,5 +1,5 @@
-import { AppSidebar } from "@/components/client/layout/app-sidebar"
-import { SiteHeader } from "@/components/client/layout/site-header"
+import { AppSidebar } from "@/components/partner/layout/app-sidebar"
+import { SiteHeader } from "@/components/partner/layout/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 
 export default function Clientlayout({ children }: { children: React.ReactNode }) {

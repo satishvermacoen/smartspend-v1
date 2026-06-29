@@ -189,7 +189,7 @@ export async function POST(req: Request) {
           title: 'Welcome to SpendSmart! 🎉',
           message: `Your account was created successfully. We've received your subscription wishlist!`,
           type: 'system',
-          actionUrl: '/client/dashboard'
+          actionUrl: '/partner/dashboard'
         });
       } else {
         await createNotification({
@@ -197,7 +197,7 @@ export async function POST(req: Request) {
           title: 'Wishlist Received! 📋',
           message: `We've updated your wishlist with ${picked.length} subscriptions.`,
           type: 'system',
-          actionUrl: '/client/dashboard'
+          actionUrl: '/partner/dashboard'
         });
       }
 

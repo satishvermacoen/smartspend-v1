@@ -49,7 +49,7 @@ export default function AccountSettingsPage() {
   useEffect(() => {
     async function fetchProfile() {
       try {
-        const res = await fetch("/api/customer/profile");
+        const res = await fetch("/api/partner/profile");
         const data = await res.json();
         
         if (res.ok && data.user) {
@@ -79,7 +79,7 @@ export default function AccountSettingsPage() {
 
     setSavingProfile(true);
     try {
-      const res = await fetch("/api/customer/profile", {
+      const res = await fetch("/api/partner/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -129,7 +129,7 @@ export default function AccountSettingsPage() {
 
     setSavingPassword(true);
     try {
-      const res = await fetch("/api/customer/profile", {
+      const res = await fetch("/api/partner/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -68,7 +68,7 @@ export async function POST(req: Request) {
         title: 'Cash Payout Approved! 💸',
         message: `Your cash claim request of ₹${redemption.amount} has been approved and credited to your wallet balance.`,
         type: 'reward',
-        actionUrl: '/client/referral'
+        actionUrl: '/partner/referral'
       });
     } else if (redemption.type === 'subscription_activation') {
       // Find and extend active subscription
@@ -95,7 +95,7 @@ export async function POST(req: Request) {
         title: 'Subscription Extended! 💳',
         message: `Your subscription extension of ${redemption.months} free months has been applied to ${sub.packageName}.`,
         type: 'subscription',
-        actionUrl: '/client/dashboard'
+        actionUrl: '/partner/dashboard'
       });
     }
 

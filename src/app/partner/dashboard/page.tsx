@@ -6,13 +6,13 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 // Import new modular components
-import { DashboardHeader } from "@/components/client/dashboard/referral/dashboard-header";
-import { ReferralKPIs } from "@/components/client/dashboard/referral/referral-kpis";
-import { PerformanceChart } from "@/components/client/dashboard/referral/performance-chart";
-import { GrowthSuggestions } from "@/components/client/dashboard/referral/growth-suggestions";
-import { QuickShareWidget } from "@/components/client/dashboard/referral/quick-share-widget";
-import { GamificationProgress } from "@/components/client/dashboard/referral/gamification-progress";
-import { RecentActivity } from "@/components/client/dashboard/referral/recent-activity";
+import { DashboardHeader } from "@/components/partner/dashboard/referral/dashboard-header";
+import { ReferralKPIs } from "@/components/partner/dashboard/referral/referral-kpis";
+import { PerformanceChart } from "@/components/partner/dashboard/referral/performance-chart";
+import { GrowthSuggestions } from "@/components/partner/dashboard/referral/growth-suggestions";
+import { QuickShareWidget } from "@/components/partner/dashboard/referral/quick-share-widget";
+import { GamificationProgress } from "@/components/partner/dashboard/referral/gamification-progress";
+import { RecentActivity } from "@/components/partner/dashboard/referral/recent-activity";
 
 export interface SubscriptionItem {
   _id?: string;
@@ -139,7 +139,7 @@ export default function ClientDashboardPage() {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/customer/dashboard");
+      const res = await fetch("/api/partner/dashboard");
       const json = await res.json();
       if (res.ok) {
         setData(json);

@@ -166,7 +166,7 @@ export async function POST(req: Request) {
         title: 'Welcome to SpendSmart! 🎉',
         message: `Your account was created successfully. We've initialized your profile with a signup discount reward!`,
         type: 'reward',
-        actionUrl: '/client/referral'
+        actionUrl: '/partner/referral'
       });
 
       const admins = await User.find({ role: 'admin' });

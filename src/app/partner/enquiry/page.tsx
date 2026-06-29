@@ -45,7 +45,7 @@ export default function ClientEnquiryPage() {
 
   const fetchEnquiries = async () => {
     try {
-      const res = await fetch("/api/customer/enquiry");
+      const res = await fetch("/api/partner/enquiry");
       const data = await res.json();
       if (res.ok) {
         setEnquiries(data.enquiries);
@@ -59,7 +59,7 @@ export default function ClientEnquiryPage() {
 
   const loadUserProfile = async () => {
     try {
-      const res = await fetch("/api/customer/profile");
+      const res = await fetch("/api/partner/profile");
       const data = await res.json();
       if (res.ok && data.user) {
         setName(data.user.fullName || "");
@@ -90,7 +90,7 @@ export default function ClientEnquiryPage() {
 
     setSubmitting(true);
     try {
-      const res = await fetch("/api/customer/enquiry", {
+      const res = await fetch("/api/partner/enquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

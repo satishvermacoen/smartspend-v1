@@ -56,7 +56,7 @@ export async function POST(req: Request) {
         title: 'Claim Request Rejected ❌',
         message: `Your withdrawal claim of ₹${redemption.amount || 0} was rejected. Reason: ${reason || 'Self-referral or mismatch flagged during transaction review.'}`,
         type: 'reward',
-        actionUrl: '/client/referral'
+        actionUrl: '/partner/referral'
       });
     }
 

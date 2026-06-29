@@ -3,8 +3,8 @@
 import * as React from "react"
 import { useSession } from "next-auth/react"
 
-import { NavMain } from "@/components/client/layout/nav-main"
-import { NavUser } from "@/components/client/layout/nav-user"
+import { NavMain } from "@/components/partner/layout/nav-main"
+import { NavUser } from "@/components/partner/layout/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -26,7 +26,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/client/dashboard",
+      url: "/partner/dashboard",
       icon: (
         <LayoutDashboardIcon
         />
@@ -34,7 +34,7 @@ const data = {
     },
     {
       title: "Enquiries",
-      url: "/client/enquiry",
+      url: "/partner/enquiry",
       icon: (
         <ListIcon
         />
@@ -42,7 +42,7 @@ const data = {
     },
     {
       title: "Referrals",
-      url: "/client/referral",
+      url: "/partner/referral",
       icon: (
         <UsersIcon
         />

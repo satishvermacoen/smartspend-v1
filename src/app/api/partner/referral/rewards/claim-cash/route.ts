@@ -85,7 +85,7 @@ export async function POST(req: Request) {
           title: 'Cash Reward Disbursed! 💸',
           message: `Your cash withdrawal claim of ₹${claimAmount} was completed successfully (Auto-credited to balance).`,
           type: 'reward',
-          actionUrl: '/client/referral'
+          actionUrl: '/partner/referral'
         });
 
         const admins = await User.find({ role: 'admin' });
@@ -134,7 +134,7 @@ export async function POST(req: Request) {
             title: 'Cash Claim Submitted ⏳',
             message: `Your withdrawal request of ₹${claimAmount} has been submitted for administrative review.`,
             type: 'reward',
-            actionUrl: '/client/referral'
+            actionUrl: '/partner/referral'
           });
 
           const admins = await User.find({ role: 'admin' });
