@@ -11,11 +11,13 @@ import { LOGOS } from "@/data/logo-map";
 import { SiteHeader, SiteFooter } from "@/components/marketing/layout/site-chrome";
 import Image, { StaticImageData } from "next/image";
 
-const CATEGORIES = ["All", "Developer", "Creative", "Product/Marketing", "Business/Operations", "OTT", "Credits"] as const;
+const CATEGORIES = ["All", "Professional", "AI", "Developer", "Creative", "Product/Marketing", "Business/Operations", "OTT", "Credits"] as const;
 type Category = (typeof CATEGORIES)[number];
  
 const CATEGORY_LABELS: Record<Category, string> = {
   All: "All",
+  Professional: "Professional Tools",
+  AI: "AI Assistants",
   Developer: "Developer Tools",
   Creative: "Design & Creative Tools",
   "Product/Marketing": "Product, Marketing & Growth",
@@ -97,7 +99,7 @@ export default function RefCodeLandingPage({ params }: { params: Promise<{ code:
 
   const groupedTools = useMemo(() => {
     const groups: Record<Category, Tool[]> = {
-      All: [], Developer: [], Creative: [], "Product/Marketing": [], "Business/Operations": [], OTT: [], Credits: [],
+      All: [], Professional: [], AI: [], Developer: [], Creative: [], "Product/Marketing": [], "Business/Operations": [], OTT: [], Credits: [],
     };
     ALL_TOOLS.forEach((t) => {
       if (t.category in groups) {

@@ -16,37 +16,37 @@ function TopDemandToolLogo({ tool, className = "h-full w-full" }: { tool: any; c
   let scaleClass = "scale-[1.0]";
 
   if (nameLower.includes("coursera")) {
-    src = "https://upload.wikimedia.org/wikipedia/commons/9/97/Coursera-Logo_Symbol.svg";
+    src = LOGOS["coursera"];
     scaleClass = "scale-[1.0]";
   } else if (nameLower.includes("nordvpn") || nameLower.includes("nord vpn")) {
-    src = "https://cdn.simpleicons.org/nordvpn/4687FF";
+    src = LOGOS["nordvpn"];
     scaleClass = "scale-[1.0]";
   } else if (nameLower.includes("coderabbit") || nameLower.includes("code rabbit")) {
-    src = "https://www.google.com/s2/favicons?domain=coderabbit.ai&sz=128";
-    scaleClass = "scale-[1.0]";
+    src = LOGOS["marquee-coderabbit-pro"];
+    scaleClass = "scale-[2.2]";
   } else if (nameLower.includes("claude")) {
-    src = "https://upload.wikimedia.org/wikipedia/commons/7/75/Claude_AI_logo.svg";
+    src = LOGOS["claude-pro"];
     scaleClass = "scale-[1.0]";
   } else if (nameLower.includes("firecrawl")) {
     src = LOGOS["firecrawl"];
     scaleClass = "scale-[1.0]";
   } else if (nameLower.includes("cursor")) {
-    src = "https://upload.wikimedia.org/wikipedia/commons/e/e0/Cursor_logo.svg";
+    src = LOGOS["cursor"];
     scaleClass = "scale-[1.0]";
   } else if (nameLower.includes("rezi")) {
-    src = "https://www.google.com/s2/favicons?domain=rezi.ai&sz=128";
-    scaleClass = "scale-[1.0]";
+    src = LOGOS["marquee-rezi"];
+    scaleClass = "scale-[2.2]";
   } else if (nameLower.includes("manus")) {
-    src = "https://www.google.com/s2/favicons?domain=manus.im&sz=128";
+    src = LOGOS["manus-pro"];
     scaleClass = "scale-[1.0]";
   } else if (nameLower.includes("fireflies")) {
-    src = "https://www.google.com/s2/favicons?domain=fireflies.ai&sz=128";
-    scaleClass = "scale-[1.0]";
+    src = LOGOS["marquee-fireflies-pro"];
+    scaleClass = "scale-[2.2]";
   } else if (nameLower.includes("perplexity")) {
-    src = "https://www.google.com/s2/favicons?domain=perplexity.ai&sz=128";
+    src = LOGOS["perplexity"];
     scaleClass = "scale-[1.0]";
   } else if (nameLower.includes("copilot") || nameLower.includes("github")) {
-    src = "https://upload.wikimedia.org/wikipedia/commons/3/30/GitHub_Copilot_(2025).svg";
+    src = LOGOS["github-copilot"];
     scaleClass = "scale-[1.0]";
   } else {
     // For all other tools, fallback to standard LOGO_OVERRIDES local logic or tool.logo

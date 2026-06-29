@@ -8,8 +8,11 @@ import boltLogo from "@/assets/logos/bolt.png";
 import canvaProLogo from "@/assets/logos/canva-pro.png";
 import chatgptProLogo from "@/assets/logos/chatgpt-pro.png";
 import cloudProLogo from "@/assets/logos/cloud-pro.png";
-import courseraLogo from "@/assets/logos/coursera.png";
+import courseraLogo from "@/assets/logos/coursera.svg";
 import cursorProLogo from "@/assets/logos/cursor-pro.png";
+import cursorLogo from "@/assets/logos/cursor.svg";
+import copilotLogo from "@/assets/logos/github-copilot.svg";
+import manusLogo from "@/assets/logos/manus.svg";
 import descriptLogo from "@/assets/logos/descript.svg";
 import elementsLogo from "@/assets/logos/elements.png";
 import figmaLogo from "@/assets/logos/figma.png";
@@ -111,6 +114,9 @@ export const LOGOS: Record<string, unknown> = {
   "cloud-pro": cloudProLogo,
   "coursera": courseraLogo,
   "cursor-pro": cursorProLogo,
+  "cursor": cursorLogo,
+  "github-copilot": copilotLogo,
+  "manus-pro": manusLogo,
   "descript": descriptLogo,
   "elements": elementsLogo,
   "eleven-labs": elevenLabsSvg,

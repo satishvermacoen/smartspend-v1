@@ -9,11 +9,13 @@ import { LOGOS } from "@/data/logo-map";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
  
-const CATEGORIES = ["All", "Developer", "Creative", "Product/Marketing", "Business/Operations", "OTT", "Credits"] as const;
+const CATEGORIES = ["All", "Professional", "AI", "Developer", "Creative", "Product/Marketing", "Business/Operations", "OTT", "Credits"] as const;
 type Category = (typeof CATEGORIES)[number];
  
 const CATEGORY_LABELS: Record<Category, string> = {
   All: "All",
+  Professional: "Professional Tools",
+  AI: "AI Assistants",
   Developer: "Developer Tools",
   Creative: "Design & Creative Tools",
   "Product/Marketing": "Product, Marketing & Growth",
@@ -82,6 +84,8 @@ export function ToolsPageClient() {
   const grouped = useMemo(() => {
     const groups: Record<Category, Tool[]> = {
       All: [],
+      Professional: [],
+      AI: [],
       Developer: [],
       Creative: [],
       "Product/Marketing": [],
