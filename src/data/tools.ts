@@ -36,10 +36,10 @@ export const ORBIT_INNER: Tool[] = [
   { name: "Canva Pro", slug: "canva", color: "00C4CC", category: "Creative", logo: LOGOS["canva-pro"] },
   { name: "Microsoft Office", slug: "microsoftoffice", color: "D83B01", category: "Professional", logo: LOGOS["ms-office"] },
   { name: "LinkedIn Premium", slug: "linkedin", color: "0A66C2", category: "Professional", logo: LOGOS["linkedin-premium"] },
-  { name: "Notion Business", slug: "notion", color: "000000", category: "Productivity" },
+  { name: "Notion Business", slug: "notion", color: "000000", category: "Productivity", logo: LOGOS["notion-business"] },
   { name: "Cursor Pro", slug: "cursor", color: "000000", category: "Developer", logo: LOGOS["cursor-pro"] },
   { name: "Lovable Pro", slug: "", color: "FF4D8D", category: "Developer", logo: LOGOS["lovable-pro"] },
-  { name: "ElevenLabs", slug: "elevenlabs", color: "000000", category: "AI", domain: "elevenlabs.io" },
+  { name: "ElevenLabs", slug: "elevenlabs", color: "000000", category: "AI", domain: "elevenlabs.io", logo: LOGOS["eleven-labs"] },
 ];
 
 // Outer ring = the remaining provided logos, no repeats with the inner ring.
@@ -53,13 +53,13 @@ export const ORBIT_OUTER: Tool[] = [
   { name: "Gamma Pro", slug: "gamma", color: "8B5CF6", category: "Productivity", logo: LOGOS["gamma-pro"] },
   { name: "Envato", slug: "envato", color: "8B5CF6", category: "Creative", logo: LOGOS["elements"] },
   { name: "AWS Credits", slug: "amazonwebservices", color: "FF9900", category: "Credits", logo: LOGOS["aws-credits"] },
-  { name: "GitHub Copilot", slug: "githubcopilot", color: "24292e", category: "Developer" },
+  { name: "GitHub Copilot", slug: "github", color: "24292e", category: "Developer", logo: LOGOS["github"] },
   { name: "Grok", slug: "grok", color: "000000", category: "AI", logo: LOGOS["grok"] },
   { name: "Figma Pro", slug: "figma", color: "F24E1E", category: "Creative", logo: LOGOS["figma"] },
   { name: "Apify Credits", slug: "apify", color: "F86606", category: "Credits", logo: LOGOS["apify"] },
-  { name: "Coursera Plus", slug: "coursera", color: "0056D2", category: "Professional" },
-  { name: "NordVPN", slug: "nordvpn", color: "4687FF", category: "Professional" },
-  { name: "Perplexity Pro", slug: "perplexity", color: "1F1F1F", category: "AI" },
+  { name: "Coursera Plus", slug: "coursera", color: "0056D2", category: "Professional", logo: LOGOS["coursera"] },
+  { name: "NordVPN", slug: "nordvpn", color: "4687FF", category: "Professional", logo: LOGOS["nordvpn"] },
+  { name: "Perplexity Pro", slug: "perplexity", color: "1F1F1F", category: "AI", logo: LOGOS["perplexity"] },
 ];
 
 export const ORBIT_TOOLS: Tool[] = [...ORBIT_INNER, ...ORBIT_OUTER];
