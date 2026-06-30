@@ -232,7 +232,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
 
   // 1. Resolve source specifically for all subscriptions section to use official/HD logos
   if (nameLower.includes("coursera")) {
-    src = LOGOS["coursera"];
+    src = LOGOS["coursera-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("nordvpn") || nameLower.includes("nord vpn")) {
     src = LOGOS["nordvpn"];
@@ -265,19 +265,19 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["manus-pro"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("gemini")) {
-    src = LOGOS["gemini-pro"];
+    src = LOGOS["gemini-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("copilot") || nameLower.includes("github")) {
     src = LOGOS["github-copilot"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("railway")) {
-    src = LOGOS["railway"];
+    src = LOGOS["railway-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("warpbuild")) {
-    src = LOGOS["warpbuild"];
+    src = LOGOS["warpbuild-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("factory")) {
-    src = LOGOS["factory"];
+    src = LOGOS["factory-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("edx")) {
     src = LOGOS["edx"];
@@ -289,17 +289,17 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["youtube"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("prime video") || nameLower.includes("amazon")) {
-    src = LOGOS["primevideo"];
-    scaleClass = "scale-[0.85]";
+    src = LOGOS["primevideo-icon"];
+    scaleClass = "scale-[1.1]";
   } else if (nameLower.includes("hotstar") || nameLower.includes("jio")) {
-    src = LOGOS["hotstar"];
-    scaleClass = "scale-[0.85]";
+    src = LOGOS["hotstar-icon"];
+    scaleClass = "scale-[1.1]";
   } else if (nameLower.includes("sonyliv") || nameLower.includes("sony")) {
-    src = LOGOS["marquee-sony-liv"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["sonyliv-icon"];
+    scaleClass = "scale-[1.1]";
   } else if (nameLower.includes("zee5") || nameLower.includes("zee 5")) {
-    src = LOGOS["marquee-zee5"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["zee5-icon"];
+    scaleClass = "scale-[1.1]";
   } else if (nameLower.includes("mongodb")) {
     src = LOGOS["mongodb"];
     scaleClass = "scale-[0.85]";
@@ -316,7 +316,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["vapi"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("autodesk")) {
-    src = LOGOS["autodesk"];
+    src = LOGOS["autodesk-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("canva business") || nameLower.includes("leonardo")) {
     src = LOGOS["marquee-canva-business"];
@@ -328,8 +328,8 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["marquee-capcut-pro"];
     scaleClass = "scale-[2.2]";
   } else if (nameLower.includes("freepik")) {
-    src = LOGOS["marquee-freepik"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["freepik-icon"];
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("pngtree") || nameLower.includes("png tree")) {
     src = LOGOS["marquee-pngtree"];
     scaleClass = "scale-[2.2]";
@@ -404,7 +404,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
       "Rezi - Resume builder": LOGOS["marquee-rezi"],
       "ChatGPT Plus": LOGOS["chatgpt-plus"],
       "Claude AI": LOGOS["claude-pro"],
-      "Google Gemini": LOGOS["gemini-pro"],
+      "Google Gemini": LOGOS["gemini-icon"],
       "Perplexity Pro": LOGOS["perplexity"],
       "Grok": LOGOS["grok"],
       "ElevenLabs": LOGOS["eleven-labs"],
@@ -418,7 +418,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
       "GitHub Copilot": LOGOS["github"],
       "Lovable Pro & Lite": LOGOS["lovable-pro"],
       "Lovable Pro": LOGOS["lovable-pro"],
-      "Replit": LOGOS["replit"],
+      "Replit": LOGOS["replit-icon"],
       "Bolt": LOGOS["bolt"],
       "Supabase Pro": LOGOS["supabase-pro"],
       "N8N": LOGOS["n8n"],

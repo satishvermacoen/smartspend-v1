@@ -279,16 +279,16 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("prime video") || nameLower.includes("amazon")) {
     src = LOGOS["primevideo-icon"];
-    scaleClass = "scale-[0.85]";
+    scaleClass = "scale-[1.1]";
   } else if (nameLower.includes("hotstar") || nameLower.includes("jio")) {
     src = LOGOS["hotstar-icon"];
-    scaleClass = "scale-[0.85]";
+    scaleClass = "scale-[1.1]";
   } else if (nameLower.includes("sonyliv") || nameLower.includes("sony")) {
     src = LOGOS["sonyliv-icon"];
-    scaleClass = "scale-[0.85]";
+    scaleClass = "scale-[1.1]";
   } else if (nameLower.includes("zee5") || nameLower.includes("zee 5")) {
     src = LOGOS["zee5-icon"];
-    scaleClass = "scale-[0.85]";
+    scaleClass = "scale-[1.1]";
   } else if (nameLower.includes("mongodb")) {
     src = LOGOS["mongodb"];
     scaleClass = "scale-[0.85]";
