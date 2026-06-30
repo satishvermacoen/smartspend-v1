@@ -17,6 +17,7 @@ export type ClientItem = z.infer<typeof ClientSchema>
 
 export const CodeSchema = z.object({
   _id: z.string(),
+  name: z.string().optional(),
   code: z.string(),
   is_active: z.boolean(),
   expires_at: z.string().optional(),

@@ -5,9 +5,9 @@ import { type Row, flexRender } from "@tanstack/react-table"
 
 import { TableRow, TableCell } from "@/components/ui/table"
 
-export function DraggableRow({ row }: { row: Row<any> }) {
+export function DraggableRow<TData>({ row }: { row: Row<TData> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
-    id: (row.original as any)._id,
+    id: (row.original as { _id?: string; redemptionId?: string; id?: string })._id || row.id,
   })
 
   return (

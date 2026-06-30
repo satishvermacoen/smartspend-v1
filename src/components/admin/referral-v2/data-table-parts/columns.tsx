@@ -27,7 +27,8 @@ import {
   Loader2
 } from "lucide-react"
 
-import type { ClientItem, CodeItem, ConversionItem, PendingApprovalItem } from "./schema"
+import type { ClientItem, CodeItem, ConversionItem, PendingApprovalItem } from "@/types/referral"
+import { ClientDetailsHover } from "./client-details-hover"
 
 function DragHandle({ id }: { id: string }) {
   const { attributes, listeners } = useSortable({
@@ -89,18 +90,10 @@ export const getClientColumns = (
     accessorKey: "name",
     header: "Client",
     cell: ({ row }) => (
-      <div 
-        className="cursor-pointer"
-        onClick={(e) => {
-          e.stopPropagation()
-          onClientClick(row.original)
-        }}
-      >
-        <div className="font-semibold text-foreground text-sm hover:underline">{row.original.name}</div>
-        <div className="text-xs text-muted-foreground">
-          {row.original.phone !== "N/A" ? row.original.phone : row.original.email}
-        </div>
-      </div>
+      <ClientDetailsHover
+        client={row.original}
+        onClick={(client) => onClientClick(client)}
+      />
     ),
   },
   {

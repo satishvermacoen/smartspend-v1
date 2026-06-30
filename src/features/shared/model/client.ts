@@ -26,7 +26,7 @@ export interface IClient extends Document {
   message?: string;
 
   // CRM Status
-  status: 'pending' | 'contacted' | 'resolved' | 'ignored';
+    status: 'pending' | 'contacted' | 'resolved' | 'ignored' | 'active' | 'inactive';
   notes?: string;
 
   // Referral Attribution
@@ -77,7 +77,7 @@ const ClientSchema = new Schema<IClient, IClientModel>(
 
     status: {
       type: String,
-      enum: ['pending', 'contacted', 'resolved', 'ignored'],
+      enum: ['pending', 'contacted', 'resolved', 'ignored', 'active', 'inactive'],
       default: 'pending',
       index: true,
     },

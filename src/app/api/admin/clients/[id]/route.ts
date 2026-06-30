@@ -2,13 +2,16 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
-import User from '@/features/shared/model/user';
-import ReferralCode from '@/features/shared/model/referral-code';
+import Client from '@/features/shared/model/client';
+import Invoice from '@/features/shared/model/invoice';
 import { z } from 'zod';
 
 const updateSchema = z.object({
-  role: z.enum(['admin', 'referral_partner']).optional(),
-  status: z.enum(['active', 'inactive', 'suspended']).optional(),
+  name: z.string().min(1).optional(),
+  mobile: z.string().min(1).optional(),
+  email: z.string().email().optional().or(z.literal('')),
+  status: z.enum(['pending', 'contacted', 'resolved', 'ignored', 'active', 'inactive']).optional(),
+  notes: z.string().optional(),
 });
 
 export async function GET(
@@ -30,20 +33,19 @@ export async function GET(
     // 2. Connect to database
     await connectDB();
 
-    // 3. Find the user
-    const user = await User.findById(id);
-    if (!user) {
+    // 3. Find the client
+    const client = await Client.findOne({ _id: id, isDeleted: { $ne: true } });
+    if (!client) {
       return NextResponse.json({ error: 'Client not found.' }, { status: 404 });
     }
 
-    // 4. Fetch clients referred by this partner
-    const Client = (await import('@/features/shared/model/client')).default;
-    const referredClients = await Client.find({ 'referredBy.referrerId': id }).sort({ createdAt: -1 });
+    // 4. Fetch invoices (purchases) associated with this client
+    const invoices = await Invoice.find({ client_id: id }).sort({ purchase_date: -1 });
 
     return NextResponse.json({
       success: true,
-      user,
-      enquiries: referredClients
+      client,
+      invoices
     });
 
   } catch (error) {
@@ -71,11 +73,6 @@ export async function PATCH(
       return NextResponse.json({ error: 'Client ID is required.' }, { status: 400 });
     }
 
-    // Prevent admin from editing their own profile role or status via this admin route
-    if (session.user.id === id) {
-      return NextResponse.json({ error: 'You cannot change your own role or status.' }, { status: 400 });
-    }
-
     const body = await req.json();
     const parseResult = updateSchema.safeParse(body);
     if (!parseResult.success) {
@@ -83,30 +80,30 @@ export async function PATCH(
       return NextResponse.json({ error: errorMsg }, { status: 400 });
     }
 
+    // Convert empty string email to undefined/null in DB
+    const updateData = { ...parseResult.data };
+    if (updateData.email === '') {
+      updateData.email = undefined;
+    }
+
     // 2. Connect to database
     await connectDB();
 
     // 3. Update the client
-    const updatedUser = await User.findByIdAndUpdate(
-      id,
-      { $set: parseResult.data },
+    const updatedClient = await Client.findOneAndUpdate(
+      { _id: id, isDeleted: { $ne: true } },
+      { $set: updateData },
       { new: true, runValidators: true }
     );
 
-    if (!updatedUser) {
+    if (!updatedClient) {
       return NextResponse.json({ error: 'Client not found.' }, { status: 404 });
     }
 
     return NextResponse.json({
       success: true,
       message: 'Client profile updated successfully.',
-      user: {
-        id: updatedUser._id,
-        fullName: updatedUser.fullName,
-        email: updatedUser.email,
-        role: updatedUser.role,
-        status: updatedUser.status,
-      }
+      client: updatedClient
     });
 
   } catch (error) {
@@ -134,22 +131,14 @@ export async function DELETE(
       return NextResponse.json({ error: 'Client ID is required.' }, { status: 400 });
     }
 
-    // Prevent admin from deleting themselves
-    if (session.user.id === id) {
-      return NextResponse.json({ error: 'You cannot delete your own account.' }, { status: 400 });
-    }
-
     // 2. Connect to database
     await connectDB();
 
-    // 3. Delete the client
-    const deletedUser = await User.findByIdAndDelete(id);
-    if (!deletedUser) {
+    // 3. Soft delete client
+    const deletedClient = await Client.findByIdAndUpdate(id, { $set: { isDeleted: true } });
+    if (!deletedClient) {
       return NextResponse.json({ error: 'Client not found.' }, { status: 404 });
     }
-
-    // 4. Clean up associated ReferralCode records
-    await ReferralCode.deleteMany({ referrer_id: id });
 
     return NextResponse.json({
       success: true,

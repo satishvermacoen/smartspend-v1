@@ -27,3 +27,46 @@ export type Testimonial = {
   role: string;
   screenshots?: { src: StaticImageData; alt: string }[];
 };
+
+export interface Client {
+  _id: string;
+  name: string;
+  mobile: string;
+  email?: string;
+  status: 'pending' | 'contacted' | 'resolved' | 'ignored' | 'active' | 'inactive';
+  source: 'website_enquiry' | 'referral' | 'wishlist' | 'admin';
+  referralCode?: string;
+  referredBy?: {
+    referrerId?: string;
+    referrerEmail?: string;
+  };
+  notes?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface InvoiceItem {
+  service_name: string;
+  amount: number;
+  quantity?: number;
+}
+
+export interface Invoice {
+  _id: string;
+  client_id: string | {
+    _id: string;
+    name: string;
+    mobile?: string;
+    email?: string;
+  };
+  invoice_number: string;
+  items: InvoiceItem[];
+  amount: number;
+  discount_applied?: number;
+  tax_amount?: number;
+  purchase_date: string;
+  status: 'pending' | 'paid' | 'cancelled';
+  createdAt?: string;
+  updatedAt?: string;
+}
+
