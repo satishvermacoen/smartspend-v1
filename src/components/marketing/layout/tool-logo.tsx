@@ -8,9 +8,9 @@ const LOGO_OVERRIDES: Record<string, string | StaticImageData> = {
   // Developer Tools
   "Firecrawl": LOGOS["firecrawl"] as StaticImageData,
   "Firecrawl Credits": LOGOS["firecrawl"] as StaticImageData,
-  "Railway": LOGOS["marquee-railway"] as StaticImageData,
-  "Factory": LOGOS["marquee-factory"] as StaticImageData,
-  "Warpbuild": LOGOS["marquee-warpbuild"] as StaticImageData,
+  "Railway": LOGOS["railway"] as StaticImageData,
+  "Factory": LOGOS["factory"] as StaticImageData,
+  "Warpbuild": LOGOS["warpbuild"] as StaticImageData,
   "Bolt": LOGOS["bolt"] as StaticImageData,
   "Coderabbit": LOGOS["marquee-coderabbit-pro"] as StaticImageData,
   "Code Rabbit": LOGOS["marquee-coderabbit-pro"] as StaticImageData,
@@ -129,7 +129,7 @@ export function ToolLogo({
       scaleClass = "scale-[2.2]";
     } else if (nameLower.includes("coursera")) {
       scaleClass = "scale-[0.95]";
-    } else if (nameLower.includes("perplexity")) {
+    } else if (nameLower.includes("perplexity") || nameLower.includes("gemini")) {
       scaleClass = "scale-[0.95]";
     } else if (nameLower.includes("copilot") || nameLower.includes("github")) {
       scaleClass = "scale-[0.95]";
@@ -139,7 +139,13 @@ export function ToolLogo({
       scaleClass = "scale-[0.95]";
     } else if (nameLower.includes("claude") || nameLower.includes("anthropic")) {
       scaleClass = "scale-[0.95]";
-    } else if (nameLower.includes("coderabbit") || nameLower.includes("code rabbit")) {
+    } else if (
+      nameLower.includes("coderabbit") ||
+      nameLower.includes("code rabbit") ||
+      nameLower.includes("railway") ||
+      nameLower.includes("warpbuild") ||
+      nameLower.includes("factory")
+    ) {
       scaleClass = "scale-[0.95]";
     }
   }
