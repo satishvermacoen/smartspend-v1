@@ -263,7 +263,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["railway-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("warpbuild")) {
-    src = LOGOS["warpbuild"];
+    src = LOGOS["warpbuild-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("factory")) {
     src = LOGOS["factory-icon"];
@@ -305,7 +305,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["vapi"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("autodesk")) {
-    src = LOGOS["autodesk"];
+    src = LOGOS["autodesk-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("canva business") || nameLower.includes("leonardo")) {
     src = LOGOS["marquee-canva-business"];
@@ -317,8 +317,8 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["marquee-capcut-pro"];
     scaleClass = "scale-[2.2]";
   } else if (nameLower.includes("freepik")) {
-    src = LOGOS["marquee-freepik"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["freepik-icon"];
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("pngtree") || nameLower.includes("png tree")) {
     src = LOGOS["marquee-pngtree"];
     scaleClass = "scale-[2.2]";

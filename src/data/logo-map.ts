@@ -123,6 +123,9 @@ import railwayIconPng from "@/assets/logos/railway-icon.png";
 import geminiIconPng from "@/assets/logos/gemini-icon.png";
 import factoryIconPng from "@/assets/logos/factory-icon.png";
 import courseraIconPng from "@/assets/logos/coursera-icon.png";
+import warpbuildIconPng from "@/assets/logos/warpbuild-icon.png";
+import freepikIconPng from "@/assets/logos/freepik-icon.png";
+import autodeskIconPng from "@/assets/logos/autodesk-icon.png";
 
 export const LOGOS: Record<string, unknown> = {
   "adobe-cc": adobeCcLogo,
@@ -250,4 +253,7 @@ export const LOGOS: Record<string, unknown> = {
   "gemini-icon": geminiIconPng,
   "factory-icon": factoryIconPng,
   "coursera-icon": courseraIconPng,
+  "warpbuild-icon": warpbuildIconPng,
+  "freepik-icon": freepikIconPng,
+  "autodesk-icon": autodeskIconPng,
 };
