@@ -149,7 +149,6 @@ export function ClientsTab({ clients, fetchingClients, handleDeleteClient, reloa
                 <TableRow className="border-border/15 hover:bg-transparent">
                   <TableHead className="font-semibold text-muted-foreground uppercase tracking-wider text-xs">Client</TableHead>
                   <TableHead className="font-semibold text-muted-foreground uppercase tracking-wider text-xs">Source</TableHead>
-                  <TableHead className="font-semibold text-muted-foreground uppercase tracking-wider text-xs">Purchases (Own)</TableHead>
                   <TableHead className="font-semibold text-muted-foreground uppercase tracking-wider text-xs">Sales Driven</TableHead>
                   <TableHead className="font-semibold text-muted-foreground uppercase tracking-wider text-xs">Commission</TableHead>
                   <TableHead className="text-right font-semibold text-muted-foreground uppercase tracking-wider text-xs">Actions</TableHead>
@@ -168,9 +167,6 @@ export function ClientsTab({ clients, fetchingClients, handleDeleteClient, reloa
                     </TableCell>
                     <TableCell className="py-4 text-xs text-muted-foreground">
                       {c.source}
-                    </TableCell>
-                    <TableCell className="py-4 text-xs font-semibold text-foreground">
-                      ₹{c.purchase || 0}
                     </TableCell>
                     <TableCell className="py-4 text-xs font-semibold text-emerald-400">
                       ₹{c.sale}

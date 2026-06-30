@@ -5,7 +5,9 @@ import connectDB from '@/lib/mongodb';
 import ReferralCode from '@/features/shared/model/referral-code';
 import ReferralConversion from '@/features/shared/model/referral-conversion';
 import ReferralReward from '@/features/shared/model/referral-reward';
+import Invoice from '@/features/shared/model/invoice';
 // import User from '@/features/shared/model/user';
+
 
 interface PopulatedUser {
   _id: string;
@@ -33,16 +35,29 @@ export async function GET() {
       conversion_stage: { $in: ['signed_up', 'purchased'] }
     });
 
-    const purchasesCount = await ReferralConversion.countDocuments({
+    const conversionPurchasesCount = await ReferralConversion.countDocuments({
       conversion_stage: 'purchased'
     });
+    const invoicePurchasesCount = await Invoice.countDocuments({
+      referrer_id: { $exists: true, $ne: null },
+      status: 'paid'
+    });
+    const purchasesCount = conversionPurchasesCount + invoicePurchasesCount;
 
     // Sum total revenue
     const revenueAggregation = await ReferralConversion.aggregate([
       { $match: { conversion_stage: 'purchased' } },
       { $group: { _id: null, total: { $sum: '$purchase_details.net_amount' } } }
     ]);
-    const totalRevenue = revenueAggregation[0]?.total || 0;
+    const conversionRevenue = revenueAggregation[0]?.total || 0;
+
+    const invoiceRevenueAggregation = await Invoice.aggregate([
+      { $match: { referrer_id: { $exists: true, $ne: null }, status: 'paid' } },
+      { $group: { _id: null, total: { $sum: '$amount' } } }
+    ]);
+    const invoiceRevenue = invoiceRevenueAggregation[0]?.total || 0;
+
+    const totalRevenue = conversionRevenue + invoiceRevenue;
 
     // Sum total cash paid and months given from ledgers
     const ledgerAgg = await ReferralReward.aggregate([

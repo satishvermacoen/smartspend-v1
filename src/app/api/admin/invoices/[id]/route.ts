@@ -78,6 +78,14 @@ export async function PATCH(
     const oldStatus = invoice.status;
     invoice.status = status;
 
+    if (status === "paid" || status === "pending") {
+      const client = await Client.findById(invoice.client_id);
+      if (client && client.status !== "active") {
+        client.status = "active";
+        await client.save();
+      }
+    }
+
     // Apply commission logic only if it goes from non-paid -> paid AND has not been calculated yet
     if (status === "paid" && oldStatus !== "paid" && !invoice.commission_calculated) {
       const client = await Client.findById(invoice.client_id);

@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { TrendingUpIcon, Users, Clipboard, RefreshCw, Sparkles, ReceiptIndianRupee } from "lucide-react"
+import { TrendingUpIcon, Users, Clipboard, ReceiptIndianRupee } from "lucide-react"
 
 interface AdminKPIs {
   activeCodes: number;

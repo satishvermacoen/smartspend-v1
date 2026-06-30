@@ -105,15 +105,7 @@ export const getClientColumns = (
       </Badge>
     ),
   },
-  {
-    accessorKey: "purchase",
-    header: "Purchases (Own)",
-    cell: ({ row }) => (
-      <div className="font-semibold text-sm">
-        ₹{row.original.purchase || 0}
-      </div>
-    ),
-  },
+
   {
     accessorKey: "sale",
     header: "Sales Driven",

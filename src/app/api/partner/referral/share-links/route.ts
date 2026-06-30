@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
     }
 
     const appUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-    const referralLink = `${appUrl}/ref/${code}`;
+    const referralLink = `${appUrl}/join/${code}`;
 
     const textMessage = `Hey! I've been using SpendSmart to get premium subscriptions (like Cursor, LinkedIn, Canva) at 50% off. Sign up using my link to get an extra ₹500 discount on your first purchase! \n\n👉 Join here: ${referralLink}`;
     

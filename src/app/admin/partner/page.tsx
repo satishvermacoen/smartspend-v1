@@ -9,7 +9,7 @@ import { DataTable } from "@/components/admin/referral-v2/data-table"
 import { SectionCards } from "@/components/admin/referral-v2/section-cards"
 import type { 
   ClientItem, CodeItem, ConversionItem, PendingApprovalItem, ProgramSettings 
-} from "@/components/admin/referral-v2/data-table-parts/schema"
+} from "@/types/referral"
 
 interface AdminKPIs {
   activeCodes: number;
@@ -21,7 +21,7 @@ interface AdminKPIs {
   subscriptionMonths: number;
 }
 
-export default function AdminReferralPage() {
+export default function AdminPartnerPage() {
   const [loading, setLoading] = useState(true)
   const [kpis, setKpis] = useState<AdminKPIs | null>(null)
 
@@ -119,8 +119,8 @@ export default function AdminReferralPage() {
 
       if (dataConvs.success) {
         dataConvs.conversions
-          .filter((c: any) => c.referrerReward?.status === "calculated")
-          .forEach((c: any) => {
+          .filter((c: ConversionItem) => c.referrerReward?.status === "calculated")
+          .forEach((c: ConversionItem) => {
             pending.push({
               customerId: c.referrer?._id || "unknown",
               customerName: c.referrer?.name || "Referrer",
@@ -329,14 +329,14 @@ export default function AdminReferralPage() {
   }
 
   const handleCopyLink = (code: string) => {
-    const link = `${window.location.origin}/ref/${code}`
+    const link = `${window.location.origin}/join/${code}`
     navigator.clipboard.writeText(link)
     toast.success("Link copied to clipboard")
   }
 
   const handleWhatsAppShare = (code: string) => {
-    const link = `${window.location.origin}/ref/${code}`
-    const message = encodeURIComponent(`Here is my referral link: ${link}`)
+    const link = `${window.location.origin}/join/${code}`
+    const message = encodeURIComponent(`Here is the invite link: ${link}`)
     window.open(`https://wa.me/?text=${message}`, "_blank")
   }
 
@@ -345,7 +345,7 @@ export default function AdminReferralPage() {
     value: string | number | boolean
   ) => {
     if (!settings) return
-    setSettings((prev) => (prev ? { ...prev, [field]: value } : null))
+    setSettings((prev: ProgramSettings | null) => (prev ? { ...prev, [field]: value } : null))
   }
 
   const formatDate = (dateStr: string) => {
@@ -361,7 +361,7 @@ export default function AdminReferralPage() {
     return (
       <div className="flex-1 flex flex-col items-center justify-center py-20 gap-3 text-muted-foreground bg-background">
         <Loader2 className="h-10 w-10 animate-spin text-brand" />
-        <span>Loading Admin referral board...</span>
+        <span>Loading Admin partner board...</span>
       </div>
     );
   }
@@ -373,7 +373,7 @@ export default function AdminReferralPage() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 lg:px-6 gap-4">
             <div>
               <h2 className="text-xl font-display font-bold tracking-tight text-foreground">
-                Referral Console
+                Partner Console
               </h2>
             </div>
             <Button

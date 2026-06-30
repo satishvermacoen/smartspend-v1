@@ -74,7 +74,7 @@ export function UserProfilePanel({
 
   return (
     <Sheet open={!!selectedProfileClient} onOpenChange={(open) => !open && setSelectedProfileClient(null)}>
-      <SheetContent side="right" className="w-[450px] sm:max-w-[450px] overflow-y-auto bg-card border-border/10">
+      <SheetContent side="right" className="w-full sm:max-w-[650px]! overflow-y-auto bg-card border-border/10">
         {selectedProfileClient && (
           <>
             <SheetHeader>

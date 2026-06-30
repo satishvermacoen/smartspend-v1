@@ -41,6 +41,7 @@ export interface Client {
     referrerEmail?: string;
   };
   notes?: string;
+  purchase?: number;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -4,6 +4,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Client from '@/features/shared/model/client';
 import User from '@/features/shared/model/user';
+import Invoice from '@/features/shared/model/invoice';
 
 export async function GET(req: Request) {
   try {
@@ -68,7 +69,29 @@ export async function GET(req: Request) {
     const clients = await Client.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
+
+    const clientIds = clients.map(c => c._id);
+    const invoices = await Invoice.find({ client_id: { $in: clientIds }, status: 'paid' }).lean();
+
+    const clientsWithPurchases = await Promise.all(clients.map(async (client) => {
+      const totalPurchase = invoices
+        .filter(inv => inv.client_id.toString() === client._id.toString())
+        .reduce((sum, inv) => sum + inv.amount, 0);
+      
+      let status = client.status;
+      if (totalPurchase > 0 && status !== 'active' && status !== 'inactive') {
+        status = 'active';
+        await Client.findByIdAndUpdate(client._id, { $set: { status: 'active' } });
+      }
+
+      return {
+        ...client,
+        status,
+        purchase: totalPurchase
+      };
+    }));
 
     const total = await Client.countDocuments(query);
 
@@ -85,7 +108,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({
       success: true,
-      users: clients, // Map to frontend expecting 'users' key
+      users: clientsWithPurchases, // Map to frontend expecting 'users' key
       pagination: {
         total,
         page,

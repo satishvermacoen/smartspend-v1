@@ -2,11 +2,10 @@ import * as React from "react"
 import { motion } from "framer-motion"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart"
-import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { Client } from "@/types"
 import { Separator } from "@/components/ui/separator"
-
+import { ReferredClientsList } from "./referred-clients-list"
 
 
 const chartConfig = {
@@ -73,8 +72,8 @@ export function ReferredClientsTab({ clientId }: ReferredClientsTabProps) {
       const targetMonth = months.find(m => m.monthIndex === monthIndex && m.year === year)
       if (targetMonth) {
         targetMonth.signups += 1
-        // Treat active/resolved as conversions/purchases for the chart
-        if (client.status === 'active' || client.status === 'resolved') {
+        // Treat active/resolved status or paid invoice purchases as conversions/purchases for the chart
+        if (client.status === 'active' || client.status === 'resolved' || (client.purchase && client.purchase > 0)) {
           targetMonth.purchases += 1
         }
       }
@@ -139,35 +138,7 @@ export function ReferredClientsTab({ clientId }: ReferredClientsTabProps) {
       <Separator className="bg-border/10" />
 
       {/* Referred Clients List */}
-      <div className="space-y-3 m-2">
-        <h4 className="font-bold text-xs uppercase tracking-wide text-muted-foreground">Referred Clients</h4>
-        
-        {loading ? (
-          <div className="flex justify-center py-6">
-            <Loader2 className="h-5 w-5 animate-spin text-brand" />
-          </div>
-        ) : referredClients.length === 0 ? (
-          <div className="py-6 text-center text-muted-foreground">No referred clients yet.</div>
-        ) : (
-          <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
-            {referredClients.map(client => (
-              <div key={client._id} className="p-3 border border-border/10 rounded-lg hover:bg-muted/50 transition-colors">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="font-bold text-foreground text-xs">{client.name}</p>
-                    <p className="text-[10px] text-muted-foreground">{client.email}</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground capitalize">
-                      {client.status || "active"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <ReferredClientsList clients={referredClients} loading={loading} />
     </motion.div>
   )
 }

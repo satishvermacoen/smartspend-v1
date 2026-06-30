@@ -51,7 +51,7 @@ export default function AdminUserProfile() {
         setCodes(data.referralCodes || []);
       } else {
         toast.error(data.error || "Failed to load user profile");
-        router.push("/admin/referral");
+        router.push("/admin/partner");
       }
     } catch (err) {
       console.error(err);
@@ -118,14 +118,14 @@ export default function AdminUserProfile() {
   };
 
   const handleCopyLink = (code: string) => {
-    const link = `${window.location.origin}/ref/${code}`;
+    const link = `${window.location.origin}/join/${code}`;
     navigator.clipboard.writeText(link);
     toast.success("Link copied to clipboard");
   };
 
   const handleWhatsAppShare = (code: string) => {
-    const link = `${window.location.origin}/ref/${code}`;
-    const message = encodeURIComponent(`Here is my referral link: ${link}`);
+    const link = `${window.location.origin}/join/${code}`;
+    const message = encodeURIComponent(`Here is the invite link: ${link}`);
     window.open(`https://wa.me/?text=${message}`, "_blank");
   };
 
@@ -148,8 +148,8 @@ export default function AdminUserProfile() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
         <div>
-          <Link href="/admin/referral" className="inline-flex items-center gap-2 text-sm text-brand hover:underline font-semibold mb-2">
-            <ArrowLeft className="h-4 w-4" /> Back to Referrals
+          <Link href="/admin/partner" className="inline-flex items-center gap-2 text-sm text-brand hover:underline font-semibold mb-2">
+            <ArrowLeft className="h-4 w-4" /> Back to Partners
           </Link>
           <h2 className="text-3xl font-display font-bold tracking-tight text-foreground flex items-center gap-2">
             <UserIcon className="h-8 w-8 text-brand" /> {name}

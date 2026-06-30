@@ -96,6 +96,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Client not found." }, { status: 404 });
     }
 
+    if (client.status !== "active") {
+      client.status = "active";
+      await client.save();
+    }
+
     const invoiceStatus = status || "paid";
 
     // 1. Referral Commission Logic (only if invoice status is paid)

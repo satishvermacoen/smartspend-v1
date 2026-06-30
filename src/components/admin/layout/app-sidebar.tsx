@@ -49,8 +49,8 @@ const data = {
       ),
     },
     {
-      title: "Referrals",
-      url: "/admin/referral",
+      title: "Partners",
+      url: "/admin/partner",
       icon: (
         <Share2Icon
         />

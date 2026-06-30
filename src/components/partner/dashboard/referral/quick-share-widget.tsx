@@ -14,7 +14,7 @@ export function QuickShareWidget({ referralCode }: QuickShareWidgetProps) {
 
   const getReferralLink = () => {
     if (!referralCode) return "";
-    return `${window.location.origin}/ref/${referralCode}`;
+    return `${window.location.origin}/join/${referralCode}`;
   };
 
   const shareText = "Hey! Check out SpentSmart to manage and optimize your premium subscriptions. Sign up using my link to get a ₹500 discount on your first subscription purchase!";
@@ -69,7 +69,7 @@ export function QuickShareWidget({ referralCode }: QuickShareWidgetProps) {
           <div className="flex justify-between items-center bg-soft/20 border border-border/5 rounded-xl px-4 py-3 text-xs font-semibold">
             <span className="text-muted-foreground uppercase text-[10px] tracking-wider">Your Unique Link</span>
             <span className="font-mono text-brand font-bold tracking-wider truncate max-w-[150px] sm:max-w-full">
-              .../ref/{referralCode}
+              .../join/{referralCode}
             </span>
           </div>
 

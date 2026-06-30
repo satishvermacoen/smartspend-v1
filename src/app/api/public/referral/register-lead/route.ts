@@ -167,7 +167,7 @@ export async function POST(req: Request) {
           title: 'New Referral Partner Registered',
           message: `${user.fullName} (${user.email}) registered as a new referral partner.`,
           type: 'system',
-          actionUrl: '/admin/referral',
+          actionUrl: '/admin/partner',
         });
       }
     } catch (err) {
@@ -175,7 +175,7 @@ export async function POST(req: Request) {
     }
 
     const appUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-    const finalReferralLink = `${appUrl}/ref/${user.referralCode || 'REF'}`;
+    const finalReferralLink = `${appUrl}/join/${user.referralCode || 'REF'}`;
 
     return NextResponse.json(
       {

@@ -125,8 +125,8 @@ export default function AllClientsPage() {
 
       // Re-fetch stats
       fetchUsers();
-    } catch (err: any) {
-      toast.error(err.message || "Failed to update status.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to update status.");
     } finally {
       setUpdatingUser(false);
     }
@@ -157,8 +157,8 @@ export default function AllClientsPage() {
       }
 
       fetchUsers();
-    } catch (err: any) {
-      toast.error(err.message || "Failed to delete client.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to delete client.");
     }
   };
 

@@ -57,7 +57,7 @@ const LOGO_OVERRIDES: Record<string, string | StaticImageData> = {
   "Scalingo Credits": "https://logos.hunter.io/scalingo.com",
 };
 
-export default function RefCodeLandingPage({ params }: { params: Promise<{ code: string }> }) {
+export default function JoinCodeLandingPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = use(params);
   const uppercaseCode = code.toUpperCase();
   
@@ -87,7 +87,7 @@ export default function RefCodeLandingPage({ params }: { params: Promise<{ code:
           setStatus("error");
         }
       } catch (err) {
-        console.error("Referral landing click tracking failed:", err);
+        console.error("Invite landing click tracking failed:", err);
         setStatus("error");
       }
     }
@@ -121,7 +121,7 @@ export default function RefCodeLandingPage({ params }: { params: Promise<{ code:
         {status === "loading" && (
           <div className="flex flex-col items-center justify-center gap-4 text-center py-20">
             <Loader2 className="h-10 w-10 animate-spin text-brand" />
-            <h2 className="text-xl font-display font-bold">Activating Referral Link...</h2>
+            <h2 className="text-xl font-display font-bold">Setting up your discounts...</h2>
             <p className="text-sm text-muted-foreground">Verifying invitation code {uppercaseCode}</p>
           </div>
         )}
@@ -133,7 +133,7 @@ export default function RefCodeLandingPage({ params }: { params: Promise<{ code:
             </div>
             <h2 className="text-2xl font-display font-bold text-foreground">Link Expired or Invalid</h2>
             <p className="text-sm text-muted-foreground max-w-sm">
-              The referral code <span className="font-mono font-semibold text-destructive">{uppercaseCode}</span> does not exist or has been deactivated.
+              The invitation code <span className="font-mono font-semibold text-destructive">{uppercaseCode}</span> does not exist or is invalid.
             </p>
             <Link href="/" className="mt-2 inline-flex h-11 items-center justify-center px-6 text-sm font-semibold rounded-xl bg-card border border-border/20 text-foreground hover:bg-soft transition-all">
               Go to Homepage
@@ -164,7 +164,7 @@ export default function RefCodeLandingPage({ params }: { params: Promise<{ code:
                   
                   <div className="space-y-1">
                     <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-                      <ShieldCheck className="h-3.5 w-3.5" /> Referral Active
+                      <ShieldCheck className="h-3.5 w-3.5" /> Invite Applied
                     </span>
                     <h1 className="text-2xl sm:text-3xl font-display font-extrabold tracking-tight mt-2">
                       You&apos;re Invited to <span className="text-gradient">SpendSmart</span>
@@ -172,7 +172,7 @@ export default function RefCodeLandingPage({ params }: { params: Promise<{ code:
                   </div>
 
                   <div className="w-full bg-soft/20 border border-border/5 rounded-2xl p-4 flex flex-col items-center gap-1 mt-2">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Your Signup Bonus</span>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Your Invite Discount</span>
                     <span className="text-3xl font-display font-black text-foreground">₹{discountAmount} OFF</span>
                     <span className="text-xs text-muted-foreground mt-1">Automatically deducted from your first subscription purchase.</span>
                   </div>
