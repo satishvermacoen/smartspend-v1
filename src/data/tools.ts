@@ -263,7 +263,7 @@ const RAW_ALL_TOOLS: Tool[] = [
   { name: "Fireflies Pro", slug: "fireflies", color: "4F46E5", category: "AI", logo: LOGOS["marquee-fireflies-pro"] },
   { name: "Wispr Flow", slug: "wispr", color: "0EA5E9", category: "AI", logo: LOGOS["whisper-flow"] },
   { name: "Otter.ai", slug: "otter", color: "0052CC", category: "AI", logo: LOGOS["marquee-otter-ai"] },
-  { name: "Granola", slug: "granola", color: "111827", category: "AI", logo: LOGOS["marquee-granola"] },
+  { name: "Granola", slug: "granola", color: "111827", category: "AI", logo: LOGOS["granola"] },
   { name: "Speechify", slug: "speechify", color: "1F8DED", category: "AI", logo: LOGOS["marquee-speechify"] },
 
   // DEVELOPER TOOLS
@@ -277,8 +277,8 @@ const RAW_ALL_TOOLS: Tool[] = [
   { name: "Coderabbit", slug: "coderabbit", color: "F97316", category: "Developer", logo: LOGOS["marquee-coderabbit-pro"] },
   { name: "Firecrawl", slug: "firecrawl", color: "F97316", category: "Developer", logo: LOGOS["firecrawl"] },
   { name: "Railway", slug: "railway", color: "0B0D0E", category: "Developer", logo: LOGOS["railway"] },
-  { name: "Warpbuild", slug: "warpbuild", color: "01A4FF", category: "Developer", logo: LOGOS["marquee-warpbuild"] },
-  { name: "Factory", slug: "factory", color: "111827", category: "Developer", logo: LOGOS["marquee-factory"] },
+  { name: "Warpbuild", slug: "warpbuild", color: "01A4FF", category: "Developer", logo: LOGOS["warpbuild"] },
+  { name: "Factory", slug: "factory", color: "111827", category: "Developer", logo: LOGOS["factory"] },
 
   // DESIGN & CREATIVE TOOLS
   { name: "Adobe Creative Cloud", slug: "adobecreativecloud", color: "DA1F26", category: "Creative", logo: LOGOS["adobe-cc"] },
@@ -330,7 +330,7 @@ const RAW_ALL_TOOLS: Tool[] = [
   { name: "Spotify", slug: "spotify", color: "1DB954", category: "OTT", logo: LOGOS["spotify"] },
 
   // PLATFORM CREDITS
-  { name: "OpenAI Credits", slug: "openai", color: "10A37F", category: "Credits", logo: LOGOS["marquee-openai-credits"] },
+  { name: "OpenAI Credits", slug: "openai", color: "10A37F", category: "Credits", logo: LOGOS["openai"] },
   { name: "AWS Credits", slug: "amazonwebservices", color: "FF9900", category: "Credits", logo: LOGOS["aws-credits"] },
   { name: "Claude Credits", slug: "anthropic", color: "D97757", category: "Credits", logo: LOGOS["marquee-claude-credits"] },
   { name: "Cursor Credits", slug: "cursor", color: "000000", category: "Credits", logo: LOGOS["cursor"] },
@@ -339,10 +339,10 @@ const RAW_ALL_TOOLS: Tool[] = [
   { name: "V0 Credits", slug: "vercel", color: "000000", category: "Credits", logo: LOGOS["marquee-v0-credits"] },
   { name: "Firecrawl Credits", slug: "firecrawl", color: "F97316", category: "Credits", logo: LOGOS["firecrawl"] },
   { name: "MongoDB Credits", slug: "mongodb", color: "47A248", category: "Credits", logo: LOGOS["mongodb"] },
-  { name: "Vapi Credits", slug: "vapi", color: "10B981", category: "Credits", logo: LOGOS["marquee-vapi-credits"] },
+  { name: "Vapi Credits", slug: "vapi", color: "10B981", category: "Credits", logo: LOGOS["vapi"] },
   { name: "Airtable Credits", slug: "airtable", color: "18BFFF", category: "Credits", logo: LOGOS["marquee-airtable-credits"] },
-  { name: "Render Credits", slug: "render", color: "46E3B7", category: "Credits", logo: LOGOS["marquee-render-credits"] },
-  { name: "Scalingo Credits", slug: "scalingo", color: "1252EE", category: "Credits", logo: LOGOS["marquee-scalingo-credits"] },
+  { name: "Render Credits", slug: "render", color: "46E3B7", category: "Credits", logo: LOGOS["render"] },
+  { name: "Scalingo Credits", slug: "scalingo", color: "1252EE", category: "Credits", logo: LOGOS["scalingo"] },
 ];
 
 export const ALL_TOOLS: Tool[] = Array.from(

@@ -41,6 +41,7 @@ import marqueeDisneyPlusLogo from "@/assets/logos/marquee-disney-plus.png";
 import marqueeEdxTeamsLogo from "@/assets/logos/marquee-edx-teams.png";
 import edxLogo from "@/assets/logos/edx.svg";
 import marqueeFactoryLogo from "@/assets/logos/marquee-factory.png";
+import factoryLogo from "@/assets/logos/factory.svg";
 import marqueeFeatureFmLogo from "@/assets/logos/marquee-feature-fm.png";
 import marqueeFilmoraLogo from "@/assets/logos/marquee-filmora.png";
 import marqueeFirecrawlLogo from "@/assets/logos/marquee-firecrawl.png";
@@ -51,6 +52,7 @@ import marqueeFreepikLogo from "@/assets/logos/marquee-freepik.png";
 import marqueeGithubLogo from "@/assets/logos/marquee-github.png";
 import linearLogo from "@/assets/logos/linear.svg";
 import marqueeGranolaLogo from "@/assets/logos/marquee-granola.png";
+import granolaLogo from "@/assets/logos/granola.png";
 import marqueeGrokLogo from "@/assets/logos/marquee-grok.png";
 import marqueeGuidlessProLogo from "@/assets/logos/marquee-guidless-pro.png";
 import marqueeGumloopLogo from "@/assets/logos/marquee-gumloop.png";
@@ -86,12 +88,16 @@ import marqueeSonyLivLogo from "@/assets/logos/marquee-sony-liv.png";
 import marqueeSpeechifyLogo from "@/assets/logos/marquee-speechify.png";
 import marqueeTextshiftLogo from "@/assets/logos/marquee-textshift.png";
 import marqueeVapiCreditsLogo from "@/assets/logos/marquee-vapi-credits.png";
+import vapiLogo from "@/assets/logos/vapi.svg";
 import marqueeWarpbuildLogo from "@/assets/logos/marquee-warpbuild.png";
+import warpbuildLogo from "@/assets/logos/warpbuild.svg";
+import renderLogo from "@/assets/logos/render.svg";
+import scalingoLogo from "@/assets/logos/scalingo.svg";
 import marqueeYoutubePremiumLogo from "@/assets/logos/marquee-youtube-premium.png";
 import marqueeZee5Logo from "@/assets/logos/marquee-zee5.png";
 import msOfficeLogo from "@/assets/logos/ms-office.png";
 import n8nLogo from "@/assets/logos/n8n.png";
-import nordvpnLogo from "@/assets/logos/nordvpn.png";
+import nordvpnLogo from "@/assets/logos/nordvpn.svg";
 import notionBusinessLogo from "@/assets/logos/notion-business.png";
 import openaiLogo from "@/assets/logos/openai.svg";
 import perplexityLogo from "@/assets/logos/perplexity.svg";
@@ -134,8 +140,10 @@ export const LOGOS: Record<string, unknown> = {
   "edx": edxLogo,
   "elements": elementsLogo,
   "eleven-labs": elevenLabsSvg,
+  "factory": factoryLogo,
   "figma": figmaLogo,
   "framer": framerLogo,
+  "granola": granolaLogo,
   "grok": grokLogo,
   "firecrawl": firecrawlLogo,
   "gamma-pro": gammaProLogo,
@@ -222,4 +230,8 @@ export const LOGOS: Record<string, unknown> = {
   "spotify": spotifyLogo,
   "supabase-pro": supabaseProLogo,
   "whisper-flow": whisperFlowLogo,
+  "warpbuild": warpbuildLogo,
+  "vapi": vapiLogo,
+  "render": renderLogo,
+  "scalingo": scalingoLogo,
 };

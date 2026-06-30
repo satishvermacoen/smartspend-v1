@@ -256,8 +256,8 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["marquee-speechify"];
     scaleClass = "scale-[2.2]";
   } else if (nameLower.includes("granola")) {
-    src = LOGOS["marquee-granola"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["granola"];
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("perplexity")) {
     src = LOGOS["perplexity"];
     scaleClass = "scale-[0.85]";
@@ -274,11 +274,14 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["railway"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("warpbuild")) {
-    src = LOGOS["marquee-warpbuild"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["warpbuild"];
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("factory")) {
-    src = LOGOS["marquee-factory"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["factory"];
+    scaleClass = "scale-[0.85]";
+  } else if (nameLower.includes("edx")) {
+    src = LOGOS["edx"];
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("spotify")) {
     src = LOGOS["spotify"];
     scaleClass = "scale-[0.85]";
@@ -304,14 +307,14 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["openai"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("scalingo")) {
-    src = LOGOS["marquee-scalingo-credits"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["scalingo"];
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("render")) {
-    src = LOGOS["marquee-render-credits"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["render"];
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("vapi")) {
-    src = LOGOS["marquee-vapi-credits"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["vapi"];
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("autodesk")) {
     src = LOGOS["autodesk"];
     scaleClass = "scale-[0.85]";
