@@ -126,6 +126,10 @@ import courseraIconPng from "@/assets/logos/coursera-icon.png";
 import warpbuildIconPng from "@/assets/logos/warpbuild-icon.png";
 import freepikIconPng from "@/assets/logos/freepik-icon.png";
 import autodeskIconPng from "@/assets/logos/autodesk-icon.png";
+import primevideoIconPng from "@/assets/logos/primevideo-icon.png";
+import sonylivIconPng from "@/assets/logos/sonyliv-icon.png";
+import zee5IconPng from "@/assets/logos/zee5-icon.png";
+import hotstarIconPng from "@/assets/logos/hotstar-icon.png";
 
 export const LOGOS: Record<string, unknown> = {
   "adobe-cc": adobeCcLogo,
@@ -256,4 +260,8 @@ export const LOGOS: Record<string, unknown> = {
   "warpbuild-icon": warpbuildIconPng,
   "freepik-icon": freepikIconPng,
   "autodesk-icon": autodeskIconPng,
+  "primevideo-icon": primevideoIconPng,
+  "sonyliv-icon": sonylivIconPng,
+  "zee5-icon": zee5IconPng,
+  "hotstar-icon": hotstarIconPng,
 };
