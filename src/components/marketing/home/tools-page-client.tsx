@@ -221,7 +221,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
 
   // 1. Resolve source specifically for all subscriptions section to use official/HD logos
   if (nameLower.includes("coursera")) {
-    src = LOGOS["coursera"];
+    src = LOGOS["coursera-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("nordvpn") || nameLower.includes("nord vpn")) {
     src = LOGOS["nordvpn"];
@@ -254,19 +254,19 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["manus-pro"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("gemini")) {
-    src = LOGOS["gemini-pro"];
+    src = LOGOS["gemini-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("copilot") || nameLower.includes("github")) {
     src = LOGOS["github-copilot"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("railway")) {
-    src = LOGOS["railway"];
+    src = LOGOS["railway-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("warpbuild")) {
     src = LOGOS["warpbuild"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("factory")) {
-    src = LOGOS["factory"];
+    src = LOGOS["factory-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("edx")) {
     src = LOGOS["edx"];
@@ -393,7 +393,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
       "Rezi - Resume builder": LOGOS["marquee-rezi"],
       "ChatGPT Plus": LOGOS["chatgpt-plus"],
       "Claude AI": LOGOS["claude-pro"],
-      "Google Gemini": LOGOS["gemini-pro"],
+      "Google Gemini": LOGOS["gemini-icon"],
       "Perplexity Pro": LOGOS["perplexity"],
       "Grok": LOGOS["grok"],
       "ElevenLabs": LOGOS["eleven-labs"],
@@ -407,7 +407,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
       "GitHub Copilot": LOGOS["github"],
       "Lovable Pro & Lite": LOGOS["lovable-pro"],
       "Lovable Pro": LOGOS["lovable-pro"],
-      "Replit": LOGOS["replit"],
+      "Replit": LOGOS["replit-icon"],
       "Bolt": LOGOS["bolt"],
       "Supabase Pro": LOGOS["supabase-pro"],
       "N8N": LOGOS["n8n"],

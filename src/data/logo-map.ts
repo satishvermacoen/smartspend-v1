@@ -118,6 +118,11 @@ import v0Logo from "@/assets/logos/v0.svg";
 import chatgptSvg from "@/assets/logos/chatgpt.svg";
 import geminiSvg from "@/assets/logos/gemini.svg";
 import elevenLabsSvg from "@/assets/logos/eleven-labs.svg";
+import replitIconPng from "@/assets/logos/replit-icon.png";
+import railwayIconPng from "@/assets/logos/railway-icon.png";
+import geminiIconPng from "@/assets/logos/gemini-icon.png";
+import factoryIconPng from "@/assets/logos/factory-icon.png";
+import courseraIconPng from "@/assets/logos/coursera-icon.png";
 
 export const LOGOS: Record<string, unknown> = {
   "adobe-cc": adobeCcLogo,
@@ -240,4 +245,9 @@ export const LOGOS: Record<string, unknown> = {
   "youtube": youtubeLogo,
   "primevideo": primeVideoLogo,
   "hotstar": hotstarLogo,
+  "replit-icon": replitIconPng,
+  "railway-icon": railwayIconPng,
+  "gemini-icon": geminiIconPng,
+  "factory-icon": factoryIconPng,
+  "coursera-icon": courseraIconPng,
 };
