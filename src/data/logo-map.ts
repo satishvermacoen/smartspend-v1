@@ -94,6 +94,9 @@ import warpbuildLogo from "@/assets/logos/warpbuild.svg";
 import renderLogo from "@/assets/logos/render.svg";
 import scalingoLogo from "@/assets/logos/scalingo.svg";
 import marqueeYoutubePremiumLogo from "@/assets/logos/marquee-youtube-premium.png";
+import youtubeLogo from "@/assets/logos/youtube.svg";
+import primeVideoLogo from "@/assets/logos/primevideo.svg";
+import hotstarLogo from "@/assets/logos/hotstar.svg";
 import marqueeZee5Logo from "@/assets/logos/marquee-zee5.png";
 import msOfficeLogo from "@/assets/logos/ms-office.png";
 import n8nLogo from "@/assets/logos/n8n.png";
@@ -234,4 +237,7 @@ export const LOGOS: Record<string, unknown> = {
   "vapi": vapiLogo,
   "render": renderLogo,
   "scalingo": scalingoLogo,
+  "youtube": youtubeLogo,
+  "primevideo": primeVideoLogo,
+  "hotstar": hotstarLogo,
 };

@@ -322,9 +322,9 @@ const RAW_ALL_TOOLS: Tool[] = [
   { name: "Raycast", slug: "raycast", color: "FF6363", category: "Business/Operations", logo: LOGOS["raycast"] },
 
   // OTT PLATFORMS
-  { name: "YouTube Premium", slug: "youtube", color: "FF0000", category: "OTT", logo: LOGOS["marquee-youtube-premium"] },
-  { name: "Amazon Prime Video", slug: "primevideo", color: "00A8E1", category: "OTT", logo: LOGOS["marquee-prime-video"] },
-  { name: "JioHotstar", slug: "hotstar", color: "0F1B45", category: "OTT", logo: LOGOS["marquee-hotstar"] },
+  { name: "YouTube Premium", slug: "youtube", color: "FF0000", category: "OTT", logo: LOGOS["youtube"] },
+  { name: "Amazon Prime Video", slug: "primevideo", color: "00A8E1", category: "OTT", logo: LOGOS["primevideo"] },
+  { name: "JioHotstar", slug: "hotstar", color: "0F1B45", category: "OTT", logo: LOGOS["hotstar"] },
   { name: "SonyLIV", slug: "sonyliv", color: "E50914", category: "OTT", logo: LOGOS["marquee-sony-liv"] },
   { name: "ZEE 5", slug: "zee5", color: "8230C2", category: "OTT", logo: LOGOS["marquee-zee5"] },
   { name: "Spotify", slug: "spotify", color: "1DB954", category: "OTT", logo: LOGOS["spotify"] },

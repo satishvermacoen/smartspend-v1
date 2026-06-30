@@ -59,8 +59,8 @@ const LOGO_OVERRIDES: Record<string, string | StaticImageData> = {
   "Lovable Pro": LOGOS["lovable-pro"] as StaticImageData,
 
   // OTT Platforms
-  "Amazon Prime Video": LOGOS["marquee-prime-video"] as StaticImageData,
-  "JioHotstar": LOGOS["marquee-hotstar"] as StaticImageData,
+  "Amazon Prime Video": LOGOS["primevideo"] as StaticImageData,
+  "JioHotstar": LOGOS["hotstar"] as StaticImageData,
   "SonyLIV": LOGOS["marquee-sony-liv"] as StaticImageData,
   "ZEE 5": LOGOS["marquee-zee5"] as StaticImageData,
 
@@ -144,7 +144,11 @@ export function ToolLogo({
       nameLower.includes("code rabbit") ||
       nameLower.includes("railway") ||
       nameLower.includes("warpbuild") ||
-      nameLower.includes("factory")
+      nameLower.includes("factory") ||
+      nameLower.includes("youtube") ||
+      nameLower.includes("primevideo") ||
+      nameLower.includes("prime video") ||
+      nameLower.includes("hotstar")
     ) {
       scaleClass = "scale-[0.95]";
     }

@@ -275,14 +275,14 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["spotify"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("youtube")) {
-    src = LOGOS["marquee-youtube-premium"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["youtube"];
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("prime video") || nameLower.includes("amazon")) {
-    src = LOGOS["marquee-prime-video"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["primevideo"];
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("hotstar") || nameLower.includes("jio")) {
-    src = LOGOS["marquee-hotstar"];
-    scaleClass = "scale-[2.2]";
+    src = LOGOS["hotstar"];
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("sonyliv") || nameLower.includes("sony")) {
     src = LOGOS["marquee-sony-liv"];
     scaleClass = "scale-[2.2]";
