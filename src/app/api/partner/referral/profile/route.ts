@@ -59,3 +59,33 @@ export async function GET() {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
+
+export async function PATCH(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user?.id) {
+      return NextResponse.json({ error: "Unauthorized access." }, { status: 401 });
+    }
+
+    const { firstName, lastName, phone } = await req.json();
+
+    await connectDB();
+
+    const user = await User.findById(session.user.id);
+    if (!user) {
+      return NextResponse.json({ error: "User not found." }, { status: 404 });
+    }
+
+    if (firstName !== undefined) user.firstName = firstName;
+    if (lastName !== undefined) user.lastName = lastName;
+    if (phone !== undefined) user.phone = phone;
+
+    await user.save();
+
+    return NextResponse.json({ success: true, message: "Profile updated successfully." });
+  } catch (error: unknown) {
+    console.error("Update Customer Profile Error:", error);
+    const message = error instanceof Error ? error.message : "Failed to update profile";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}

@@ -33,18 +33,18 @@ const data = {
       ),
     },
     {
-      title: "Enquiries",
-      url: "/partner/enquiry",
+      title: "Clients",
+      url: "/partner/clients",
       icon: (
-        <ListIcon
+        <UsersIcon
         />
       ),
     },
     {
-      title: "Referrals",
-      url: "/partner/referral",
+      title: "Enquiries",
+      url: "/partner/enquiry",
       icon: (
-        <UsersIcon
+        <ListIcon
         />
       ),
     },

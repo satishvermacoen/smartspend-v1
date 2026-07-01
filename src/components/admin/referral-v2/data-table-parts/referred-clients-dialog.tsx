@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Client } from "@/types"
 import { ClientItem } from "@/types/referral"
+import { Button } from "@/components/ui/button"
 
 interface ReferredClientsDialogProps {
   isOpen: boolean
@@ -54,7 +55,7 @@ export function ReferredClientsDialog({
         ) : (
           <div className="max-h-[300px] overflow-y-auto space-y-2 pr-1 scrollbar-thin">
             {referredClients.map((client) => (
-              <button
+              <Button
                 key={client._id}
                 onClick={() => {
                   onOpenChange(false)
@@ -71,7 +72,7 @@ export function ReferredClientsDialog({
                   </span>
                 </div>
                 <ChevronRightIcon className="h-4 w-4 text-muted-foreground group-hover:text-brand transition-colors" />
-              </button>
+              </Button>
             ))}
           </div>
         )}

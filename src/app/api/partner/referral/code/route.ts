@@ -115,3 +115,35 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function PATCH(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user?.id) {
+      return NextResponse.json({ error: "Unauthorized access." }, { status: 401 });
+    }
+
+    const { id, is_active } = await req.json();
+    if (!id || typeof is_active !== "boolean") {
+      return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+    }
+
+    await connectDB();
+
+    const codeToUpdate = await ReferralCode.findOne({ _id: id, referrer_id: session.user.id });
+    if (!codeToUpdate) {
+      return NextResponse.json({ error: "Referral code not found." }, { status: 404 });
+    }
+
+    codeToUpdate.is_active = is_active;
+    await codeToUpdate.save();
+
+    return NextResponse.json({ success: true, message: "Code status updated." });
+  } catch (error: unknown) {
+    console.error("Customer update referral code error:", error);
+    return NextResponse.json(
+      { error: "An unexpected error occurred while updating your referral code." },
+      { status: 500 }
+    );
+  }
+}
