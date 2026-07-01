@@ -70,7 +70,7 @@ export default function CreateInvoiceDialog({
       // If there is only one line item, and it is empty (no name, 0 price), replace it.
       // Otherwise, append the product to the list.
       const isFirstItemEmpty = prev.length === 1 && prev[0].service_name === '' && prev[0].amount === 0;
-      const newItem = { service_name: product.name, amount: product.defaultPrice, quantity: 1 };
+      const newItem = { service_name: product.name, amount: 0, quantity: 1 };
       
       if (isFirstItemEmpty) {
         return [newItem];
@@ -78,7 +78,7 @@ export default function CreateInvoiceDialog({
         return [...prev, newItem];
       }
     });
-    toast.success(`Added ${product.name} (₹${product.defaultPrice}) to invoice`);
+    toast.success(`Added ${product.name} to invoice`);
   };
 
   // Calculations
@@ -402,10 +402,7 @@ export default function CreateInvoiceDialog({
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <span className="font-mono text-[11px] font-bold text-foreground">
-                        ₹{product.defaultPrice}
-                      </span>
+                     <div className="flex items-center gap-2 flex-shrink-0">
                       <div className="p-0.5 rounded-md bg-brand/10 text-brand opacity-0 group-hover:opacity-100 transition-opacity">
                         <Plus className="h-3 w-3" />
                       </div>

@@ -5,6 +5,7 @@ import connectDB from '@/lib/mongodb';
 import Client from '@/features/shared/model/client';
 import User from '@/features/shared/model/user';
 import Invoice from '@/features/shared/model/invoice';
+import ReferralCode from '@/features/shared/model/referral-code';
 
 export async function GET(req: Request) {
   try {
@@ -159,7 +160,18 @@ export async function POST(req: Request) {
 
     let referredBy = undefined;
     if (referralCode) {
-      const referrer = await User.findOne({ referralCode: referralCode.trim().toUpperCase(), role: 'referral_partner' });
+      const codeUpper = referralCode.trim().toUpperCase();
+      const validCodeDoc = await ReferralCode.findOne({ code: codeUpper });
+      let referrer = null;
+      if (validCodeDoc) {
+        referrer = await User.findById(validCodeDoc.referrer_id);
+      }
+      
+      // Fallback to direct user referralCode lookup
+      if (!referrer) {
+        referrer = await User.findOne({ referralCode: codeUpper });
+      }
+
       if (!referrer) {
         return NextResponse.json({ error: 'Referral partner with this code not found.' }, { status: 400 });
       }

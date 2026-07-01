@@ -76,7 +76,7 @@ export default function AdminInviteCodesPage() {
         body: JSON.stringify({ is_active: !currentStatus }),
       })
       if (res.ok) {
-        toast.success(`Referral code status updated.`)
+        toast.success(`Invite code status updated.`)
         fetchCodes()
       } else {
         throw new Error()
@@ -91,7 +91,7 @@ export default function AdminInviteCodesPage() {
     try {
       const res = await fetch(`/api/admin/referrals/codes/${id}`, { method: "DELETE" })
       if (res.ok) {
-        toast.success("Referral code deleted.")
+        toast.success("Invite code deleted.")
         fetchCodes()
       } else {
         throw new Error()
@@ -104,7 +104,7 @@ export default function AdminInviteCodesPage() {
   const handleCreateCode = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newLinkName) {
-      toast.error("Please provide a name for this referral link.")
+      toast.error("Please provide a name for this invite link.")
       return
     }
     setCreatingCode(true)
@@ -124,7 +124,7 @@ export default function AdminInviteCodesPage() {
         if (data.userCreated) {
           toast.success(
             <div className="flex flex-col gap-1.5 p-1">
-              <span className="font-semibold text-sm text-foreground">Referral link generated!</span>
+              <span className="font-semibold text-sm text-foreground">Invite link generated!</span>
               <span className="text-xs text-muted-foreground">A new user account was created:</span>
               <div className="bg-muted p-2 rounded-lg text-xs space-y-1 font-mono select-all">
                 <div>Email: {data.email}</div>
@@ -135,7 +135,7 @@ export default function AdminInviteCodesPage() {
             { duration: 20000 }
           )
         } else {
-          toast.success("Referral link generated successfully!")
+          toast.success("Invite link generated successfully!")
         }
         setNewLinkName("")
         setNewReferrerName("")
@@ -217,7 +217,7 @@ export default function AdminInviteCodesPage() {
       </div>
 
       <div className="bg-card/25 backdrop-blur-xl border border-border/10 rounded-2xl p-5 shadow-elegant">
-        <h4 className="font-bold text-xs uppercase tracking-wider text-muted-foreground mb-3">Generate New Referral Code</h4>
+        <h4 className="font-bold text-xs uppercase tracking-wider text-muted-foreground mb-3">Generate New Invite Code</h4>
         <form onSubmit={handleCreateCode} className="grid gap-3 sm:grid-cols-5 items-end">
           <div>
             <Label className="text-[10px] text-muted-foreground font-bold uppercase mb-1">Link Name</Label>

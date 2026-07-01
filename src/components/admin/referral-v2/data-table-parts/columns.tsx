@@ -33,13 +33,30 @@ export const getClientColumns = (
 ): ColumnDef<ClientItem>[] => [
   {
     accessorKey: "name",
-    header: "Client",
-    cell: ({ row }) => (
-      <ClientDetailsHover
-        client={row.original}
-        onClick={(client) => onClientClick(client)}
-      />
-    ),
+    header: "Partners Name/Details",
+    cell: ({ row }) => {
+      const client = row.original
+      const joinDate = client.createdAt 
+        ? new Date(client.createdAt).toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })
+        : "N/A"
+      return (
+        <div className="flex flex-col gap-0.5">
+          <ClientDetailsHover
+            client={client}
+            onClick={(c) => onClientClick(c)}
+          />
+          <div className="text-[11px] text-muted-foreground flex flex-col gap-0.5 mt-1 font-medium">
+            {client.email && <span className="truncate max-w-[180px]">{client.email}</span>}
+            {client.phone && client.phone !== "N/A" && <span>{client.phone}</span>}
+            <span className="text-[10px] text-muted-foreground/60">Joined: {joinDate}</span>
+          </div>
+        </div>
+      )
+    },
   },
   {
     accessorKey: "source",
@@ -129,7 +146,7 @@ export const getCodeColumns = (
 ): ColumnDef<CodeItem>[] => [
   {
     accessorKey: "code",
-    header: "Referral Link / Code",
+    header: "Invite Link / Code",
     cell: ({ row }) => (
       <div>
         <div className="font-semibold text-sm font-mono tracking-wider">{row.original.code}</div>
@@ -139,7 +156,7 @@ export const getCodeColumns = (
   },
   {
     accessorKey: "reward",
-    header: "Referral Reward",
+    header: "Invite Reward",
     cell: ({ row }) => {
       const { type, cashAmount, subscriptionMonths, referralBonus } = row.original.reward
       return (
@@ -239,6 +256,11 @@ export const getConversionColumns = (
     ),
   },
   {
+    accessorKey: "createdAt",
+    header: "Date",
+    cell: ({ row }) => formatDate(row.original.createdAt || row.original.timeline?.clicked_at || ""),
+  },
+  {
     accessorKey: "referrer",
     header: "Referrer / Partner",
     cell: ({ row }) => (
@@ -284,11 +306,6 @@ export const getConversionColumns = (
         </div>
       )
     },
-  },
-  {
-    accessorKey: "createdAt",
-    header: "Date",
-    cell: ({ row }) => formatDate(row.original.createdAt || row.original.timeline?.clicked_at || ""),
   },
 ]
 

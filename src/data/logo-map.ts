@@ -133,7 +133,9 @@ import hotstarIconPng from "@/assets/logos/hotstar-icon.png";
 import scalingoIconPng from "@/assets/logos/scalingo-icon.png";
 import renderIconPng from "@/assets/logos/render-icon.png";
 
-export const LOGOS: Record<string, unknown> = {
+import { StaticImageData } from "next/image";
+
+export const LOGOS: Record<string, string | StaticImageData> = {
   "adobe-cc": adobeCcLogo,
   "airtable": airtableLogo,
   "anytime-invent": anytimeInventLogo,

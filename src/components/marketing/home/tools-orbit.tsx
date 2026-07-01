@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { ORBIT_INNER, ORBIT_OUTER, logoUrl } from "@/data/tools";
-import { ToolLogo } from "@/components/marketing/layout/tool-logo";
 import { Tool } from "@/types";
-import { LOGOS } from "@/data/logo-map";
 import Image from "next/image";
 
 function OrbitToolLogo({ tool, className = "h-7 w-7 sm:h-10 sm:w-10" }: { tool: Tool; className?: string }) {

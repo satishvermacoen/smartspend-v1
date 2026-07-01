@@ -62,12 +62,31 @@ export async function POST(req: Request) {
           );
         }
         
+        // Resolve referrer details from referralCode
+        let referredByObj = undefined;
+        if (referralCode) {
+          const validCodeDoc = await ReferralCode.findOne({
+            code: referralCode.trim().toUpperCase(),
+            is_active: true
+          });
+          if (validCodeDoc) {
+            const referrerUser = await User.findById(validCodeDoc.referrer_id);
+            if (referrerUser) {
+              referredByObj = {
+                referrerId: referrerUser._id,
+                referrerEmail: referrerUser.email
+              };
+            }
+          }
+        }
+
         // Update existing client document with password, name details, and activate
         existingClient.password = password;
         existingClient.name = `${firstName} ${lastName}`.trim();
         existingClient.status = 'active';
         if (referralCode && !existingClient.referralCode) {
           existingClient.referralCode = referralCode.trim().toUpperCase();
+          existingClient.referredBy = referredByObj;
           existingClient.source = 'referral';
         }
         await existingClient.save();
@@ -85,6 +104,24 @@ export async function POST(req: Request) {
           { status: 201 }
         );
       } else {
+        // Resolve referrer details from referralCode
+        let referredByObj = undefined;
+        if (referralCode) {
+          const validCodeDoc = await ReferralCode.findOne({
+            code: referralCode.trim().toUpperCase(),
+            is_active: true
+          });
+          if (validCodeDoc) {
+            const referrerUser = await User.findById(validCodeDoc.referrer_id);
+            if (referrerUser) {
+              referredByObj = {
+                referrerId: referrerUser._id,
+                referrerEmail: referrerUser.email
+              };
+            }
+          }
+        }
+
         // Create new client
         const newClient = await Client.create({
           name: `${firstName} ${lastName}`.trim(),
@@ -93,7 +130,8 @@ export async function POST(req: Request) {
           password,
           status: 'active',
           source: referralCode ? 'referral' : 'website_enquiry',
-          referralCode: referralCode ? referralCode.trim().toUpperCase() : undefined
+          referralCode: referralCode ? referralCode.trim().toUpperCase() : undefined,
+          referredBy: referredByObj
         });
 
         return NextResponse.json(

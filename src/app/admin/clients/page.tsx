@@ -14,7 +14,8 @@ import {
   Activity,
   Plus,
   MoreHorizontal,
-  ShoppingCart
+  ShoppingCart,
+  Edit
 } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +31,7 @@ import {
 import CreateClientDialog from "@/components/admin/clients/create-client-dialog";
 import ClientDetailsDialog from "@/components/admin/clients/client-details-dialog";
 import ClientPurchasesDialog from "@/components/admin/clients/client-purchases-dialog";
+import EditClientDialog from "@/components/admin/clients/edit-client-dialog";
 
 interface ClientItem {
   _id: string;
@@ -70,6 +72,7 @@ export default function AllClientsPage() {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isPurchasesOpen, setIsPurchasesOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -390,6 +393,14 @@ export default function AllClientsPage() {
                             <Eye className="h-3.5 w-3.5 text-muted-foreground" />
                             View Details
                           </DropdownMenuItem>
+
+                          <DropdownMenuItem
+                            onClick={() => { setSelectedUser(user); setIsEditOpen(true); }}
+                            className="text-xs cursor-pointer flex items-center gap-2"
+                          >
+                            <Edit className="h-3.5 w-3.5 text-muted-foreground" />
+                            Edit Details
+                          </DropdownMenuItem>
                           
                           <DropdownMenuItem
                             onClick={() => { setSelectedUser(user); setIsPurchasesOpen(true); }}
@@ -468,6 +479,12 @@ export default function AllClientsPage() {
             client={selectedUser}
             isOpen={isPurchasesOpen}
             onOpenChange={setIsPurchasesOpen}
+          />
+          <EditClientDialog
+            client={selectedUser}
+            isOpen={isEditOpen}
+            onOpenChange={setIsEditOpen}
+            onSuccess={fetchUsers}
           />
         </>
       )}

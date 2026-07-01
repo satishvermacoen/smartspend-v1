@@ -62,7 +62,7 @@ function LoginForm() {
     setLoading(true);
 
     try {
-      let targetUrl = '/clients/enquiries';
+      let targetUrl = '/clients';
       if (activeTab === 'admin') targetUrl = '/admin/dashboard';
       else if (activeTab === 'partner') targetUrl = '/partner/dashboard';
 

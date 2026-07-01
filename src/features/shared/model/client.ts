@@ -22,6 +22,8 @@ export interface IClient extends Document {
   mobile: string;
   email?: string;
   password?: string;
+  passwordResetToken?: string;
+  passwordResetExpires?: Date;
 
   // Enquiry / Interest Info
   subscription?: string;   // what they're interested in (from form)
@@ -52,11 +54,13 @@ export interface IClient extends Document {
 
   // Methods
   comparePassword(candidatePassword: string): Promise<boolean>;
+  createPasswordResetToken(): string;
 }
 
 export interface IClientModel extends Model<IClient> {
   findByMobile(mobile: string): mongoose.Query<IClient | null, IClient>;
   findByEmail(email: string): mongoose.Query<IClient | null, IClient>;
+  findByPasswordResetToken(token: string): Promise<IClient | null>;
 }
 
 const ClientSubscriptionSchema = new Schema<IClientSubscription>({
@@ -77,6 +81,8 @@ const ClientSchema = new Schema<IClient, IClientModel>(
     mobile: { type: String, required: true, trim: true, index: true },
     email: { type: String, trim: true, lowercase: true, sparse: true, index: true },
     password: { type: String, select: false },
+    passwordResetToken: { type: String },
+    passwordResetExpires: { type: Date },
 
     subscription: { type: String, trim: true },
     message: { type: String, trim: true },
@@ -124,6 +130,14 @@ ClientSchema.methods.comparePassword = async function(this: IClient, candidatePa
   return bcrypt.compare(candidatePassword, this.password);
 };
 
+ClientSchema.methods.createPasswordResetToken = function(this: IClient): string {
+  const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  this.passwordResetToken = token;
+  // Expires in 1 hour
+  this.passwordResetExpires = new Date(Date.now() + 60 * 60 * 1000);
+  return token;
+};
+
 // Statics
 ClientSchema.statics.findByMobile = function (mobile: string) {
   return this.findOne({ mobile: mobile.trim() });
@@ -131,6 +145,13 @@ ClientSchema.statics.findByMobile = function (mobile: string) {
 
 ClientSchema.statics.findByEmail = function (email: string) {
   return this.findOne({ email: email.toLowerCase().trim() });
+};
+
+ClientSchema.statics.findByPasswordResetToken = async function(this: IClientModel, token: string): Promise<IClient | null> {
+  return this.findOne({
+    passwordResetToken: token,
+    passwordResetExpires: { $gt: new Date() }
+  });
 };
 
 if (process.env.NODE_ENV === 'development') {

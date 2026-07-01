@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import User from '@/features/shared/model/user';
+import User, { IUser } from '@/features/shared/model/user';
+import Client, { IClient } from '@/features/shared/model/client';
 import { sendPasswordResetEmail } from '@/lib/mail';
 
 export async function POST(req: Request) {
@@ -23,10 +24,14 @@ export async function POST(req: Request) {
 
     await connectDB();
 
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    let account: IUser | IClient | null = await User.findOne({ email: email.toLowerCase().trim() });
+
+    if (!account) {
+      account = await Client.findOne({ email: email.toLowerCase().trim() });
+    }
 
     // For security reasons, do not explicitly reveal if email is not found
-    if (!user) {
+    if (!account) {
       return NextResponse.json(
         { message: 'If an account exists with that email, a password reset link has been sent.' },
         { status: 200 }
@@ -34,13 +39,13 @@ export async function POST(req: Request) {
     }
 
     // Generate password reset token
-    const token = user.createPasswordResetToken();
-    await user.save();
+    const token = account.createPasswordResetToken();
+    await account.save();
 
     // Send reset email
-    const emailSent = await sendPasswordResetEmail(user.email, token);
+    const emailSent = await sendPasswordResetEmail(account.email!, token);
     if (!emailSent) {
-      console.error('Failed to send password reset email to:', user.email);
+      console.error('Failed to send password reset email to:', account.email);
     }
 
     return NextResponse.json(

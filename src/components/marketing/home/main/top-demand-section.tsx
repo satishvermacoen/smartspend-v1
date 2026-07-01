@@ -5,14 +5,16 @@ import Link from "next/link";
 import { TOP_DEMAND_CATEGORIES } from "@/data/tools";
 import { useState } from "react";
 import Image from "next/image";
+import { Tool } from "@/types";
+import { StaticImageData } from "next/image";
 import { LOGOS } from "@/data/logo-map";
 
-function TopDemandToolLogo({ tool, className = "h-full w-full" }: { tool: any; className?: string }) {
+function TopDemandToolLogo({ tool, className = "h-full w-full" }: { tool: Tool; className?: string }) {
   const nameLower = tool.name.toLowerCase();
   const [failed, setFailed] = useState(false);
 
   // Resolve source and scale specifically for Top Demand section
-  let src: any = undefined;
+  let src: string | StaticImageData | undefined = undefined;
   let scaleClass = "scale-[1.0]";
 
   if (nameLower.includes("coursera")) {
@@ -86,7 +88,7 @@ function TopDemandToolLogo({ tool, className = "h-full w-full" }: { tool: any; c
     );
   } else {
     // For all other tools, fallback to standard LOGO_OVERRIDES local logic or tool.logo
-    const LOGO_OVERRIDES_LOCAL: Record<string, any> = {
+    const LOGO_OVERRIDES_LOCAL: Record<string, string | StaticImageData> = {
       "LinkedIn Premium": LOGOS["linkedin-premium"],
       "Microsoft Office": LOGOS["ms-office"],
       "Rezi - Resume builder": LOGOS["marquee-rezi"],

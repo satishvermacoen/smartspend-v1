@@ -188,7 +188,7 @@ export default function SignupPage() {
         <div className="mb-4 flex flex-col gap-1 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-xs text-emerald-400 font-medium">
           <div className="flex items-center gap-1.5 font-bold text-emerald-400">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            Referral Code Applied: {referralCode}
+            Invited by: {referralCode}
           </div>
           <p className="text-[11px] text-muted-foreground">You will automatically receive ₹500 OFF on your first subscription purchase!</p>
         </div>

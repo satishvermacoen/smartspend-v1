@@ -3,8 +3,8 @@
 import * as React from "react"
 import { useSession } from "next-auth/react"
 
-import { NavMain } from "@/components/partner/layout/nav-main"
-import { NavUser } from "@/components/partner/layout/nav-user"
+import { NavMain } from "@/components/clients/layout/nav-main"
+import { NavUser } from "@/components/clients/layout/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -14,11 +14,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { ListIcon, FileTextIcon, CommandIcon } from "lucide-react"
+import { ListIcon, FileTextIcon, CommandIcon, LayoutDashboard } from "lucide-react"
 import Link from "next/link"
 
 const data = {
   navMain: [
+    {
+      title: "Dashboard",
+      url: "/clients",
+      icon: (
+        <LayoutDashboard />
+      ),
+    },
     {
       title: "My Enquiries",
       url: "/clients/enquiries",

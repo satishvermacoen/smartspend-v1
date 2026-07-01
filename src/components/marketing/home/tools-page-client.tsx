@@ -3,11 +3,11 @@
 import { useMemo, useState } from "react";
 import { Search, ArrowRight, Sparkles } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/marketing/layout/site-chrome";
-import { ALL_TOOLS, logoUrl } from "@/data/tools";
+import { ALL_TOOLS } from "@/data/tools";
 import { Tool } from "@/types";
 import { LOGOS } from "@/data/logo-map";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
  
 const CATEGORIES = ["All", "Professional", "AI", "Developer", "Creative", "Product/Marketing", "Business/Operations", "OTT", "Credits"] as const;
 type Category = (typeof CATEGORIES)[number];
@@ -24,49 +24,7 @@ const CATEGORY_LABELS: Record<Category, string> = {
   Credits: "Platform Credits",
 };
  
-const LOGO_OVERRIDES: Record<string, string> = {
-  // Developer Tools
-  "Firecrawl": "https://logos.hunter.io/firecrawl.dev",
-  "Firecrawl Credits": "https://logos.hunter.io/firecrawl.dev",
-  "Railway": "https://logos.hunter.io/railway.app",
-  "Factory": "https://logos.hunter.io/factory.ai",
-  "Warpbuild": "https://logos.hunter.io/warpbuild.com",
-  "Bolt": "https://www.google.com/s2/favicons?domain=bolt.new&sz=128",
- 
-  // Design & Creative Tools
-  "Adobe Creative Cloud": LOGOS["adobe-cc"] as string,
-  "Canva Pro": "https://logos.hunter.io/canva.com",
-  "Canva Business + Leonardo AI": "https://logos.hunter.io/canva.com",
-  "CapCut": "https://logos.hunter.io/capcut.com",
-  "InVideo": "https://logos.hunter.io/invideo.io",
-  "Gamma": "https://logos.hunter.io/gamma.app",
-  "Descript": "https://logos.hunter.io/descript.com",
-  "Leonardo AI": "https://logos.hunter.io/leonardo.ai",
- 
-  // Product Marketing
-  "Customer.io": "https://logos.hunter.io/customer.io",
-  "Mobbin Team": "https://logos.hunter.io/mobbin.com",
-  "Guidless Pro": "https://logos.hunter.io/guideless.ai",
- 
-  // Business & Operations
-  "Lead.CM": "https://www.google.com/s2/favicons?domain=leads.cm&sz=128",
-  "TextShift": "https://www.google.com/s2/favicons?domain=textshift.org&sz=128",
- 
-  // OTT Platforms
-  "Amazon Prime Video": "https://logos.hunter.io/primevideo.com",
-  "JioHotstar": "https://logos.hunter.io/jiocinema.com",
-  "SonyLIV": "https://upload.wikimedia.org/wikipedia/commons/f/f7/SonyLIV_2020.png",
-  "ZEE 5": "https://logos.hunter.io/zee5.com",
- 
-  // Platform Credits
-  "OpenAI Credits": "https://logos.hunter.io/openai.com",
-  "AWS Credits": LOGOS["aws-credits"] as string,
-  "MongoDB Credits": "https://logos.hunter.io/mongodb.com",
-  "Vapi Credits": "https://logos.hunter.io/vapi.ai",
-  "Airtable Credits": "https://logos.hunter.io/airtable.com",
-  "Render Credits": "https://logos.hunter.io/render.com",
-  "Scalingo Credits": "https://logos.hunter.io/scalingo.com",
-};
+
  
 export function ToolsPageClient() {
   const [query, setQuery] = useState("");
@@ -216,7 +174,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
   const [failed, setFailed] = useState(false);
   const nameLower = tool.name.toLowerCase();
 
-  let src: any = undefined;
+  let src: string | StaticImageData | undefined = undefined;
   let scaleClass = "scale-[1.0]";
 
   // 1. Resolve source specifically for all subscriptions section to use official/HD logos
@@ -387,7 +345,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     scaleClass = "scale-[1.6]";
   } else {
     // Local overrides for all other tools to prevent loading failures on strict network
-    const LOCAL_OVERRIDES: Record<string, any> = {
+    const LOCAL_OVERRIDES: Record<string, string | StaticImageData> = {
       "LinkedIn Premium": LOGOS["linkedin-premium"],
       "Microsoft Office": LOGOS["ms-office"],
       "Rezi - Resume builder": LOGOS["marquee-rezi"],

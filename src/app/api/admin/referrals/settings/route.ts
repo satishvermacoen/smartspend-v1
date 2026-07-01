@@ -57,6 +57,8 @@ export async function PATCH(req: Request) {
     if (body.auto_credit_cash !== undefined) settings.auto_credit_cash = !!body.auto_credit_cash;
     if (body.auto_apply_subscription !== undefined) settings.auto_apply_subscription = !!body.auto_apply_subscription;
     if (body.currency !== undefined) settings.currency = body.currency;
+    if (body.commission_percentage !== undefined) settings.commission_percentage = parseFloat(body.commission_percentage);
+    if (body.default_reward_type !== undefined) settings.default_reward_type = body.default_reward_type;
 
     await settings.save();
 

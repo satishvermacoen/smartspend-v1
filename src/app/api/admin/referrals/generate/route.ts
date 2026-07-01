@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
 
     // Generate random code suffix
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let codeStr = 'REF';
+    let codeStr = 'INV';
     for (let i = 0; i < 5; i++) {
       codeStr += chars.charAt(Math.floor(Math.random() * chars.length));
     }

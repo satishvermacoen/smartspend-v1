@@ -11,6 +11,7 @@ export const ClientSchema = z.object({
   sale: z.number(),
   commission: z.number(),
   status: z.string(),
+  createdAt: z.string().optional(),
 })
 
 export type ClientItem = z.infer<typeof ClientSchema>

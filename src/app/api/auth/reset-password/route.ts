@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import User from '@/features/shared/model/user';
+import User, { IUser } from '@/features/shared/model/user';
+import Client, { IClient } from '@/features/shared/model/client';
 
 export async function POST(req: Request) {
   try {
@@ -22,10 +23,18 @@ export async function POST(req: Request) {
 
     await connectDB();
 
-    // Find the user by token (checks expiration too)
-    const user = await User.findByPasswordResetToken(token);
+    // Find the account by token (checks expiration too)
+    let account: IUser | IClient | null = await User.findByPasswordResetToken(token);
+    let isClient = false;
 
-    if (!user) {
+    if (!account) {
+      account = await Client.findByPasswordResetToken(token);
+      if (account) {
+        isClient = true;
+      }
+    }
+
+    if (!account) {
       return NextResponse.json(
         { error: 'Invalid or expired password reset token.' },
         { status: 400 }
@@ -33,14 +42,18 @@ export async function POST(req: Request) {
     }
 
     // Assign new password, clear token and reset login attempts
-    user.password = newPassword;
-    user.passwordResetToken = undefined;
-    user.passwordResetExpires = undefined;
-    user.loginAttempts = 0;
-    user.lockUntil = undefined;
+    account.password = newPassword;
+    account.passwordResetToken = undefined;
+    account.passwordResetExpires = undefined;
+    
+    if (!isClient) {
+      const userAccount = account as IUser;
+      userAccount.loginAttempts = 0;
+      userAccount.lockUntil = undefined;
+    }
 
-    // Save the user (triggers pre-save hashing)
-    await user.save();
+    // Save the account (triggers pre-save hashing)
+    await account.save();
 
     return NextResponse.json(
       { message: 'Your password has been reset successfully! You can now log in.' },

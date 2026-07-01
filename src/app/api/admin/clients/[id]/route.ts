@@ -4,6 +4,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Client from '@/features/shared/model/client';
 import Invoice from '@/features/shared/model/invoice';
+import { sendClientPasswordUpdateEmail } from '@/lib/mail';
 import { z } from 'zod';
 
 const updateSchema = z.object({
@@ -12,7 +13,9 @@ const updateSchema = z.object({
   email: z.string().email().optional().or(z.literal('')),
   status: z.enum(['pending', 'contacted', 'resolved', 'ignored', 'active', 'inactive']).optional(),
   notes: z.string().optional(),
+  password: z.string().min(6).optional().or(z.literal('')),
 });
+
 
 export async function GET(
   req: Request,
@@ -80,30 +83,52 @@ export async function PATCH(
       return NextResponse.json({ error: errorMsg }, { status: 400 });
     }
 
-    // Convert empty string email to undefined/null in DB
     const updateData = { ...parseResult.data };
-    if (updateData.email === '') {
-      updateData.email = undefined;
-    }
 
     // 2. Connect to database
     await connectDB();
 
-    // 3. Update the client
-    const updatedClient = await Client.findOneAndUpdate(
-      { _id: id, isDeleted: { $ne: true } },
-      { $set: updateData },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedClient) {
+    // 3. Find the client
+    const client = await Client.findOne({ _id: id, isDeleted: { $ne: true } });
+    if (!client) {
       return NextResponse.json({ error: 'Client not found.' }, { status: 404 });
     }
+
+    // Check if mobile number is being updated and already in use by another client
+    if (updateData.mobile && updateData.mobile !== client.mobile) {
+      const existingClient = await Client.findOne({ 
+        mobile: updateData.mobile.trim(), 
+        _id: { $ne: id }, 
+        isDeleted: { $ne: true } 
+      });
+      if (existingClient) {
+        return NextResponse.json({ error: 'A client with this mobile number already exists.' }, { status: 400 });
+      }
+    }
+
+    // Assign fields
+    if (updateData.name !== undefined) client.name = updateData.name.trim();
+    if (updateData.mobile !== undefined) client.mobile = updateData.mobile.trim();
+    if (updateData.email !== undefined) {
+      client.email = updateData.email === '' ? undefined : updateData.email.trim().toLowerCase();
+    }
+    if (updateData.status !== undefined) client.status = updateData.status;
+    if (updateData.notes !== undefined) client.notes = updateData.notes.trim();
+
+    if (updateData.password !== undefined && updateData.password !== '') {
+      client.password = updateData.password;
+      const targetEmail = client.email || updateData.email;
+      if (targetEmail) {
+        await sendClientPasswordUpdateEmail(targetEmail, client.name, updateData.password);
+      }
+    }
+
+    await client.save();
 
     return NextResponse.json({
       success: true,
       message: 'Client profile updated successfully.',
-      client: updatedClient
+      client
     });
 
   } catch (error) {
@@ -114,6 +139,7 @@ export async function PATCH(
     );
   }
 }
+
 
 export async function DELETE(
   req: Request,

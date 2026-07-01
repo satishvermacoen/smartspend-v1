@@ -170,3 +170,47 @@ export async function sendWithdrawalStatusEmail(email: string, name: string, amo
     return null;
   }
 }
+
+export async function sendClientPasswordUpdateEmail(email: string, name: string, password: string): Promise<boolean> {
+  if (!resend) {
+    console.log('\n========================================');
+    console.log(`[DEV EMAIL] Password update notification email to: ${email}`);
+    console.log(`Hi ${name}, your password has been reset by the Admin.`);
+    console.log(`Your new password is: ${password}`);
+    console.log('========================================\n');
+    return true;
+  }
+
+  try {
+    const data = await resend.emails.send({
+      from: `SpentSmart <${fromEmail}>`,
+      to: email,
+      subject: 'Your password has been updated - SpentSmart',
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+          <h2 style="color: #0f766e; margin-bottom: 24px;">Your password has been updated</h2>
+          <p>Hi ${name},</p>
+          <p>An administrator has updated your password. You can now log in using the credentials below:</p>
+          <div style="margin: 24px 0; padding: 16px; background-color: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+            <p style="margin: 0 0 8px 0;"><strong>Email:</strong> ${email}</p>
+            <p style="margin: 0;"><strong>New Password:</strong> <code style="font-size: 14px; background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">${password}</code></p>
+          </div>
+          <p>For security reasons, we recommend that you change this password after logging in.</p>
+          <p style="color: #64748b; font-size: 14px;">If you have any questions or did not authorize this, please contact support immediately.</p>
+          <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 32px 0;" />
+          <p style="color: #94a3b8; font-size: 12px;">This is an automated notification. Please do not reply directly to this email.</p>
+        </div>
+      `
+    });
+
+    if (data.error) {
+      console.error('Failed to send password update email via Resend:', data.error);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('Error sending password update email:', error);
+    return false;
+  }
+}
+
