@@ -375,16 +375,16 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("gumloop")) {
     src = LOGOS["marquee-gumloop"];
-    scaleClass = "scale-[0.85]";
+    scaleClass = "scale-[1.1]";
   } else if (nameLower.includes("textshift")) {
     src = LOGOS["marquee-textshift"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("lightfield")) {
     src = LOGOS["marquee-lightfield-crm"];
-    scaleClass = "scale-[0.85]";
+    scaleClass = "scale-[0.9]";
   } else if (nameLower.includes("indy")) {
     src = LOGOS["marquee-indy"];
-    scaleClass = "scale-[0.85]";
+    scaleClass = "scale-[1.1]";
   } else {
     // Local overrides for all other tools to prevent loading failures on strict network
     const LOCAL_OVERRIDES: Record<string, any> = {
@@ -522,7 +522,7 @@ function ToolTile({
       <div className="flex h-20 w-20 items-center justify-center rounded-lg p-3 bg-secondary/40">
         <AllSubscriptionsLogo tool={tool} className="h-full w-full" />
       </div>
-      <div className="text-center text-sm font-semibold text-foreground min-w-0 w-full truncate" title={tool.name}>
+      <div className="text-center text-sm font-semibold text-foreground min-w-0 w-full line-clamp-2 break-words leading-tight" title={tool.name}>
         {tool.name}
       </div>
       <a
