@@ -8,8 +8,11 @@ import boltLogo from "@/assets/logos/bolt.png";
 import canvaProLogo from "@/assets/logos/canva-pro.png";
 import chatgptProLogo from "@/assets/logos/chatgpt-pro.png";
 import cloudProLogo from "@/assets/logos/cloud-pro.png";
-import courseraLogo from "@/assets/logos/coursera.png";
+import courseraLogo from "@/assets/logos/coursera.svg";
 import cursorProLogo from "@/assets/logos/cursor-pro.png";
+import cursorLogo from "@/assets/logos/cursor.svg";
+import copilotLogo from "@/assets/logos/github-copilot.svg";
+import manusLogo from "@/assets/logos/manus.svg";
 import descriptLogo from "@/assets/logos/descript.svg";
 import elementsLogo from "@/assets/logos/elements.png";
 import figmaLogo from "@/assets/logos/figma.png";
@@ -23,8 +26,11 @@ import linkedinPremiumLogo from "@/assets/logos/linkedin-premium.png";
 import lovableProLogo from "@/assets/logos/lovable-pro.png";
 import marqueeAirtableCreditsLogo from "@/assets/logos/marquee-airtable-credits.png";
 import marqueeAirtableLogo from "@/assets/logos/marquee-airtable.png";
+import airtableLogo from "@/assets/logos/airtable.svg";
 import marqueeAsanaLogo from "@/assets/logos/marquee-asana.png";
+import asanaLogo from "@/assets/logos/asana.svg";
 import marqueeAutodeskLogo from "@/assets/logos/marquee-autodesk.png";
+import autodeskLogo from "@/assets/logos/autodesk.svg";
 import marqueeCanvaBusinessLogo from "@/assets/logos/marquee-canva-business.png";
 import marqueeCapcutProLogo from "@/assets/logos/marquee-capcut-pro.png";
 import marqueeChatprdLogo from "@/assets/logos/marquee-chatprd.png";
@@ -33,15 +39,20 @@ import marqueeCustomerIoLogo from "@/assets/logos/marquee-customer-io.png";
 import marqueeDescriptLogo from "@/assets/logos/marquee-descript.png";
 import marqueeDisneyPlusLogo from "@/assets/logos/marquee-disney-plus.png";
 import marqueeEdxTeamsLogo from "@/assets/logos/marquee-edx-teams.png";
+import edxLogo from "@/assets/logos/edx.svg";
 import marqueeFactoryLogo from "@/assets/logos/marquee-factory.png";
+import factoryLogo from "@/assets/logos/factory.svg";
 import marqueeFeatureFmLogo from "@/assets/logos/marquee-feature-fm.png";
 import marqueeFilmoraLogo from "@/assets/logos/marquee-filmora.png";
 import marqueeFirecrawlLogo from "@/assets/logos/marquee-firecrawl.png";
 import marqueeFirefliesProLogo from "@/assets/logos/marquee-fireflies-pro.png";
 import marqueeFramerProLogo from "@/assets/logos/marquee-framer-pro.png";
+import framerLogo from "@/assets/logos/framer.svg";
 import marqueeFreepikLogo from "@/assets/logos/marquee-freepik.png";
 import marqueeGithubLogo from "@/assets/logos/marquee-github.png";
+import linearLogo from "@/assets/logos/linear.svg";
 import marqueeGranolaLogo from "@/assets/logos/marquee-granola.png";
+import granolaLogo from "@/assets/logos/granola.png";
 import marqueeGrokLogo from "@/assets/logos/marquee-grok.png";
 import marqueeGuidlessProLogo from "@/assets/logos/marquee-guidless-pro.png";
 import marqueeGumloopLogo from "@/assets/logos/marquee-gumloop.png";
@@ -69,6 +80,7 @@ import marqueePosthogLogo from "@/assets/logos/marquee-posthog.png";
 import marqueePrimeVideoLogo from "@/assets/logos/marquee-prime-video.png";
 import marqueeRailwayLogo from "@/assets/logos/marquee-railway.png";
 import marqueeRaycastLogo from "@/assets/logos/marquee-raycast.png";
+import raycastLogo from "@/assets/logos/raycast.svg";
 import marqueeRenderCreditsLogo from "@/assets/logos/marquee-render-credits.png";
 import marqueeReziLogo from "@/assets/logos/marquee-rezi.png";
 import marqueeScalingoCreditsLogo from "@/assets/logos/marquee-scalingo-credits.png";
@@ -76,30 +88,57 @@ import marqueeSonyLivLogo from "@/assets/logos/marquee-sony-liv.png";
 import marqueeSpeechifyLogo from "@/assets/logos/marquee-speechify.png";
 import marqueeTextshiftLogo from "@/assets/logos/marquee-textshift.png";
 import marqueeVapiCreditsLogo from "@/assets/logos/marquee-vapi-credits.png";
+import vapiLogo from "@/assets/logos/vapi.svg";
 import marqueeWarpbuildLogo from "@/assets/logos/marquee-warpbuild.png";
+import warpbuildLogo from "@/assets/logos/warpbuild.svg";
+import renderLogo from "@/assets/logos/render.svg";
+import scalingoLogo from "@/assets/logos/scalingo.svg";
 import marqueeYoutubePremiumLogo from "@/assets/logos/marquee-youtube-premium.png";
+import youtubeLogo from "@/assets/logos/youtube.svg";
+import primeVideoLogo from "@/assets/logos/primevideo.svg";
+import hotstarLogo from "@/assets/logos/hotstar.svg";
 import marqueeZee5Logo from "@/assets/logos/marquee-zee5.png";
 import msOfficeLogo from "@/assets/logos/ms-office.png";
 import n8nLogo from "@/assets/logos/n8n.png";
-import nordvpnLogo from "@/assets/logos/nordvpn.png";
+import nordvpnLogo from "@/assets/logos/nordvpn.svg";
 import notionBusinessLogo from "@/assets/logos/notion-business.png";
 import openaiLogo from "@/assets/logos/openai.svg";
-import perplexityLogo from "@/assets/logos/perplexity.webp";
+import perplexityLogo from "@/assets/logos/perplexity.svg";
+import mongodbLogo from "@/assets/logos/mongodb.svg";
 import replicaiLogo from "@/assets/logos/replicai.png";
 import replitLogo from "@/assets/logos/replit.png";
+import railwayLogo from "@/assets/logos/railway.svg";
 import supabaseProLogo from "@/assets/logos/supabase-pro.png";
 import whisperFlowLogo from "@/assets/logos/whisper-flow.png";
 import grokLogo from "@/assets/logos/grok.svg";
+import spotifyLogo from "@/assets/logos/spotify.svg";
 import firecrawlLogo from "@/assets/logos/firecrawl.svg";
 import claudeLogo from "@/assets/logos/claude.svg";
 import v0Logo from "@/assets/logos/v0.svg";
 import chatgptSvg from "@/assets/logos/chatgpt.svg";
 import geminiSvg from "@/assets/logos/gemini.svg";
 import elevenLabsSvg from "@/assets/logos/eleven-labs.svg";
+import replitIconPng from "@/assets/logos/replit-icon.png";
+import railwayIconPng from "@/assets/logos/railway-icon.png";
+import geminiIconPng from "@/assets/logos/gemini-icon.png";
+import factoryIconPng from "@/assets/logos/factory-icon.png";
+import courseraIconPng from "@/assets/logos/coursera-icon.png";
+import warpbuildIconPng from "@/assets/logos/warpbuild-icon.png";
+import freepikIconPng from "@/assets/logos/freepik-icon.png";
+import autodeskIconPng from "@/assets/logos/autodesk-icon.png";
+import primevideoIconPng from "@/assets/logos/primevideo-icon.png";
+import sonylivIconPng from "@/assets/logos/sonyliv-icon.png";
+import zee5IconPng from "@/assets/logos/zee5-icon.png";
+import hotstarIconPng from "@/assets/logos/hotstar-icon.png";
+import scalingoIconPng from "@/assets/logos/scalingo-icon.png";
+import renderIconPng from "@/assets/logos/render-icon.png";
 
 export const LOGOS: Record<string, unknown> = {
   "adobe-cc": adobeCcLogo,
+  "airtable": airtableLogo,
   "anytime-invent": anytimeInventLogo,
+  "asana": asanaLogo,
+  "autodesk": autodeskLogo,
   "apify-credits": apifyCreditsLogo,
   "apify": apifyLogo,
   "aws-credits": awsCreditsLogo,
@@ -111,10 +150,17 @@ export const LOGOS: Record<string, unknown> = {
   "cloud-pro": cloudProLogo,
   "coursera": courseraLogo,
   "cursor-pro": cursorProLogo,
+  "cursor": cursorLogo,
+  "github-copilot": copilotLogo,
+  "manus-pro": manusLogo,
   "descript": descriptLogo,
+  "edx": edxLogo,
   "elements": elementsLogo,
   "eleven-labs": elevenLabsSvg,
+  "factory": factoryLogo,
   "figma": figmaLogo,
+  "framer": framerLogo,
+  "granola": granolaLogo,
   "grok": grokLogo,
   "firecrawl": firecrawlLogo,
   "gamma-pro": gammaProLogo,
@@ -125,6 +171,7 @@ export const LOGOS: Record<string, unknown> = {
   "itn": itnLogo,
   "level-pro": levelProLogo,
   "linkedin-premium": linkedinPremiumLogo,
+  "linear": linearLogo,
   "lovable-pro": lovableProLogo,
   "marquee-airtable-credits": marqueeAirtableCreditsLogo,
   "marquee-airtable": marqueeAirtableLogo,
@@ -190,10 +237,35 @@ export const LOGOS: Record<string, unknown> = {
   "n8n": n8nLogo,
   "nordvpn": nordvpnLogo,
   "notion-business": notionBusinessLogo,
+  "mongodb": mongodbLogo,
   "openai": openaiLogo,
   "perplexity": perplexityLogo,
   "replicai": replicaiLogo,
   "replit": replitLogo,
+  "railway": railwayLogo,
+  "raycast": raycastLogo,
+  "spotify": spotifyLogo,
   "supabase-pro": supabaseProLogo,
   "whisper-flow": whisperFlowLogo,
+  "warpbuild": warpbuildLogo,
+  "vapi": vapiLogo,
+  "render": renderLogo,
+  "scalingo": scalingoLogo,
+  "youtube": youtubeLogo,
+  "primevideo": primeVideoLogo,
+  "hotstar": hotstarLogo,
+  "replit-icon": replitIconPng,
+  "railway-icon": railwayIconPng,
+  "gemini-icon": geminiIconPng,
+  "factory-icon": factoryIconPng,
+  "coursera-icon": courseraIconPng,
+  "warpbuild-icon": warpbuildIconPng,
+  "freepik-icon": freepikIconPng,
+  "autodesk-icon": autodeskIconPng,
+  "primevideo-icon": primevideoIconPng,
+  "sonyliv-icon": sonylivIconPng,
+  "zee5-icon": zee5IconPng,
+  "hotstar-icon": hotstarIconPng,
+  "scalingo-icon": scalingoIconPng,
+  "render-icon": renderIconPng,
 };

@@ -1,6 +1,85 @@
-import { ORBIT_INNER, ORBIT_OUTER } from "@/data/tools";
+import { useState } from "react";
+import { ORBIT_INNER, ORBIT_OUTER, logoUrl } from "@/data/tools";
 import { ToolLogo } from "@/components/marketing/layout/tool-logo";
 import { Tool } from "@/types";
+import { LOGOS } from "@/data/logo-map";
+import Image from "next/image";
+
+function OrbitToolLogo({ tool, className = "h-7 w-7 sm:h-10 sm:w-10" }: { tool: Tool; className?: string }) {
+  const name = tool.name.toLowerCase();
+  
+  // Resolve image source
+  let src: string | undefined = undefined;
+  if (name.includes("coursera")) {
+    src = "https://cdn.simpleicons.org/coursera/0056D2";
+  } else if (name.includes("perplexity")) {
+    src = "https://cdn.simpleicons.org/perplexity/1F1F1F";
+  } else if (name.includes("nordvpn") || name.includes("nord vpn")) {
+    src = "https://cdn.simpleicons.org/nordvpn/4687FF";
+  } else if (tool.logo) {
+    src = typeof tool.logo === "object" && tool.logo !== null && "src" in tool.logo ? tool.logo.src : tool.logo;
+  } else if (tool.slug) {
+    src = logoUrl(tool);
+  } else if (tool.domain) {
+    src = `https://www.google.com/s2/favicons?domain=${tool.domain}&sz=128`;
+  }
+
+  const [failed, setFailed] = useState(false);
+
+  if (!src || failed) {
+    return (
+      <div
+        className={`grid place-items-center rounded-full font-display text-[11px] font-extrabold uppercase tracking-tight text-white ${className}`}
+        style={{ backgroundColor: `#${tool.color ?? "0A66C2"}` }}
+        title={tool.name}
+      >
+        {tool.name
+          .replace(/\b(Pro|Plus|Premium|Cloud|Credits|Business|Elements|Flow|Labs)\b/gi, "")
+          .trim()
+          .split(/\s+/)
+          .map((w) => w[0])
+          .join("")
+          .slice(0, 2)}
+      </div>
+    );
+  }
+
+  // Adjust scaling for perfect centering and display in Orbit circle container
+  let scaleClass = "scale-[1.0]";
+  if (name.includes("coursera")) {
+    scaleClass = "scale-[0.85]";
+  } else if (name.includes("perplexity")) {
+    scaleClass = "scale-[0.85]";
+  } else if (name.includes("copilot") || name.includes("github")) {
+    scaleClass = "scale-[0.9]";
+  } else if (name.includes("nordvpn") || name.includes("nord vpn")) {
+    scaleClass = "scale-[0.85]";
+  } else if (name.includes("invideo")) {
+    scaleClass = "scale-[0.85]";
+  } else if (name.includes("manus")) {
+    scaleClass = "scale-[2.0]";
+  } else if (name.includes("fireflies")) {
+    scaleClass = "scale-[2.2]";
+  } else if (name.includes("rezi")) {
+    scaleClass = "scale-[2.2]";
+  }
+
+  const isInverted = name.includes("perplexity") || name.includes("github") || name.includes("copilot");
+
+  return (
+    <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
+      <Image
+        unoptimized
+        width={96}
+        height={96}
+        src={src}
+        alt={tool.name}
+        className={`block h-full w-full object-contain object-center transition-transform ${scaleClass} ${isInverted ? "dark:invert" : ""}`}
+        onError={() => setFailed(true)}
+      />
+    </div>
+  );
+}
 
 export function ToolsOrbit() {
   return (
@@ -68,7 +147,7 @@ function Ring({
                   title={t.name}
                 >
                   <div className="absolute inset-0 rounded-full bg-primary opacity-0 transition group-hover:opacity-[0.06]" />
-                  <ToolLogo tool={t} className="h-7 w-7 sm:h-10 sm:w-10" />
+                  <OrbitToolLogo tool={t} className="h-7 w-7 sm:h-10 sm:w-10" />
                 </div>
                 <span className="hidden sm:block max-w-[96px] whitespace-nowrap text-center text-[9px] font-semibold leading-tight text-muted-foreground sm:max-w-[120px] sm:text-[11px]">
                   {t.name}

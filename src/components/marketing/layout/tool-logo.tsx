@@ -6,46 +6,74 @@ import Image, { StaticImageData } from "next/image";
 
 const LOGO_OVERRIDES: Record<string, string | StaticImageData> = {
   // Developer Tools
-  "Firecrawl": "https://logos.hunter.io/firecrawl.dev",
-  "Firecrawl Credits": "https://logos.hunter.io/firecrawl.dev",
-  "Railway": "https://logos.hunter.io/railway.app",
-  "Factory": "https://logos.hunter.io/factory.ai",
-  "Warpbuild": "https://logos.hunter.io/warpbuild.com",
-  "Bolt": "https://www.google.com/s2/favicons?domain=bolt.new&sz=128",
+  "Firecrawl": LOGOS["firecrawl"] as StaticImageData,
+  "Firecrawl Credits": LOGOS["firecrawl"] as StaticImageData,
+  "Railway": LOGOS["railway"] as StaticImageData,
+  "Factory": LOGOS["factory"] as StaticImageData,
+  "Warpbuild": LOGOS["warpbuild"] as StaticImageData,
+  "Bolt": LOGOS["bolt"] as StaticImageData,
+  "Coderabbit": LOGOS["marquee-coderabbit-pro"] as StaticImageData,
+  "Code Rabbit": LOGOS["marquee-coderabbit-pro"] as StaticImageData,
+  "Cursor Pro": LOGOS["cursor-pro"] as StaticImageData,
+  "GitHub Copilot": LOGOS["github"] as StaticImageData,
+  "Replit": LOGOS["replit"] as StaticImageData,
+  "Supabase Pro": LOGOS["supabase-pro"] as StaticImageData,
+  "n8n": LOGOS["n8n"] as StaticImageData,
+  "N8N": LOGOS["n8n"] as StaticImageData,
 
   // Design & Creative Tools
   "Adobe Creative Cloud": LOGOS["adobe-cc"] as StaticImageData,
-  "Canva Pro": "https://logos.hunter.io/canva.com",
-  "Canva Business + Leonardo AI": "https://logos.hunter.io/canva.com",
-  "CapCut": "https://logos.hunter.io/capcut.com",
-  "InVideo": "https://logos.hunter.io/invideo.io",
-  "Gamma": "https://logos.hunter.io/gamma.app",
-  "Descript": "https://logos.hunter.io/descript.com",
-  "Leonardo AI": "https://logos.hunter.io/leonardo.ai",
+  "Canva Pro": LOGOS["canva-pro"] as StaticImageData,
+  "Canva Pro/Business": LOGOS["canva-pro"] as StaticImageData,
+  "Canva Business + Leonardo AI": LOGOS["marquee-canva-business"] as StaticImageData,
+  "CapCut": LOGOS["marquee-capcut-pro"] as StaticImageData,
+  "InVideo": LOGOS["invideo"] as StaticImageData,
+  "Gamma": LOGOS["gamma-pro"] as StaticImageData,
+  "Gamma Pro": LOGOS["gamma-pro"] as StaticImageData,
+  "Descript": LOGOS["descript"] as StaticImageData,
+  "Leonardo AI": LOGOS["marquee-leonardo-ai"] as StaticImageData,
+  "Figma Professional": LOGOS["figma"] as StaticImageData,
+  "Figma Pro": LOGOS["figma"] as StaticImageData,
+  "Figma": LOGOS["figma"] as StaticImageData,
+  "Envato Elements": LOGOS["elements"] as StaticImageData,
 
   // Product Marketing
-  "Customer.io": "https://logos.hunter.io/customer.io",
-  "Mobbin Team": "https://logos.hunter.io/mobbin.com",
-  "Guidless Pro": "https://logos.hunter.io/guideless.ai",
+  "Customer.io": LOGOS["marquee-customer-io"] as StaticImageData,
+  "Mobbin Team": LOGOS["marquee-mobbin-team"] as StaticImageData,
+  "Guidless Pro": LOGOS["marquee-guidless-pro"] as StaticImageData,
 
-  // Business & Operations
-  "Lead.CM": "https://www.google.com/s2/favicons?domain=leads.cm&sz=128",
-  "TextShift": "https://www.google.com/s2/favicons?domain=textshift.org&sz=128",
+  // Business & Operations & Professional
+  "Lead.CM": LOGOS["marquee-lead-cm"] as StaticImageData,
+  "TextShift": LOGOS["marquee-textshift"] as StaticImageData,
+  "LinkedIn Premium": LOGOS["linkedin-premium"] as StaticImageData,
+  "Microsoft Office": LOGOS["ms-office"] as StaticImageData,
+  "Rezi - Resume builder": LOGOS["marquee-rezi"] as StaticImageData,
+  "NordVPN": LOGOS["nordvpn"] as StaticImageData,
+  "Perplexity Pro": LOGOS["perplexity"] as StaticImageData,
+  "Notion Business + AI": LOGOS["notion-business"] as StaticImageData,
+  "Notion Business": LOGOS["notion-business"] as StaticImageData,
+  "Manus pro": LOGOS["marquee-manus-pro"] as StaticImageData,
+  "Fireflies Pro": LOGOS["marquee-fireflies-pro"] as StaticImageData,
+  "Wispr Flow": LOGOS["whisper-flow"] as StaticImageData,
+  "Lovable Pro & Lite": LOGOS["lovable-pro"] as StaticImageData,
+  "Lovable Pro": LOGOS["lovable-pro"] as StaticImageData,
 
   // OTT Platforms
-  "Amazon Prime Video": "https://logos.hunter.io/primevideo.com",
-  "JioHotstar": "https://logos.hunter.io/jiocinema.com",
-  "SonyLIV": "https://upload.wikimedia.org/wikipedia/commons/f/f7/SonyLIV_2020.png",
-  "ZEE 5": "https://logos.hunter.io/zee5.com",
+  "Amazon Prime Video": LOGOS["primevideo"] as StaticImageData,
+  "JioHotstar": LOGOS["hotstar"] as StaticImageData,
+  "SonyLIV": LOGOS["marquee-sony-liv"] as StaticImageData,
+  "ZEE 5": LOGOS["marquee-zee5"] as StaticImageData,
 
   // Platform Credits
-  "OpenAI Credits": "https://logos.hunter.io/openai.com",
+  "OpenAI Credits": LOGOS["marquee-openai-credits"] as StaticImageData,
   "AWS Credits": LOGOS["aws-credits"] as StaticImageData,
-  "MongoDB Credits": "https://logos.hunter.io/mongodb.com",
-  "Vapi Credits": "https://logos.hunter.io/vapi.ai",
-  "Airtable Credits": "https://logos.hunter.io/airtable.com",
-  "Render Credits": "https://logos.hunter.io/render.com",
-  "Scalingo Credits": "https://logos.hunter.io/scalingo.com",
+  "MongoDB Credits": LOGOS["marquee-mongodb-credits"] as StaticImageData,
+  "Vapi Credits": LOGOS["marquee-vapi-credits"] as StaticImageData,
+  "Airtable Credits": LOGOS["marquee-airtable-credits"] as StaticImageData,
+  "Render Credits": LOGOS["marquee-render-credits"] as StaticImageData,
+  "Scalingo Credits": LOGOS["marquee-scalingo-credits"] as StaticImageData,
+  "Lovable Credits": LOGOS["lovable-pro"] as StaticImageData,
+  "Apify Credits": LOGOS["apify-credits"] as StaticImageData,
 };
 
 // Render a single stable logo source; explicit/local logos are preferred.
@@ -91,7 +119,7 @@ export function ToolLogo({
   }
 
   let scaleClass = "";
-  if (tool.logo) {
+  if (tool.logo || tool.slug) {
     const nameLower = tool.name.toLowerCase();
     if (nameLower.includes("manus")) {
       scaleClass = "scale-[2.0]";
@@ -99,6 +127,30 @@ export function ToolLogo({
       scaleClass = "scale-[2.2]";
     } else if (nameLower.includes("rezi")) {
       scaleClass = "scale-[2.2]";
+    } else if (nameLower.includes("coursera")) {
+      scaleClass = "scale-[0.95]";
+    } else if (nameLower.includes("perplexity") || nameLower.includes("gemini")) {
+      scaleClass = "scale-[0.95]";
+    } else if (nameLower.includes("copilot") || nameLower.includes("github")) {
+      scaleClass = "scale-[0.95]";
+    } else if (nameLower.includes("nordvpn") || nameLower.includes("nord vpn")) {
+      scaleClass = "scale-[0.95]";
+    } else if (nameLower.includes("invideo")) {
+      scaleClass = "scale-[0.95]";
+    } else if (nameLower.includes("claude") || nameLower.includes("anthropic")) {
+      scaleClass = "scale-[0.95]";
+    } else if (
+      nameLower.includes("coderabbit") ||
+      nameLower.includes("code rabbit") ||
+      nameLower.includes("railway") ||
+      nameLower.includes("warpbuild") ||
+      nameLower.includes("factory") ||
+      nameLower.includes("youtube") ||
+      nameLower.includes("primevideo") ||
+      nameLower.includes("prime video") ||
+      nameLower.includes("hotstar")
+    ) {
+      scaleClass = "scale-[0.95]";
     }
   }
 
@@ -107,8 +159,9 @@ export function ToolLogo({
   return (
     <div className={`grid place-items-center p-0.5 overflow-hidden ${className}`}>
       <Image
-        width={48}
-        height={48}
+        unoptimized
+        width={96}
+        height={96}
         src={primary}
         alt={tool.name}
         loading={tool.logo ? "eager" : "lazy"}
