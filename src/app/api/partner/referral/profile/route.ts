@@ -15,7 +15,7 @@ export async function GET() {
 
     await connectDB();
 
-    const user = await User.findById(session.user.id).populate("referredBy.referrerId", "firstName lastName email").lean();
+    const user = await User.findById(session.user.id).lean();
     if (!user) {
       return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
@@ -33,6 +33,16 @@ export async function GET() {
 
     const reward = await ReferralReward.findOne({ customer_id: user._id }).lean();
 
+    const claimedCash = reward?.redemptions
+      ?.filter((r: any) => r.type === 'cash_claim' && r.status === 'completed')
+      .reduce((sum: number, r: any) => sum + r.amount, 0) || 0;
+
+    const pendingCashClaimed = reward?.redemptions
+      ?.filter((r: any) => r.type === 'cash_claim' && r.status === 'pending')
+      .reduce((sum: number, r: any) => sum + r.amount, 0) || 0;
+
+    const availableBalance = Math.max(0, (reward?.cash_earned || 0) - claimedCash - pendingCashClaimed);
+
     const profileData = {
       user: {
         _id: user._id,
@@ -49,7 +59,10 @@ export async function GET() {
         purchase: purchasesAgg[0]?.totalPurchase || 0,
         commission: reward?.total_earned || 0,
         cashEarned: reward?.cash_earned || 0,
-      }
+        pendingCash: pendingCashClaimed,
+        availableBalance,
+      },
+      redemptions: reward?.redemptions || []
     };
 
     return NextResponse.json(profileData);

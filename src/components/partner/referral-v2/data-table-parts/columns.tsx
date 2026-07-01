@@ -30,7 +30,7 @@ import {
   EllipsisVerticalIcon,
 } from "lucide-react"
 
-import { schema, type ReferralSchema } from "./schema"
+import { type ReferralSchema } from "./schema"
 import { TableCellViewer } from "./table-cell-viewer"
 
 function DragHandle({ id }: { id: number }) {

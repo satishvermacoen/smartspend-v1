@@ -1,28 +1,67 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Loader2, Activity } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
-// Import modular components
-import { AdminHeader } from "@/components/admin/dashboard/admin-header";
-import { AdminKPIs } from "@/components/admin/dashboard/admin-kpis";
-import { SystemPerformanceChart } from "@/components/admin/dashboard/system-performance-chart";
-import { AdminGrowthSuggestions } from "@/components/admin/dashboard/admin-growth-suggestions";
-import { TopReferrersLeaderboard } from "@/components/admin/dashboard/top-referrers-leaderboard";
-import { GlobalFunnel } from "@/components/admin/dashboard/global-funnel";
-import { AdminRecentActivity } from "@/components/admin/dashboard/admin-recent-activity";
-import { CampaignControls } from "@/components/admin/dashboard/campaign-controls";
+// Dashboard components
+import { DashboardHeader } from "@/components/admin/dashboard/dashboard-header";
+import { KPICards } from "@/components/admin/dashboard/kpi-cards";
+import { RevenueChart } from "@/components/admin/dashboard/revenue-chart";
+import { InquiryPurchaseChart } from "@/components/admin/dashboard/inquiry-purchase-chart";
+import { TopSubscriptionsChart } from "@/components/admin/dashboard/top-subscriptions-chart";
+import { ClientStatusChart } from "@/components/admin/dashboard/client-status-chart";
+import { ReferralFunnel } from "@/components/admin/dashboard/referral-funnel";
+import { Leaderboard } from "@/components/admin/dashboard/leaderboard";
+import { PendingActions } from "@/components/admin/dashboard/pending-actions";
+import { ActivityFeed } from "@/components/admin/dashboard/activity-feed";
+import { InsightsPanel } from "@/components/admin/dashboard/insights-panel";
+import { GrowthMetrics } from "@/components/admin/dashboard/growth-metrics";
 
-interface AdminKPIsData {
+// ── Types ──────────────────────────────────────────────────────────────────
+
+interface DashboardStats {
+  totalRevenue: number;
+  totalInquiries: number;
+  totalPurchases: number;
+  conversionRate: number;
+  totalPartners: number;
   activeCodes: number;
-  clicks: number;
-  signups: number;
-  purchases: number;
-  revenue: number;
-  cashPaid: number;
-  subscriptionMonths: number;
+  activeClients: number;
+  rewardsPaid: number;
+  referredClients: number;
+  pendingEnquiries: number;
+  pendingInvoices: number;
+  pendingRewardsDocs: number;
+  newClientsToday: number;
+  monthlyInquiryGrowth: number;
+  monthlySalesGrowth: number;
+  referralAttributionRate: number;
+  thisMonthInquiries: number;
+  thisMonthPurchases: number;
+}
+
+interface DashboardCharts {
+  revenueWithReferral: { name: string; totalRevenue: number; referralRevenue: number; directRevenue: number }[];
+  inquiryVsPurchase: { name: string; inquiries: number; purchases: number; conversionRate: number }[];
+  topSubscriptions: { name: string; count: number; revenue: number; avgDeal: number }[];
+  clientStatusBreakdown: { status: string; count: number }[];
+  funnelChartData: { name: string; value: number }[];
+}
+
+interface DashboardTrends {
+  inquiries: number[];
+  purchases: number[];
+  revenue: number[];
+}
+
+interface ActivityItem {
+  type: string;
+  title: string;
+  subtitle: string;
+  timestamp: string;
+  badge: string;
 }
 
 interface LeaderboardItem {
@@ -35,96 +74,111 @@ interface LeaderboardItem {
   conversionRate: number;
 }
 
-interface RecentConversion {
-  _id: string;
-  referralCode: string;
-  purchasedAt: string;
-  amount: number;
-  referrerReward: number;
-  referrerRewardType: 'cash' | 'subscription';
-  referrerName: string;
-  prospectName: string;
+interface DashboardData {
+  stats: DashboardStats;
+  charts: DashboardCharts;
+  trends: DashboardTrends;
+  feeds: { recentActivity: ActivityItem[] };
 }
 
-// Generate mock historical chart data for the performance chart based on total KPIs
-const generateMockChartData = (clicks: number, signups: number, purchases: number) => {
-  if (clicks === 0 && signups === 0 && purchases === 0) return [];
-  
-  const data = [];
-  const today = new Date();
-  
-  for (let i = 29; i >= 0; i--) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
-    
-    // Create an upward trend with some randomness
-    const baseMultiplier = (30 - i) / 30; // 0 to 1
-    
-    const clickShare = Math.floor((clicks / 30) * (0.5 + baseMultiplier) + Math.random() * (clicks / 60));
-    const signupShare = Math.floor((signups / 30) * (0.5 + baseMultiplier) + Math.random() * (signups / 60));
-    const purchaseShare = Math.floor((purchases / 30) * (0.5 + baseMultiplier) + Math.random() * (purchases / 60));
-    
-    data.push({
-      date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      clicks: Math.max(0, clickShare),
-      signups: Math.max(0, signupShare),
-      purchases: Math.max(0, purchaseShare)
-    });
-  }
-  return data;
+// ── Default empty state ────────────────────────────────────────────────────
+
+const EMPTY_STATS: DashboardStats = {
+  totalRevenue: 0, totalInquiries: 0, totalPurchases: 0,
+  conversionRate: 0, totalPartners: 0, activeCodes: 0,
+  activeClients: 0, rewardsPaid: 0, referredClients: 0,
+  pendingEnquiries: 0, pendingInvoices: 0, pendingRewardsDocs: 0,
+  newClientsToday: 0, monthlyInquiryGrowth: 0, monthlySalesGrowth: 0,
+  referralAttributionRate: 0, thisMonthInquiries: 0, thisMonthPurchases: 0,
 };
+
+const EMPTY_CHARTS: DashboardCharts = {
+  revenueWithReferral: [],
+  inquiryVsPurchase: [],
+  topSubscriptions: [],
+  clientStatusBreakdown: [],
+  funnelChartData: [],
+};
+
+const EMPTY_TRENDS: DashboardTrends = {
+  inquiries: [0, 0, 0, 0, 0, 0, 0],
+  purchases: [0, 0, 0, 0, 0, 0, 0],
+  revenue:   [0, 0, 0, 0, 0, 0, 0],
+};
+
+// ── Page ──────────────────────────────────────────────────────────────────
 
 export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  // Referral analytics state
-  const [refKpis, setRefKpis] = useState<AdminKPIsData | null>(null);
+  const [dashData, setDashData] = useState<DashboardData>({
+    stats: EMPTY_STATS,
+    charts: EMPTY_CHARTS,
+    trends: EMPTY_TRENDS,
+    feeds: { recentActivity: [] },
+  });
+
   const [leaderboard, setLeaderboard] = useState<LeaderboardItem[]>([]);
-  const [recentConversions, setRecentConversions] = useState<RecentConversion[]>([]);
 
-  const fetchReferralAnalytics = async (showLoader = false) => {
+  const fetchAll = useCallback(async (showLoader = false) => {
     if (showLoader) setLoading(true);
+    setError(false);
     try {
-      const res = await fetch("/api/admin/referrals/analytics");
-      const json = await res.json();
-      if (json.success) {
-        setRefKpis(json.kpis);
-        setLeaderboard(json.leaderboard);
-        setRecentConversions(json.recentConversions);
+      const [dashRes, refRes] = await Promise.all([
+        fetch("/api/admin/dashboard"),
+        fetch("/api/admin/referrals/analytics"),
+      ]);
+
+      const dashJson = await dashRes.json();
+      const refJson = await refRes.json();
+
+      if (dashJson.success) {
+        setDashData({
+          stats:  dashJson.stats,
+          charts: dashJson.charts,
+          trends: dashJson.trends,
+          feeds:  dashJson.feeds,
+        });
       } else {
-        throw new Error(json.error || "Failed to load referral analytics.");
+        throw new Error(dashJson.error || "Dashboard data failed.");
+      }
+
+      if (refJson.success) {
+        setLeaderboard(refJson.leaderboard || []);
       }
     } catch (err) {
-      console.error("Error loading referral analytics:", err);
-      toast.error("Failed to sync referral metrics.");
+      console.error("Dashboard fetch error:", err);
+      toast.error("Failed to load dashboard data.");
+      setError(true);
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    Promise.resolve().then(() => {
-      fetchReferralAnalytics();
-    });
   }, []);
 
-  if (loading && !refKpis) {
+  useEffect(() => {
+    Promise.resolve().then(() => fetchAll());
+  }, [fetchAll]);
+
+  // ── Loading state ────────────────────────────────────────────────────────
+  if (loading) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center py-40 gap-3 text-muted-foreground bg-background">
         <Loader2 className="h-8 w-8 animate-spin text-brand" />
-        <span>Loading administration metrics...</span>
+        <span className="text-sm">Loading Command Center...</span>
       </div>
     );
   }
 
-  if (!refKpis && !loading) {
+  // ── Error state ──────────────────────────────────────────────────────────
+  if (error) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center py-40 text-center text-muted-foreground bg-background">
         <Activity className="h-12 w-12 opacity-30 text-destructive mb-3 animate-pulse" />
         <h4 className="font-semibold text-lg text-foreground">Failed to Load Dashboard</h4>
-        <p className="text-sm max-w-sm mt-1">Please check your network and authorization permissions before trying again.</p>
+        <p className="text-sm max-w-sm mt-1">Check your network and authorization, then try again.</p>
         <Button
-          onClick={() => fetchReferralAnalytics(true)}
+          onClick={() => fetchAll(true)}
           className="mt-4 px-4 py-2 text-xs font-semibold rounded-xl bg-card border border-border/15 text-foreground hover:bg-soft"
         >
           Try Again
@@ -133,63 +187,64 @@ export default function AdminDashboardPage() {
     );
   }
 
-  if (!refKpis) return null; // Fallback
+  const { stats, charts, trends, feeds } = dashData;
 
-  const globalConversionRate = refKpis.clicks > 0 
-    ? Math.round((refKpis.purchases / refKpis.clicks) * 100) 
-    : 0;
-
-  const chartData = generateMockChartData(refKpis.clicks, refKpis.signups, refKpis.purchases);
-  
-  const funnelData = [
-    { name: 'Clicks', value: refKpis.clicks },
-    { name: 'Signups', value: refKpis.signups },
-    { name: 'Purchases', value: refKpis.purchases }
-  ];
-
+  // ── Dashboard ─────────────────────────────────────────────────────────────
   return (
-    <div className="flex-1 p-6 md:p-10 space-y-8 bg-background relative overflow-y-auto">
-      {/* Header */}
-      <AdminHeader onRefresh={() => fetchReferralAnalytics(true)} isLoading={loading} />
+    <div className="flex-1 p-6 md:p-8 space-y-7 bg-background relative overflow-y-auto">
 
-      {/* KPI stats grid */}
-      <AdminKPIs 
-        totalRevenue={refKpis.revenue}
-        totalRewardsPaid={refKpis.cashPaid}
-        activePromoters={refKpis.activeCodes}
-        conversionRate={globalConversionRate}
+      {/* ── Section 1: Header ───────────────────────────────────────────── */}
+      <DashboardHeader
+        onRefresh={() => fetchAll(true)}
+        isLoading={loading}
+        pendingEnquiries={stats.pendingEnquiries}
+        pendingInvoices={stats.pendingInvoices}
       />
 
-      {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
-        
-        {/* Left Column (System Performance & Insights) - 70% width */}
-        <div className="lg:col-span-8 space-y-8 flex flex-col">
-          <div className="flex-1">
-            <SystemPerformanceChart data={chartData} />
+      {/* ── Section 2: KPI Cards (10) ────────────────────────────────────── */}
+      <KPICards stats={stats} trends={trends} />
+
+      {/* ── Section 3: Main Grid ─────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        {/* Left Column — Charts */}
+        <div className="lg:col-span-8 space-y-6">
+
+          {/* 3a. Revenue Overview */}
+          <RevenueChart data={charts.revenueWithReferral} />
+
+          {/* 3b. Inquiry vs Purchase Comparison */}
+          <InquiryPurchaseChart data={charts.inquiryVsPurchase} />
+
+          {/* 3c + 3d: Two smaller charts side by side */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <TopSubscriptionsChart data={charts.topSubscriptions} />
+            <ClientStatusChart data={charts.clientStatusBreakdown} />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <GlobalFunnel data={funnelData} />
-            <AdminGrowthSuggestions 
-              globalClicks={refKpis.clicks}
-              globalSignups={refKpis.signups}
-              globalPurchases={refKpis.purchases}
-              activePromoters={refKpis.activeCodes}
-            />
-          </div>
+          {/* 3e. Referral Funnel */}
+          <ReferralFunnel data={charts.funnelChartData} />
         </div>
 
-        {/* Right Column (Leaderboard & Actions) - 30% width */}
-        <div className="lg:col-span-4 space-y-8 flex flex-col">
-          <CampaignControls />
-          
-          <TopReferrersLeaderboard leaderboard={leaderboard} />
-          
-          <AdminRecentActivity conversions={recentConversions} />
+        {/* Right Column — Action Panels */}
+        <div className="lg:col-span-4 space-y-6">
+          <PendingActions
+            pendingEnquiries={stats.pendingEnquiries}
+            pendingInvoices={stats.pendingInvoices}
+            pendingRewardsDocs={stats.pendingRewardsDocs}
+            newClientsToday={stats.newClientsToday}
+          />
+          <Leaderboard leaderboard={leaderboard} />
+          <ActivityFeed items={feeds.recentActivity} />
         </div>
-
       </div>
+
+      {/* ── Section 4: AI Insights Panel ────────────────────────────────── */}
+      <InsightsPanel stats={stats} />
+
+      {/* ── Section 5: Growth Metrics Strip ─────────────────────────────── */}
+      <GrowthMetrics stats={stats} />
+
     </div>
   );
 }

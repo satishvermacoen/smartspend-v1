@@ -1,11 +1,10 @@
 "use client"
 
 import * as React from "react"
-import { Search, Loader2, Plus, Columns3Icon, ChevronDownIcon } from "lucide-react"
+import { Search, Plus, Columns3Icon, ChevronDownIcon } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -23,7 +22,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table } from "@tanstack/react-table"
 import { ClientItem, PendingApprovalItem } from "@/types/referral"
 
-export type TabValue = "clients" | "codes" | "conversions" | "pending" | "settings"
+export type TabValue = "clients" | "codes" | "conversions" | "pending"
 
 interface DataTableToolbarProps<TData> {
   activeTab: TabValue
@@ -39,9 +38,9 @@ interface DataTableToolbarProps<TData> {
   uniqueSources: string[]
   codesSearch: string
   setCodesSearch: (val: string) => void
-  setCodesPage: (page: number) => void
-  codesFilter: string
-  setCodesFilter: (val: string) => void
+  setCodesPage?: (page: number) => void
+  codesFilter?: string
+  setCodesFilter?: (val: string) => void
   convSearch: string
   setConvSearch: (val: string) => void
   setConvPage: (page: number) => void
@@ -71,26 +70,11 @@ export function DataTableToolbar<TData>({
   clientSourceFilter,
   setClientSourceFilter,
   uniqueSources,
-  codesSearch,
-  setCodesSearch,
-  setCodesPage,
-  codesFilter,
-  setCodesFilter,
   convSearch,
   setConvSearch,
   setConvPage,
   convStageFilter,
   setConvStageFilter,
-  handleCreateCode,
-  newLinkName,
-  setNewLinkName,
-  newReferrerName,
-  setNewReferrerName,
-  newReferrerPhone,
-  setNewReferrerPhone,
-  newReferrerEmail,
-  setNewReferrerEmail,
-  creatingCode,
 }: DataTableToolbarProps<TData>) {
   return (
     <div className="flex flex-col gap-6">
@@ -106,7 +90,7 @@ export function DataTableToolbar<TData>({
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="codes">Codes</TabsTrigger>
+
           <TabsTrigger value="conversions">Conversions</TabsTrigger>
           <TabsTrigger value="pending">
             Approvals
@@ -116,7 +100,6 @@ export function DataTableToolbar<TData>({
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
         </Tabs>
 
@@ -148,38 +131,6 @@ export function DataTableToolbar<TData>({
             </>
           )}
 
-          {activeTab === "codes" && (
-            <>
-              <div className="relative w-full sm:w-60">
-                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search codes..."
-                  value={codesSearch}
-                  onChange={(e) => {
-                    setCodesSearch(e.target.value)
-                    setCodesPage(1)
-                  }}
-                  className="pl-8 bg-background border-border/15 h-9 text-xs"
-                />
-              </div>
-              <Select
-                value={codesFilter}
-                onValueChange={(val) => {
-                  setCodesFilter(val)
-                  setCodesPage(1)
-                }}
-              >
-                <SelectTrigger className="bg-background border-border/15 h-9 text-xs w-full sm:w-40">
-                  <SelectValue placeholder="All Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                </SelectContent>
-              </Select>
-            </>
-          )}
 
           {activeTab === "conversions" && (
             <>
@@ -226,8 +177,7 @@ export function DataTableToolbar<TData>({
             </Button>
           )}
 
-          {activeTab !== "settings" && (
-            <DropdownMenu>
+          <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="h-9">
                   <Columns3Icon data-icon="inline-start" className="size-4" />
@@ -259,63 +209,8 @@ export function DataTableToolbar<TData>({
                   })}
               </DropdownMenuContent>
             </DropdownMenu>
-          )}
         </div>
       </div>
-
-
-
-      {/* Code Generation Form Block */}
-      {activeTab === "codes" && (
-        <div className="bg-card/25 backdrop-blur-xl border border-border/10 rounded-2xl p-5 shadow-elegant mx-4 lg:mx-6">
-          <h4 className="font-bold text-xs uppercase tracking-wider text-muted-foreground mb-3">Generate New Referral Code</h4>
-          <form onSubmit={handleCreateCode} className="grid gap-3 sm:grid-cols-5 items-end">
-            <div>
-              <Label className="text-[10px] text-muted-foreground font-bold uppercase mb-1">Link Name</Label>
-              <Input
-                placeholder="e.g. Summer Promo"
-                value={newLinkName}
-                onChange={(e) => setNewLinkName(e.target.value)}
-                className="h-9 text-xs"
-              />
-            </div>
-            <div>
-              <Label className="text-[10px] text-muted-foreground font-bold uppercase mb-1">Client Name</Label>
-              <Input
-                placeholder="Jane Doe"
-                value={newReferrerName}
-                onChange={(e) => setNewReferrerName(e.target.value)}
-                className="h-9 text-xs"
-              />
-            </div>
-            <div>
-              <Label className="text-[10px] text-muted-foreground font-bold uppercase mb-1">Client Phone</Label>
-              <Input
-                placeholder="+91..."
-                value={newReferrerPhone}
-                onChange={(e) => setNewReferrerPhone(e.target.value)}
-                className="h-9 text-xs"
-              />
-            </div>
-            <div>
-              <Label className="text-[10px] text-muted-foreground font-bold uppercase mb-1">Client Email</Label>
-              <Input
-                placeholder="user@example.com"
-                value={newReferrerEmail}
-                onChange={(e) => setNewReferrerEmail(e.target.value)}
-                className="h-9 text-xs"
-              />
-            </div>
-            <Button
-              type="submit"
-              disabled={creatingCode}
-              className="h-9 bg-brand text-primary-foreground font-bold text-xs"
-            >
-              {creatingCode ? <Loader2 className="h-4 w-4 animate-spin" /> : "Generate"}
-            </Button>
-          </form>
-        </div>
-      )}
     </div>
   )
 }

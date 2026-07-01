@@ -14,7 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, ListIcon, UsersIcon, CommandIcon } from "lucide-react"
+import { LayoutDashboardIcon, ListIcon, UsersIcon, CommandIcon, Settings, IndianRupee } from "lucide-react"
 import Link from "next/link"
 
 const data = {
@@ -41,10 +41,26 @@ const data = {
       ),
     },
     {
+      title: "Your Earnings",
+      url: "/partner/earning",
+      icon: (
+        <IndianRupee
+        />
+      ),
+    },
+    {
       title: "Enquiries",
       url: "/partner/enquiry",
       icon: (
         <ListIcon
+        />
+      ),
+    },
+    {
+      title: "Settings",
+      url: "/partner/setting",
+      icon: (
+        <Settings
         />
       ),
     },

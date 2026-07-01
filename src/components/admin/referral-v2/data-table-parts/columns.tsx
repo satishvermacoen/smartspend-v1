@@ -1,10 +1,7 @@
-import * as React from "react"
 import { type ColumnDef } from "@tanstack/react-table"
-import { useSortable } from "@dnd-kit/sortable"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Switch } from "@/components/ui/switch"
 import {
   DropdownMenu,
@@ -14,9 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
-  GripVerticalIcon,
-  CircleCheckIcon,
-  LoaderIcon,
   EllipsisVerticalIcon,
   ShoppingBag,
   Trash2,
@@ -30,24 +24,6 @@ import {
 import type { ClientItem, CodeItem, ConversionItem, PendingApprovalItem } from "@/types/referral"
 import { ClientDetailsHover } from "./client-details-hover"
 
-function DragHandle({ id }: { id: string }) {
-  const { attributes, listeners } = useSortable({
-    id,
-  })
-
-  return (
-    <Button
-      {...attributes}
-      {...listeners}
-      variant="ghost"
-      size="icon"
-      className="size-7 text-muted-foreground hover:bg-transparent"
-    >
-      <GripVerticalIcon className="size-3 text-muted-foreground" />
-      <span className="sr-only">Drag to reorder</span>
-    </Button>
-  )
-}
 
 // Clients Columns
 export const getClientColumns = (
@@ -55,37 +31,6 @@ export const getClientColumns = (
   onDeleteClient: (id: string) => void,
   onClientClick: (client: ClientItem) => void
 ): ColumnDef<ClientItem>[] => [
-  {
-    id: "drag",
-    header: () => null,
-    cell: ({ row }) => <DragHandle id={row.original._id} />,
-  },
-  {
-    id: "select",
-    header: ({ table }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      </div>
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "name",
     header: "Client",

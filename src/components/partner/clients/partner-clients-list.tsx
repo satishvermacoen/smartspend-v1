@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from "react"
-import { Loader2, Mail, Phone, Calendar, Receipt } from "lucide-react"
+import { Loader2, Mail, Phone, Calendar, Receipt, Send, MessageSquare, ShoppingBag, Award, CheckCircle2 } from "lucide-react"
 import { Client } from "@/types"
 import { Button } from "@/components/ui/button"
 import ClientPurchasesDialog from "@/components/admin/clients/client-purchases-dialog"
@@ -78,7 +78,7 @@ export function PartnerClientsList({ clients, loading }: PartnerClientsListProps
             return (
               <div
                 key={client._id}
-                className="p-4 border border-border/10 rounded-xl bg-card/40 hover:bg-card/75 transition-all shadow-sm"
+                className="p-4 border border-border/10 rounded-xl bg-card/40 hover:bg-card/75 transition-all shadow-sm space-y-4"
               >
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                   <div className="space-y-1.5">
@@ -142,6 +142,92 @@ export function PartnerClientsList({ clients, loading }: PartnerClientsListProps
                     </div>
                   </div>
                 </div>
+
+                {/* Pipeline Stepper Progress */}
+                {(() => {
+                  const isPurchased = client.purchase !== undefined && client.purchase > 0;
+                  const isRewarded = client.conversion?.referrer_reward?.status === 'credited' || 
+                                     client.conversion?.referrer_reward?.status === 'claimed' ||
+                                     (isPurchased && client.conversion?.purchase_details?.referrer_reward > 0);
+
+                  let progressPercent = "w-1/3";
+                  if (isRewarded) {
+                    progressPercent = "w-full";
+                  } else if (isPurchased) {
+                    progressPercent = "w-2/3";
+                  }
+
+                  return (
+                    <div className="border-t border-border/10 pt-4 mt-2">
+                      <div className="flex items-center justify-between relative max-w-2xl mx-auto px-2">
+                        {/* Connecting track line */}
+                        <div className="absolute top-[18px] left-[20px] right-[20px] h-0.5 bg-border/20 z-0">
+                          <div className={`h-full bg-brand rounded-full transition-all duration-700 ${progressPercent}`} />
+                        </div>
+
+                        {/* Step 1: Invite Sent */}
+                        <div className="flex flex-col items-center z-10 text-center space-y-1 group">
+                          <div className="w-9 h-9 rounded-full flex items-center justify-center bg-brand text-white border border-brand shadow-md">
+                            <Send className="h-4 w-4" />
+                          </div>
+                          <span className="text-[11px] font-bold text-foreground">Invite Sent</span>
+                          <span className="text-[9px] text-muted-foreground/80">
+                            {client.conversion?.timeline?.clicked_at 
+                              ? formatDate(client.conversion.timeline.clicked_at) 
+                              : formatDate(client.createdAt)}
+                          </span>
+                        </div>
+
+                        {/* Step 2: Customer Inquiry */}
+                        <div className="flex flex-col items-center z-10 text-center space-y-1 group">
+                          <div className="w-9 h-9 rounded-full flex items-center justify-center bg-brand text-white border border-brand shadow-md">
+                            <MessageSquare className="h-4 w-4" />
+                          </div>
+                          <span className="text-[11px] font-bold text-foreground">Inquiry</span>
+                          <span className="text-[9px] text-muted-foreground/80">
+                            {client.conversion?.timeline?.visited_at 
+                              ? formatDate(client.conversion.timeline.visited_at) 
+                              : formatDate(client.createdAt)}
+                          </span>
+                        </div>
+
+                        {/* Step 3: Purchase Completed */}
+                        <div className="flex flex-col items-center z-10 text-center space-y-1 group">
+                          <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-all border shadow-md ${
+                            isPurchased 
+                              ? "bg-brand text-white border-brand" 
+                              : "bg-muted text-muted-foreground border-border/20"
+                          }`}>
+                            <ShoppingBag className="h-4 w-4" />
+                          </div>
+                          <span className={`text-[11px] font-bold ${isPurchased ? "text-foreground" : "text-muted-foreground"}`}>Purchase</span>
+                          <span className="text-[9px] text-muted-foreground/80">
+                            {client.conversion?.timeline?.purchased_at 
+                              ? formatDate(client.conversion.timeline.purchased_at) 
+                              : (isPurchased ? "Completed" : "Pending")}
+                          </span>
+                        </div>
+
+                        {/* Step 4: Reward Credited */}
+                        <div className="flex flex-col items-center z-10 text-center space-y-1 group">
+                          <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-all border shadow-md ${
+                            isRewarded 
+                              ? "bg-emerald-500 text-white border-emerald-500" 
+                              : "bg-muted text-muted-foreground border-border/20"
+                          }`}>
+                            <Award className="h-4 w-4" />
+                          </div>
+                          <span className={`text-[11px] font-bold ${isRewarded ? "text-emerald-400" : "text-muted-foreground"}`}>Reward</span>
+                          <span className="text-[9px] text-muted-foreground/80 font-medium">
+                            {isRewarded 
+                              ? `+${formatCurrency(client.conversion?.purchase_details?.referrer_reward || client.conversion?.referrer_reward?.amount || 0)}` 
+                              : "Pending"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             )
           })}

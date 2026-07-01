@@ -1,42 +1,57 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Loader2, RefreshCw, CreditCard } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { Loader2, CreditCard } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
-// Import new modular components
-import { DashboardHeader } from "@/components/partner/dashboard/referral/dashboard-header";
-import { ReferralKPIs } from "@/components/partner/dashboard/referral/referral-kpis";
-import { PerformanceChart } from "@/components/partner/dashboard/referral/performance-chart";
-import { GrowthSuggestions } from "@/components/partner/dashboard/referral/growth-suggestions";
+// New components
+import { PartnerHeader } from "@/components/partner/dashboard/referral/partner-header";
+import { PartnerKPICards } from "@/components/partner/dashboard/referral/partner-kpi-cards";
+import { PartnerPerformanceChart } from "@/components/partner/dashboard/referral/partner-performance-chart";
+import { PartnerFunnel } from "@/components/partner/dashboard/referral/partner-funnel";
+import { PartnerClientStatus } from "@/components/partner/dashboard/referral/partner-client-status";
+import { PartnerWalletCard } from "@/components/partner/dashboard/referral/partner-wallet-card";
+import { PartnerGrowthCoach } from "@/components/partner/dashboard/referral/partner-growth-coach";
+import { PartnerEarningsTimeline } from "@/components/partner/dashboard/referral/partner-earnings-timeline";
+
+// Preserved existing components (no mock data)
 import { QuickShareWidget } from "@/components/partner/dashboard/referral/quick-share-widget";
 import { GamificationProgress } from "@/components/partner/dashboard/referral/gamification-progress";
-import { RecentActivity } from "@/components/partner/dashboard/referral/recent-activity";
 
-export interface SubscriptionItem {
-  _id?: string;
-  packageId: string;
-  packageName: string;
-  billingCycle: string;
-  price: number;
-  discount: number;
-  totalPrice: number;
-  status: 'active' | 'cancelled' | 'expired';
-  startDate: string;
-  endDate: string;
+// ── Types ──────────────────────────────────────────────────────────────────
+
+interface DashboardStats {
+  activePlanName: string;
+  daysRemaining: number;
+  walletBalance: number;
+  cashEarned: number;
+  pendingCash: number;
+  availableBalance: number;
+  claimedCash: number;
+  subscriptionMonths: number;
+  earningsToday: number;
+  referredCount: number;
+  referralClicks: number;
+  referralSignups: number;
+  referralPurchases: number;
+  activeClients: number;
+  totalClients: number;
+  conversionRate: number;
 }
 
-interface ConversionItem {
-  _id: string;
-  prospect_email: string;
-  conversion_stage: 'clicked' | 'visited' | 'signed_up' | 'purchased';
-  timeline: {
-    clicked_at?: string;
-    signed_up_at?: string;
-    purchased_at?: string;
-  };
-  createdAt: string;
+interface DashboardCharts {
+  monthlyPerformance: { name: string; clicks: number; signups: number; purchases: number }[];
+  funnelData: { name: string; value: number }[];
+  clientStatusBreakdown: { status: string; count: number }[];
+}
+
+interface ActivityItem {
+  type: string;
+  title: string;
+  subtitle: string;
+  timestamp: string;
+  badge: string;
 }
 
 interface DashboardData {
@@ -47,136 +62,86 @@ interface DashboardData {
     accountBalance: number;
     createdAt: string;
   };
-  stats: {
-    activePlanName: string;
-    daysRemaining: number;
-    walletBalance: number;
-    referredCount: number;
-    referralClicks: number;
-    referralSignups: number;
-    referralPurchases: number;
-  };
-  // We keep the old interfaces here to not break the API fetch, even if we don't use them deeply on this specific view.
-  activeSubscription: SubscriptionItem | null;
-  conversions: ConversionItem[];
-  billingHistory: SubscriptionItem[];
+  stats: DashboardStats;
+  charts: DashboardCharts;
+  feeds: { recentActivity: ActivityItem[] };
 }
 
-// Generate some mock chart data based on overall stats for visual representation
-const generateMockChartData = (clicks: number, signups: number, purchases: number) => {
-  // If no data, return empty array
-  if (clicks === 0 && signups === 0 && purchases === 0) return [];
-  
-  const data = [];
-  const today = new Date();
-  
-  for (let i = 29; i >= 0; i--) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
-    
-    // Distribute the totals somewhat randomly over the last 30 days
-    const clickShare = i < 15 ? Math.floor((clicks / 30) * 1.5) : Math.floor((clicks / 30) * 0.5);
-    const signupShare = i < 10 ? Math.floor((signups / 30) * 2) : Math.floor((signups / 30) * 0.2);
-    const purchaseShare = i < 5 ? Math.floor((purchases / 30) * 3) : Math.floor((purchases / 30) * 0.1);
-    
-    data.push({
-      date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      clicks: clickShare,
-      signups: signupShare,
-      purchases: purchaseShare
-    });
-  }
-  return data;
+// ── Defaults ───────────────────────────────────────────────────────────────
+
+const EMPTY_STATS: DashboardStats = {
+  activePlanName: '', daysRemaining: 0, walletBalance: 0, cashEarned: 0,
+  pendingCash: 0, availableBalance: 0, claimedCash: 0, subscriptionMonths: 0,
+  earningsToday: 0, referredCount: 0, referralClicks: 0, referralSignups: 0,
+  referralPurchases: 0, activeClients: 0, totalClients: 0, conversionRate: 0,
 };
 
-// Generate mock activity based on actual stats for UI richness
-const generateMockActivity = (clicks: number, signups: number, purchases: number) => {
-  if (clicks === 0 && signups === 0 && purchases === 0) return [];
-
-  const activities = [];
-  let idCounter = 1
-
-  if (purchases > 0) {
-    activities.push({
-      id: `act-${idCounter++}`,
-      type: 'reward' as const,
-      message: '₹500 reward unlocked from a successful referral purchase!',
-      timestamp: '2 hours ago'
-    });
-    activities.push({
-      id: `act-${idCounter++}`,
-      type: 'purchase' as const,
-      message: 'A referral upgraded to Premium.',
-      timestamp: '2.5 hours ago'
-    });
-  }
-
-  if (signups > 0) {
-    activities.push({
-      id: `act-${idCounter++}`,
-      type: 'signup' as const,
-      message: 'Someone just signed up using your link.',
-      timestamp: '1 day ago'
-    });
-  }
-
-  if (clicks > 0) {
-    activities.push({
-      id: `act-${idCounter++}`,
-      type: 'click' as const,
-      message: 'Your link received a new visitor.',
-      timestamp: '1 day ago'
-    });
-  }
-
-  return activities;
+const EMPTY_CHARTS: DashboardCharts = {
+  monthlyPerformance: [],
+  funnelData: [],
+  clientStatusBreakdown: [],
 };
 
-export default function ClientDashboardPage() {
-  const [data, setData] = useState<DashboardData | null>(null);
+// ── Page ──────────────────────────────────────────────────────────────────
+
+export default function PartnerDashboardPage() {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [data, setData] = useState<DashboardData>({
+    profile: { fullName: '', email: '', referralCode: '', accountBalance: 0, createdAt: '' },
+    stats: EMPTY_STATS,
+    charts: EMPTY_CHARTS,
+    feeds: { recentActivity: [] },
+  });
 
-  const fetchDashboardData = async () => {
-    setLoading(true);
+  const fetchDashboardData = useCallback(async (showLoader = false) => {
+    if (showLoader) setLoading(true);
+    setError(false);
     try {
       const res = await fetch("/api/partner/dashboard");
       const json = await res.json();
-      if (res.ok) {
-        setData(json);
+      if (res.ok && json.success) {
+        setData({
+          profile: json.profile,
+          stats: json.stats,
+          charts: json.charts || EMPTY_CHARTS,
+          feeds: json.feeds || { recentActivity: [] },
+        });
       } else {
         throw new Error(json.error || "Failed to retrieve dashboard.");
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to load dashboard.";
       toast.error(message);
+      setError(true);
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      fetchDashboardData();
-    }, 0);
   }, []);
 
-  if (loading && !data) {
+  useEffect(() => {
+    Promise.resolve().then(() => fetchDashboardData());
+  }, [fetchDashboardData]);
+
+  // ── Loading ──────────────────────────────────────────────────────────────
+  if (loading) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center py-40 gap-3 text-muted-foreground bg-background">
         <Loader2 className="h-8 w-8 animate-spin text-brand" />
-        <span>Loading your dashboard...</span>
+        <span className="text-sm">Loading your dashboard...</span>
       </div>
     );
   }
 
-  if (!data) {
+  // ── Error ────────────────────────────────────────────────────────────────
+  if (error) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center py-40 text-center text-muted-foreground bg-background">
-        <CreditCard className="h-12 w-12 opacity-30 text-destructive mb-3" />
+        <CreditCard className="h-12 w-12 opacity-30 text-destructive mb-3 animate-pulse" />
         <h4 className="font-semibold text-lg text-foreground">Failed to Load Dashboard</h4>
         <p className="text-sm max-w-sm mt-1">Please try refreshing or log back in.</p>
         <Button
-          onClick={fetchDashboardData}
+          onClick={() => fetchDashboardData(true)}
           className="mt-4 px-4 py-2 text-xs font-semibold rounded-xl bg-card border border-border/15 text-foreground hover:bg-soft"
         >
           Try Again
@@ -185,73 +150,66 @@ export default function ClientDashboardPage() {
     );
   }
 
-  const { stats, profile } = data;
-  
-  // Calculate KPIs
-  const totalEarnings = stats.walletBalance || 0;
-  // Approximating pending rewards based on signups that haven't purchased
-  const pendingSignups = Math.max(0, (stats.referralSignups || 0) - (stats.referralPurchases || 0));
-  const pendingRewards = pendingSignups * 500; 
-  const conversionRate = stats.referralClicks > 0 
-    ? Math.round((stats.referralPurchases / stats.referralClicks) * 100) 
-    : 0;
+  const { profile, stats, charts, feeds } = data;
 
-  const chartData = generateMockChartData(stats.referralClicks, stats.referralSignups, stats.referralPurchases);
-  const recentActivities = generateMockActivity(stats.referralClicks, stats.referralSignups, stats.referralPurchases);
-
+  // ── Dashboard ─────────────────────────────────────────────────────────────
   return (
-    <div className="flex-1 p-6 md:p-10 space-y-8 bg-background relative overflow-y-auto">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10 w-full">
-        <DashboardHeader fullName={profile.fullName} totalEarnings={totalEarnings} />
-        <Button
-          onClick={fetchDashboardData}
-          className="inline-flex items-center gap-2 rounded-xl border border-border/15 bg-card/40 backdrop-blur-md px-4 py-2 text-sm font-medium text-foreground hover:bg-card/70 hover:-translate-y-0.5 active:scale-[0.98] transition-all cursor-pointer shadow-soft shrink-0 self-end sm:self-auto"
-        >
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-          Refresh
-        </Button>
-      </div>
+    <div className="flex-1 p-6 md:p-8 space-y-7 bg-background overflow-y-auto">
 
-      {/* Top KPIs Row */}
-      <ReferralKPIs 
-        totalEarnings={totalEarnings} 
-        pendingRewards={pendingRewards}
-        conversionRate={conversionRate}
-        totalNetwork={stats.referredCount || 0}
+      {/* ── Section 1: Header ──────────────────────────────────────────── */}
+      <PartnerHeader
+        fullName={profile.fullName}
+        referralPurchases={stats.referralPurchases}
+        earningsToday={stats.earningsToday}
+        onRefresh={() => fetchDashboardData(true)}
+        isLoading={loading}
       />
 
-      {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
-        
-        {/* Left Column (Performance & Analytics) - 70% width on large screens */}
-        <div className="lg:col-span-8 space-y-8 flex flex-col">
-          {/* Performance Chart */}
-          <div className="flex-1">
-            <PerformanceChart data={chartData} />
+      {/* ── Section 2: KPI Cards (8) ───────────────────────────────────── */}
+      <PartnerKPICards stats={stats} />
+
+      {/* ── Section 3: Main Grid ───────────────────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        {/* Left Column — Charts */}
+        <div className="lg:col-span-8 space-y-6">
+          {/* 3a. Real performance chart */}
+          <PartnerPerformanceChart data={charts.monthlyPerformance} />
+
+          {/* 3b + 3c: Funnel + Client Status side by side */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <PartnerFunnel data={charts.funnelData} />
+            <PartnerClientStatus
+              data={charts.clientStatusBreakdown}
+              total={stats.totalClients}
+            />
           </div>
+        </div>
 
-          {/* AI Growth Suggestions */}
-          <GrowthSuggestions 
-            clicks={stats.referralClicks || 0} 
-            signups={stats.referralSignups || 0} 
-            purchases={stats.referralPurchases || 0} 
+        {/* Right Column — Action Panels */}
+        <div className="lg:col-span-4 space-y-6">
+          {/* 3d. Wallet breakdown */}
+          <PartnerWalletCard
+            cashEarned={stats.cashEarned}
+            pendingCash={stats.pendingCash}
+            availableBalance={stats.availableBalance}
+            claimedCash={stats.claimedCash}
           />
-        </div>
 
-        {/* Right Column (Action Center & Gamification) - 30% width on large screens */}
-        <div className="lg:col-span-4 space-y-8 flex flex-col">
-          {/* Share Widget */}
+          {/* 3e. Quick Share Widget (preserved) */}
           <QuickShareWidget referralCode={profile.referralCode} />
-          
-          {/* Gamification Tier Progress */}
-          <GamificationProgress totalNetwork={stats.referredCount || 0} />
-          
-          {/* Recent Activity Feed */}
-          <RecentActivity activities={recentActivities} />
-        </div>
 
+          {/* 3f. Gamification Tier (preserved + enhanced) */}
+          <GamificationProgress totalNetwork={stats.referredCount} />
+        </div>
       </div>
+
+      {/* ── Section 4: AI Growth Coach (3-card) ───────────────────────── */}
+      <PartnerGrowthCoach stats={stats} />
+
+      {/* ── Section 5: Earnings Timeline ──────────────────────────────── */}
+      <PartnerEarningsTimeline recentActivity={feeds.recentActivity} />
+
     </div>
   );
 }

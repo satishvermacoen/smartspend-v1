@@ -14,7 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { LayoutDashboardIcon, ListIcon, UsersIcon, CommandIcon, Share2Icon } from "lucide-react"
+import { LayoutDashboardIcon, ListIcon, UsersIcon, CommandIcon, Share2Icon, CreditCardIcon, SettingsIcon } from "lucide-react"
 import Link from "next/link"
 
 const data = {
@@ -29,6 +29,14 @@ const data = {
       url: "/admin/dashboard",
       icon: (
         <LayoutDashboardIcon
+        />
+      ),
+    },
+    {
+      title: "Partners",
+      url: "/admin/partner",
+      icon: (
+        <Share2Icon
         />
       ),
     },
@@ -49,10 +57,26 @@ const data = {
       ),
     },
     {
-      title: "Partners",
-      url: "/admin/partner",
+      title: "Invite Codes",
+      url: "/admin/invite-codes",
       icon: (
-        <Share2Icon
+        <CommandIcon
+        />
+      ),
+    },
+    {
+      title: "Withdrawals",
+      url: "/admin/withdrawals",
+      icon: (
+        <CreditCardIcon
+        />
+      ),
+    },
+    {
+      title: "Reward Setting",
+      url: "/admin/settings",
+      icon: (
+        <SettingsIcon
         />
       ),
     },

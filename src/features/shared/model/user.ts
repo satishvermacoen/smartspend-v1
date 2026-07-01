@@ -45,6 +45,7 @@ export interface IUser extends Document {
   referralCode?: string;
   isDeleted?: boolean;
   accountBalance: number;
+  source?: string;
   subscriptions: ISubscription[];
   loginHistory: ILoginHistory[];
   createdAt?: Date;
@@ -122,6 +123,7 @@ const UserSchema = new Schema<IUser, IUserModel>({
   referralCode: { type: String, unique: true, sparse: true },
   isDeleted: { type: Boolean, default: false },
   accountBalance: { type: Number, default: 0 },
+  source: { type: String, default: 'direct' },
   subscriptions: [SubscriptionSchema],
   loginHistory: [LoginHistorySchema]
 }, {

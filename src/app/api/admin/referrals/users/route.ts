@@ -86,6 +86,7 @@ export async function GET() {
         email: user.email,
         phone: user.phone || "N/A",
         role: user.role,
+        source: user.source || "direct",
         purchase: userPurchases,
         sale: userSales,
         commission: userReward?.total_earned || 0,

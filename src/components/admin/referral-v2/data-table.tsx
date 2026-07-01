@@ -48,9 +48,8 @@ import {
   getPendingColumns,
 } from "./data-table-parts/columns"
 import { DraggableRow } from "./data-table-parts/draggable-row"
-import type { ClientItem, CodeItem, ConversionItem, PendingApprovalItem, ProgramSettings } from "@/types/referral"
+import type { ClientItem, CodeItem, ConversionItem, PendingApprovalItem } from "@/types/referral"
 import { Client } from "@/types"
-import { SettingsTab } from "../referral/settings-tab"
 import { Loader2 } from "lucide-react"
 
 // Import the newly extracted modular components
@@ -70,27 +69,6 @@ interface DataTableProps {
   handleDeleteClient: (id: string) => void
   reloadClients: () => void
 
-  codes: CodeItem[]
-  codesFilter: string
-  setCodesFilter: (val: string) => void
-  codesSearch: string
-  setCodesSearch: (val: string) => void
-  setCodesPage: (val: number) => void
-  handleCreateCode: (e: React.FormEvent) => void
-  newLinkName: string
-  setNewLinkName: (val: string) => void
-  newReferrerName: string
-  setNewReferrerName: (val: string) => void
-  newReferrerPhone: string
-  setNewReferrerPhone: (val: string) => void
-  newReferrerEmail: string
-  setNewReferrerEmail: (val: string) => void
-  creatingCode: boolean
-  handleCopyLink: (code: string) => void
-  handleWhatsAppShare: (code: string) => void
-  handleToggleCodeStatus: (id: string, status: boolean) => void
-  handleDeleteCode: (id: string) => void
-
   pendingQueue: PendingApprovalItem[]
   processingRewardId: string | null
   handleApproveReward: (item: PendingApprovalItem) => void
@@ -101,13 +79,9 @@ interface DataTableProps {
   setConvStageFilter: (val: string) => void
   convSearch: string
   setConvSearch: (val: string) => void
+  convPage?: number
   setConvPage: (val: number) => void
   formatDate: (dateStr: string) => string
-
-  settings: ProgramSettings | null
-  handleSettingsFieldChange: (field: keyof ProgramSettings, value: string | number | boolean) => void
-  handleSaveSettings: (e: React.FormEvent) => void
-  updatingSettings: boolean
 }
 
 export function DataTable({
@@ -115,27 +89,6 @@ export function DataTable({
   fetchingClients,
   handleDeleteClient,
   reloadClients,
-
-  codes,
-  codesFilter,
-  setCodesFilter,
-  codesSearch,
-  setCodesSearch,
-  setCodesPage,
-  handleCreateCode,
-  newLinkName,
-  setNewLinkName,
-  newReferrerName,
-  setNewReferrerName,
-  newReferrerPhone,
-  setNewReferrerPhone,
-  newReferrerEmail,
-  setNewReferrerEmail,
-  creatingCode,
-  handleCopyLink,
-  handleWhatsAppShare,
-  handleToggleCodeStatus,
-  handleDeleteCode,
 
   pendingQueue,
   processingRewardId,
@@ -147,13 +100,9 @@ export function DataTable({
   setConvStageFilter,
   convSearch,
   setConvSearch,
+  convPage,
   setConvPage,
   formatDate,
-
-  settings,
-  handleSettingsFieldChange,
-  handleSaveSettings,
-  updatingSettings,
 }: DataTableProps) {
   "use no memo"
   const [activeTab, setActiveTab] = React.useState<TabValue>("clients")
@@ -290,6 +239,18 @@ export function DataTable({
     }
   }, [selectedProfileClient, fetchProfile])
 
+  const handleCopyLink = (code: string) => {
+    const link = `${window.location.origin}/join/${code}`
+    navigator.clipboard.writeText(link)
+    toast.success("Link copied to clipboard")
+  }
+
+  const handleWhatsAppShare = (code: string) => {
+    const link = `${window.location.origin}/join/${code}`
+    const message = encodeURIComponent(`Here is the invite link: ${link}`)
+    window.open(`https://wa.me/?text=${message}`, "_blank")
+  }
+
   const handleToggleProfileCodeStatus = async (codeId: string, currentStatus: boolean) => {
     try {
       const res = await fetch(`/api/admin/referrals/codes/${codeId}`, {
@@ -382,9 +343,7 @@ export function DataTable({
     if (activeTab === "clients") {
       return getClientColumns(handleOpenPurchases, handleDeleteClient, (client) => setSelectedProfileClient(client))
     }
-    if (activeTab === "codes") {
-      return getCodeColumns(handleToggleCodeStatus, handleDeleteCode, handleCopyLink, handleWhatsAppShare)
-    }
+
     if (activeTab === "conversions") {
       return getConversionColumns(formatDate)
     }
@@ -392,15 +351,15 @@ export function DataTable({
       return getPendingColumns(handleApproveReward, handleRejectReward, processingRewardId)
     }
     return []
-  }, [activeTab, processingRewardId, handleDeleteClient, handleToggleCodeStatus, handleDeleteCode, handleCopyLink, handleWhatsAppShare, formatDate, handleApproveReward, handleRejectReward, handleOpenPurchases])
+  }, [activeTab, processingRewardId, handleDeleteClient, formatDate, handleApproveReward, handleRejectReward, handleOpenPurchases])
 
   const currentData = React.useMemo(() => {
     if (activeTab === "clients") return filteredClients
-    if (activeTab === "codes") return codes
+
     if (activeTab === "conversions") return conversions
     if (activeTab === "pending") return pendingQueue
     return []
-  }, [activeTab, filteredClients, codes, conversions, pendingQueue])
+  }, [activeTab, filteredClients, conversions, pendingQueue])
 
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
@@ -468,40 +427,15 @@ export function DataTable({
           clientSourceFilter={clientSourceFilter}
           setClientSourceFilter={setClientSourceFilter}
           uniqueSources={uniqueSources}
-          codesSearch={codesSearch}
-          setCodesSearch={setCodesSearch}
-          setCodesPage={setCodesPage}
-          codesFilter={codesFilter}
-          setCodesFilter={setCodesFilter}
           convSearch={convSearch}
           setConvSearch={setConvSearch}
           setConvPage={setConvPage}
           convStageFilter={convStageFilter}
           setConvStageFilter={setConvStageFilter}
-          handleCreateCode={handleCreateCode}
-          newLinkName={newLinkName}
-          setNewLinkName={setNewLinkName}
-          newReferrerName={newReferrerName}
-          setNewReferrerName={setNewReferrerName}
-          newReferrerPhone={newReferrerPhone}
-          setNewReferrerPhone={setNewReferrerPhone}
-          newReferrerEmail={newReferrerEmail}
-          setNewReferrerEmail={setNewReferrerEmail}
-          creatingCode={creatingCode}
         />
       </div>
 
-      {activeTab === "settings" ? (
-        <div className="px-4 lg:px-6 mt-4">
-          <SettingsTab
-            settings={settings}
-            handleSettingsFieldChange={handleSettingsFieldChange}
-            handleSaveSettings={handleSaveSettings}
-            updatingSettings={updatingSettings}
-          />
-        </div>
-      ) : (
-        <div className="px-4 lg:px-6 mt-4">
+      <div className="px-4 lg:px-6 mt-4">
           <div className="overflow-hidden rounded-xl border border-border/10 bg-card/25 backdrop-blur-xl shadow-elegant">
             {fetchingClients && activeTab === "clients" ? (
               <div className="py-20 flex flex-col items-center justify-center gap-2 text-muted-foreground">
@@ -562,7 +496,6 @@ export function DataTable({
           </div>
           <DataTablePagination table={table} activeTab={activeTab} />
         </div>
-      )}
 
       {/* Extracted Modals */}
       <ReferredClientsDialog

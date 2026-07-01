@@ -114,12 +114,58 @@ export async function sendReferralEmail(email: string, subject: string, htmlCont
 
     if (data.error) {
       console.error('Failed to send referral email via Resend:', data.error);
-      return false;
     }
-    return true;
+    return data;
   } catch (error) {
     console.error('Error sending referral email:', error);
-    return false;
+    return null;
   }
 }
 
+export async function sendWithdrawalStatusEmail(email: string, name: string, amount: number, status: 'approved' | 'rejected') {
+  if (!resend) {
+    console.warn('RESEND_API_KEY is not set. Withdrawal status email not sent to:', email);
+    return null;
+  }
+
+  const subject = status === 'approved' 
+    ? 'Withdrawal Request Approved - SpendSmart' 
+    : 'Withdrawal Request Update - SpendSmart';
+
+  const amountStr = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0
+  }).format(amount);
+
+  const message = status === 'approved'
+    ? `Great news! Your withdrawal request for ${amountStr} has been approved and processed.`
+    : `Unfortunately, your withdrawal request for ${amountStr} could not be processed at this time.`;
+
+  try {
+    const data = await resend.emails.send({
+      from: fromEmail,
+      to: email,
+      subject,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2>Withdrawal Status Update</h2>
+          <p>Hi ${name},</p>
+          <p>${message}</p>
+          <p>If you have any questions, please contact support.</p>
+          <br/>
+          <p>Best regards,</p>
+          <p>The SpendSmart Team</p>
+        </div>
+      `
+    });
+    
+    if (data.error) {
+      console.error('Failed to send withdrawal status email via Resend:', data.error);
+    }
+    return data;
+  } catch (error) {
+    console.error('Error sending withdrawal status email:', error);
+    return null;
+  }
+}

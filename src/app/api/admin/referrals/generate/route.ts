@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
           role: 'referral_partner',
           status: "active",
           emailVerified: true,
+          source: "admin",
         });
 
         targetUserId = newUser._id;

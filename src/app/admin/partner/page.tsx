@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/admin/referral-v2/data-table"
 import { SectionCards } from "@/components/admin/referral-v2/section-cards"
 import type { 
-  ClientItem, CodeItem, ConversionItem, PendingApprovalItem, ProgramSettings 
+  ClientItem, ConversionItem, PendingApprovalItem
 } from "@/types/referral"
 
 interface AdminKPIs {
@@ -25,11 +25,7 @@ export default function AdminPartnerPage() {
   const [loading, setLoading] = useState(true)
   const [kpis, setKpis] = useState<AdminKPIs | null>(null)
 
-  // States for codes
-  const [codes, setCodes] = useState<CodeItem[]>([])
-  const [codesSearch, setCodesSearch] = useState("")
-  const [codesFilter, setCodesFilter] = useState("all")
-  const [codesPage, setCodesPage] = useState(1)
+
 
   // States for conversions
   const [conversions, setConversions] = useState<ConversionItem[]>([])
@@ -41,16 +37,7 @@ export default function AdminPartnerPage() {
   const [pendingQueue, setPendingQueue] = useState<PendingApprovalItem[]>([])
   const [processingRewardId, setProcessingRewardId] = useState<string | null>(null)
 
-  // Settings
-  const [settings, setSettings] = useState<ProgramSettings | null>(null)
-  const [updatingSettings, setUpdatingSettings] = useState(false)
 
-  // Create Code form state
-  const [newLinkName, setNewLinkName] = useState("")
-  const [newReferrerName, setNewReferrerName] = useState("")
-  const [newReferrerPhone, setNewReferrerPhone] = useState("")
-  const [newReferrerEmail, setNewReferrerEmail] = useState("")
-  const [creatingCode, setCreatingCode] = useState(false)
 
   // Clients
   const [clients, setClients] = useState<ClientItem[]>([])
@@ -71,19 +58,6 @@ export default function AdminPartnerPage() {
     }
   }, [])
 
-  const fetchCodes = useCallback(async () => {
-    try {
-      const res = await fetch(
-        `/api/admin/referrals/codes?status=${codesFilter}&search=${encodeURIComponent(codesSearch)}&page=${codesPage}&limit=10`
-      )
-      const data = await res.json()
-      if (data.success) {
-        setCodes(data.codes)
-      }
-    } catch (err) {
-      console.error("Error loading codes:", err)
-    }
-  }, [codesFilter, codesSearch, codesPage])
 
   const fetchConversions = useCallback(async () => {
     try {
@@ -99,41 +73,16 @@ export default function AdminPartnerPage() {
     }
   }, [convStageFilter, convSearch, convPage])
 
-  const fetchSettings = useCallback(async () => {
-    try {
-      const res = await fetch("/api/admin/referrals/settings")
-      const data = await res.json()
-      if (data.success) {
-        setSettings(data.settings)
-      }
-    } catch (err) {
-      console.error("Error loading settings:", err)
-    }
-  }, [])
-
   const fetchPendingQueue = useCallback(async () => {
     try {
-      const resConvs = await fetch("/api/admin/referrals/conversions?stage=purchased&limit=200")
-      const dataConvs = await resConvs.json()
-      const pending: PendingApprovalItem[] = []
-
-      if (dataConvs.success) {
-        dataConvs.conversions
-          .filter((c: ConversionItem) => c.referrerReward?.status === "calculated")
-          .forEach((c: ConversionItem) => {
-            pending.push({
-              customerId: c.referrer?._id || "unknown",
-              customerName: c.referrer?.name || "Referrer",
-              customerEmail: c.referrer?.email || "",
-              redemptionId: c._id,
-              type: c.referrerReward?.type === "subscription" ? "subscription_activation" : "cash_claim",
-              amount: c.referrerReward?.type === "cash" ? c.referrerReward?.amount : 0,
-              months: c.referrerReward?.type === "subscription" ? c.referrerReward?.amount : 0,
-              date: c.timeline?.purchased_at || c.createdAt || "",
-            })
-          })
+      const res = await fetch("/api/admin/referrals/redemptions?status=pending")
+      const data = await res.json()
+      
+      if (data.success && data.pendingRequests) {
+        setPendingQueue(data.pendingRequests)
+      } else {
+        setPendingQueue([])
       }
-      setPendingQueue(pending)
     } catch (err) {
       console.error("Error fetching pending approvals queue:", err)
     }
@@ -154,15 +103,13 @@ export default function AdminPartnerPage() {
   const loadAllData = useCallback(async () => {
     setLoading(true)
     await Promise.all([
-      fetchCodes(),
       fetchConversions(),
-      fetchSettings(),
       fetchPendingQueue(),
       fetchClients(),
       fetchAnalytics(),
     ])
     setLoading(false)
-  }, [fetchCodes, fetchConversions, fetchSettings, fetchPendingQueue, fetchClients, fetchAnalytics])
+  }, [fetchClients, fetchConversions, fetchPendingQueue, fetchAnalytics])
 
   useEffect(() => {
     let active = true
@@ -176,38 +123,7 @@ export default function AdminPartnerPage() {
     }
   }, [loadAllData])
 
-  const handleToggleCodeStatus = async (id: string, currentStatus: boolean) => {
-    try {
-      const res = await fetch(`/api/admin/referrals/codes/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ is_active: !currentStatus }),
-      })
-      if (res.ok) {
-        toast.success(`Referral code status updated.`)
-        fetchCodes()
-      } else {
-        throw new Error()
-      }
-    } catch {
-      toast.error("Failed to toggle code status.")
-    }
-  }
 
-  const handleDeleteCode = async (id: string) => {
-    if (!confirm("Are you sure you want to permanently delete this code?")) return
-    try {
-      const res = await fetch(`/api/admin/referrals/codes/${id}`, { method: "DELETE" })
-      if (res.ok) {
-        toast.success("Referral code deleted.")
-        fetchCodes()
-      } else {
-        throw new Error()
-      }
-    } catch {
-      toast.error("Failed to delete code.")
-    }
-  }
 
   const handleDeleteClient = async (id: string) => {
     if (!confirm("Are you sure you want to soft-delete this user?")) return
@@ -224,56 +140,7 @@ export default function AdminPartnerPage() {
     }
   }
 
-  const handleCreateCode = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!newLinkName) {
-      toast.error("Please provide a name for this referral link.")
-      return
-    }
-    setCreatingCode(true)
-    try {
-      const res = await fetch("/api/admin/referrals/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          linkName: newLinkName,
-          name: newReferrerName,
-          phone: newReferrerPhone,
-          email: newReferrerEmail,
-        }),
-      })
-      const data = await res.json()
-      if (res.ok) {
-        if (data.userCreated) {
-          toast.success(
-            <div className="flex flex-col gap-1.5 p-1">
-              <span className="font-semibold text-sm text-foreground">Referral link generated!</span>
-              <span className="text-xs text-muted-foreground">A new user account was created:</span>
-              <div className="bg-muted p-2 rounded-lg text-xs space-y-1 font-mono select-all">
-                <div>Email: {data.email}</div>
-                <div>Password: {data.password}</div>
-              </div>
-              <span className="text-[10px] text-muted-foreground">Please copy and share these credentials with the client.</span>
-            </div>,
-            { duration: 20000 }
-          )
-        } else {
-          toast.success("Referral link generated successfully!")
-        }
-        setNewLinkName("")
-        setNewReferrerName("")
-        setNewReferrerPhone("")
-        setNewReferrerEmail("")
-        fetchCodes()
-      } else {
-        throw new Error(data.error || "Creation failed.")
-      }
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to create code.")
-    } finally {
-      setCreatingCode(false)
-    }
-  }
+
 
   const handleApproveReward = async (item: PendingApprovalItem) => {
     setProcessingRewardId(item.redemptionId)
@@ -327,49 +194,7 @@ export default function AdminPartnerPage() {
     }
   }
 
-  const handleSaveSettings = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!settings) return
-    setUpdatingSettings(true)
-    try {
-      const res = await fetch("/api/admin/referrals/settings", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(settings),
-      })
-      const data = await res.json()
-      if (res.ok) {
-        toast.success("Referral configuration settings saved!")
-        fetchSettings()
-      } else {
-        throw new Error(data.error || "Update failed.")
-      }
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to update configuration.")
-    } finally {
-      setUpdatingSettings(false)
-    }
-  }
 
-  const handleCopyLink = (code: string) => {
-    const link = `${window.location.origin}/join/${code}`
-    navigator.clipboard.writeText(link)
-    toast.success("Link copied to clipboard")
-  }
-
-  const handleWhatsAppShare = (code: string) => {
-    const link = `${window.location.origin}/join/${code}`
-    const message = encodeURIComponent(`Here is the invite link: ${link}`)
-    window.open(`https://wa.me/?text=${message}`, "_blank")
-  }
-
-  const handleSettingsFieldChange = (
-    field: keyof ProgramSettings,
-    value: string | number | boolean
-  ) => {
-    if (!settings) return
-    setSettings((prev: ProgramSettings | null) => (prev ? { ...prev, [field]: value } : null))
-  }
 
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "-"
@@ -416,26 +241,6 @@ export default function AdminPartnerPage() {
             fetchingClients={fetchingClients}
             handleDeleteClient={handleDeleteClient}
             reloadClients={fetchClients}
-            codes={codes}
-            codesFilter={codesFilter}
-            setCodesFilter={setCodesFilter}
-            codesSearch={codesSearch}
-            setCodesSearch={setCodesSearch}
-            setCodesPage={setCodesPage}
-            handleCreateCode={handleCreateCode}
-            newLinkName={newLinkName}
-            setNewLinkName={setNewLinkName}
-            newReferrerName={newReferrerName}
-            setNewReferrerName={setNewReferrerName}
-            newReferrerPhone={newReferrerPhone}
-            setNewReferrerPhone={setNewReferrerPhone}
-            newReferrerEmail={newReferrerEmail}
-            setNewReferrerEmail={setNewReferrerEmail}
-            creatingCode={creatingCode}
-            handleCopyLink={handleCopyLink}
-            handleWhatsAppShare={handleWhatsAppShare}
-            handleToggleCodeStatus={handleToggleCodeStatus}
-            handleDeleteCode={handleDeleteCode}
             pendingQueue={pendingQueue}
             processingRewardId={processingRewardId}
             handleApproveReward={handleApproveReward}
@@ -446,11 +251,8 @@ export default function AdminPartnerPage() {
             convSearch={convSearch}
             setConvSearch={setConvSearch}
             setConvPage={setConvPage}
+            convPage={convPage}
             formatDate={formatDate}
-            settings={settings}
-            handleSettingsFieldChange={handleSettingsFieldChange}
-            handleSaveSettings={handleSaveSettings}
-            updatingSettings={updatingSettings}
           />
         </div>
       </div>

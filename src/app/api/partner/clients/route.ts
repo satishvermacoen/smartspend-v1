@@ -4,6 +4,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import Client from '@/features/shared/model/client';
 import Invoice from '@/features/shared/model/invoice';
+import ReferralConversion from '@/features/shared/model/referral-conversion';
 
 export async function GET(req: Request) {
   try {
@@ -40,6 +41,9 @@ export async function GET(req: Request) {
     // Fetch associated paid invoices to calculate total purchases
     const invoices = await Invoice.find({ client_id: { $in: clientIds }, status: 'paid' }).lean();
 
+    // Fetch associated conversions for timeline tracking
+    const conversions = await ReferralConversion.find({ referrer_id: session.user.id }).lean();
+
     const clientsWithPurchases = clients.map((client) => {
       const totalPurchase = invoices
         .filter(inv => inv.client_id.toString() === client._id.toString())
@@ -52,10 +56,18 @@ export async function GET(req: Request) {
         status = 'active';
       }
 
+      // Find matching conversion
+      const matchedConversion = conversions.find(
+        (conv) => 
+          (client.email && conv.prospect_email?.toLowerCase() === client.email.toLowerCase()) ||
+          (conv.referral_code === client.referralCode)
+      );
+
       return {
         ...client,
         status,
-        purchase: totalPurchase
+        purchase: totalPurchase,
+        conversion: matchedConversion || null
       };
     });
 

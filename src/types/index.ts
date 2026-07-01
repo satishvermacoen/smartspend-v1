@@ -42,6 +42,7 @@ export interface Client {
   };
   notes?: string;
   purchase?: number;
+  conversion?: any;
   createdAt?: string;
   updatedAt?: string;
 }

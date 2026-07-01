@@ -3,168 +3,331 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import connectDB from '@/lib/mongodb';
 import User from '@/features/shared/model/user';
-import ReferralConversion from '@/features/shared/model/referral-conversion';
 import Client from '@/features/shared/model/client';
+import Invoice from '@/features/shared/model/invoice';
+import ReferralCode from '@/features/shared/model/referral-code';
+import ReferralConversion from '@/features/shared/model/referral-conversion';
+import ReferralReward from '@/features/shared/model/referral-reward';
+
+function getMonthRange(offset: number) {
+  const start = new Date();
+  start.setMonth(start.getMonth() - offset);
+  start.setDate(1);
+  start.setHours(0, 0, 0, 0);
+  const end = new Date(start);
+  end.setMonth(end.getMonth() + 1);
+  return { start, end };
+}
+
+function getDayStart(daysAgo: number) {
+  const d = new Date();
+  d.setDate(d.getDate() - daysAgo);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 export async function GET() {
   try {
-    // 1. Authenticate session and check admin role
     const session = await getServerSession(authOptions);
     if (!session || session.user?.role !== 'admin') {
       return NextResponse.json({ error: 'Unauthorized access.' }, { status: 401 });
     }
 
-    // 2. Connect to database
     await connectDB();
 
-    // 3. Aggregate Revenue
-    const revenueResult = await User.aggregate([
-      { $unwind: '$subscriptions' },
-      { $group: { _id: null, total: { $sum: '$subscriptions.totalPrice' } } }
-    ]);
-    const totalRevenue = revenueResult[0]?.total || 0;
+    const { start: thisMonthStart } = getMonthRange(0);
+    const { start: lastMonthStart, end: lastMonthEnd } = getMonthRange(1);
+    const startOfToday = getDayStart(0);
 
-    // 4. Count Active Subscriptions
-    const activeSubsCount = await User.countDocuments({
-      'subscriptions': {
-        $elemMatch: {
-          status: 'active',
-          endDate: { $gt: new Date() }
-        }
-      }
-    });
-
-    // 5. Client Counts
-    const [totalClients, activeClients] = await Promise.all([
+    // ── PARALLEL CORE STATS ────────────────────────────────────────────────
+    const [
+      totalInquiries,
+      totalPurchases,
+      totalPartners,
+      pendingEnquiries,
+      pendingInvoices,
+      pendingRewardsDocs,
+      activeCodes,
+      activeClients,
+      referredClients,
+      newClientsToday,
+      thisMonthInquiries,
+      lastMonthInquiries,
+      thisMonthPurchases,
+      lastMonthPurchases,
+    ] = await Promise.all([
       Client.countDocuments({ isDeleted: { $ne: true } }),
-      Client.countDocuments({ isDeleted: { $ne: true }, status: { $in: ['pending', 'contacted'] } })
+      Invoice.countDocuments({ status: 'paid' }),
+      User.countDocuments({ role: 'referral_partner', isDeleted: { $ne: true } }),
+      Client.countDocuments({ status: 'pending', isDeleted: { $ne: true } }),
+      Invoice.countDocuments({ status: 'pending' }),
+      ReferralReward.countDocuments({ pending_cash: { $gt: 0 } }),
+      ReferralCode.countDocuments({ is_active: true }),
+      Client.countDocuments({ status: 'active', isDeleted: { $ne: true } }),
+      Client.countDocuments({ 'referredBy.referrerId': { $exists: true, $ne: null }, isDeleted: { $ne: true } }),
+      Client.countDocuments({ createdAt: { $gte: startOfToday }, isDeleted: { $ne: true } }),
+      Client.countDocuments({ createdAt: { $gte: thisMonthStart }, isDeleted: { $ne: true } }),
+      Client.countDocuments({ createdAt: { $gte: lastMonthStart, $lt: lastMonthEnd }, isDeleted: { $ne: true } }),
+      Invoice.countDocuments({ status: 'paid', purchase_date: { $gte: thisMonthStart } }),
+      Invoice.countDocuments({ status: 'paid', purchase_date: { $gte: lastMonthStart, $lt: lastMonthEnd } }),
     ]);
 
-    // 6. Conversion rate & funnel
-    const [totalClicks, totalPurchases] = await Promise.all([
-      ReferralConversion.countDocuments({}),
-      ReferralConversion.countDocuments({ conversion_stage: 'purchased' })
+    // ── REVENUE & REWARDS ──────────────────────────────────────────────────
+    const [totalRevenueAgg, rewardsPaidAgg] = await Promise.all([
+      Invoice.aggregate([
+        { $match: { status: 'paid' } },
+        { $group: { _id: null, total: { $sum: '$amount' } } }
+      ]),
+      ReferralReward.aggregate([
+        { $group: { _id: null, totalCash: { $sum: '$cash_earned' } } }
+      ]),
     ]);
-    const conversionRate = totalClicks > 0 ? parseFloat(((totalPurchases / totalClicks) * 100).toFixed(1)) : 0;
+    const totalRevenue = totalRevenueAgg[0]?.total || 0;
+    const rewardsPaid = rewardsPaidAgg[0]?.totalCash || 0;
 
-    // Funnel stages details
-    const funnelStages = await ReferralConversion.aggregate([
+    // ── COMPUTED STATS ─────────────────────────────────────────────────────
+    const conversionRate = totalInquiries > 0
+      ? parseFloat(((totalPurchases / totalInquiries) * 100).toFixed(1)) : 0;
+    const monthlyInquiryGrowth = lastMonthInquiries > 0
+      ? parseFloat((((thisMonthInquiries - lastMonthInquiries) / lastMonthInquiries) * 100).toFixed(1)) : 0;
+    const monthlySalesGrowth = lastMonthPurchases > 0
+      ? parseFloat((((thisMonthPurchases - lastMonthPurchases) / lastMonthPurchases) * 100).toFixed(1)) : 0;
+    const referralAttributionRate = totalInquiries > 0
+      ? parseFloat(((referredClients / totalInquiries) * 100).toFixed(1)) : 0;
+
+    // ── CHART: REVENUE WITH REFERRAL SPLIT (6 months) ─────────────────────
+    const sixMonthsAgo = getMonthRange(5).start;
+
+    const [revenueByMonth, referralRevenueByMonth] = await Promise.all([
+      Invoice.aggregate([
+        { $match: { status: 'paid', purchase_date: { $gte: sixMonthsAgo } } },
+        {
+          $group: {
+            _id: { year: { $year: '$purchase_date' }, month: { $month: '$purchase_date' } },
+            total: { $sum: '$amount' }
+          }
+        }
+      ]),
+      Invoice.aggregate([
+        {
+          $match: {
+            status: 'paid',
+            purchase_date: { $gte: sixMonthsAgo },
+            referrer_id: { $exists: true, $ne: null }
+          }
+        },
+        {
+          $group: {
+            _id: { year: { $year: '$purchase_date' }, month: { $month: '$purchase_date' } },
+            total: { $sum: '$amount' }
+          }
+        }
+      ]),
+    ]);
+
+    const revenueWithReferral = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(); d.setMonth(d.getMonth() - i);
+      const m = d.getMonth() + 1; const y = d.getFullYear();
+      const totalEntry = revenueByMonth.find((e: {_id: {month: number, year: number}, total: number}) => e._id.month === m && e._id.year === y);
+      const refEntry = referralRevenueByMonth.find((e: {_id: {month: number, year: number}, total: number}) => e._id.month === m && e._id.year === y);
+      const totalRev = totalEntry?.total || 0;
+      const refRev = refEntry?.total || 0;
+      revenueWithReferral.push({
+        name: MONTH_NAMES[m - 1],
+        totalRevenue: totalRev,
+        referralRevenue: refRev,
+        directRevenue: totalRev - refRev,
+      });
+    }
+
+    // ── CHART: INQUIRY VS PURCHASE (6 months) ─────────────────────────────
+    const [inquiriesByMonth, purchasesByMonth] = await Promise.all([
+      Client.aggregate([
+        { $match: { createdAt: { $gte: sixMonthsAgo }, isDeleted: { $ne: true } } },
+        {
+          $group: {
+            _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } },
+            count: { $sum: 1 }
+          }
+        }
+      ]),
+      Invoice.aggregate([
+        { $match: { status: 'paid', purchase_date: { $gte: sixMonthsAgo } } },
+        {
+          $group: {
+            _id: { year: { $year: '$purchase_date' }, month: { $month: '$purchase_date' } },
+            count: { $sum: 1 }
+          }
+        }
+      ]),
+    ]);
+
+    const inquiryVsPurchase = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(); d.setMonth(d.getMonth() - i);
+      const m = d.getMonth() + 1; const y = d.getFullYear();
+      const inqEntry = inquiriesByMonth.find((e: {_id: {month: number, year: number}, count: number}) => e._id.month === m && e._id.year === y);
+      const purEntry = purchasesByMonth.find((e: {_id: {month: number, year: number}, count: number}) => e._id.month === m && e._id.year === y);
+      const inq = inqEntry?.count || 0;
+      const pur = purEntry?.count || 0;
+      inquiryVsPurchase.push({
+        name: MONTH_NAMES[m - 1],
+        inquiries: inq,
+        purchases: pur,
+        conversionRate: inq > 0 ? parseFloat(((pur / inq) * 100).toFixed(1)) : 0,
+      });
+    }
+
+    // ── CHART: TOP SUBSCRIPTIONS ───────────────────────────────────────────
+    const topSubscriptionsRaw = await Invoice.aggregate([
+      { $match: { status: 'paid' } },
+      { $unwind: '$items' },
+      {
+        $group: {
+          _id: '$items.service_name',
+          count: { $sum: { $ifNull: ['$items.quantity', 1] } },
+          revenue: { $sum: '$items.amount' }
+        }
+      },
+      { $sort: { revenue: -1 } },
+      { $limit: 6 }
+    ]);
+    const topSubscriptions = topSubscriptionsRaw.map((s: {_id: string, count: number, revenue: number}) => ({
+      name: s._id || 'Unknown Service',
+      count: s.count,
+      revenue: s.revenue,
+      avgDeal: s.count > 0 ? Math.round(s.revenue / s.count) : 0,
+    }));
+
+    // ── CHART: CLIENT STATUS BREAKDOWN ────────────────────────────────────
+    const clientStatusRaw = await Client.aggregate([
+      { $match: { isDeleted: { $ne: true } } },
+      { $group: { _id: '$status', count: { $sum: 1 } } }
+    ]);
+    const clientStatusBreakdown = clientStatusRaw.map((s: {_id: string, count: number}) => ({
+      status: s._id,
+      count: s.count,
+    }));
+
+    // ── CHART: REFERRAL FUNNEL ─────────────────────────────────────────────
+    const funnelStagesRaw = await ReferralConversion.aggregate([
       { $group: { _id: '$conversion_stage', count: { $sum: 1 } } }
     ]);
-
     const stagesMap: Record<string, number> = { clicked: 0, visited: 0, signed_up: 0, purchased: 0 };
-    funnelStages.forEach(stage => {
-      if (stage._id in stagesMap) {
-        stagesMap[stage._id] = stage.count;
-      }
+    funnelStagesRaw.forEach((stage: {_id: string, count: number}) => {
+      if (stage._id in stagesMap) stagesMap[stage._id] = stage.count;
     });
-
     const funnelChartData = [
       { name: 'Clicks', value: stagesMap.clicked + stagesMap.visited + stagesMap.signed_up + stagesMap.purchased },
       { name: 'Visits', value: stagesMap.visited + stagesMap.signed_up + stagesMap.purchased },
       { name: 'Signups', value: stagesMap.signed_up + stagesMap.purchased },
-      { name: 'Purchases', value: stagesMap.purchased }
+      { name: 'Purchases', value: stagesMap.purchased },
     ];
 
-    // 7. Monthly Revenue Chart (last 6 months)
-    const sixMonthsAgo = new Date();
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
-    sixMonthsAgo.setDate(1);
-    sixMonthsAgo.setHours(0, 0, 0, 0);
+    // ── TRENDS: 7-DAY SPARKLINES ──────────────────────────────────────────
+    const last7DayStart = getDayStart(6);
 
-    const monthlySales = await User.aggregate([
-      { $unwind: '$subscriptions' },
-      { $match: { 'subscriptions.startDate': { $gte: sixMonthsAgo } } },
-      {
-        $group: {
-          _id: {
-            year: { $year: '$subscriptions.startDate' },
-            month: { $month: '$subscriptions.startDate' }
-          },
-          revenue: { $sum: '$subscriptions.totalPrice' }
-        }
-      },
-      { $sort: { '_id.year': 1, '_id.month': 1 } }
+    const [dailyInquiries, dailyPurchases, dailyRevenue] = await Promise.all([
+      Client.aggregate([
+        { $match: { createdAt: { $gte: last7DayStart }, isDeleted: { $ne: true } } },
+        { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } }, count: { $sum: 1 } } }
+      ]),
+      Invoice.aggregate([
+        { $match: { status: 'paid', purchase_date: { $gte: last7DayStart } } },
+        { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$purchase_date' } }, count: { $sum: 1 } } }
+      ]),
+      Invoice.aggregate([
+        { $match: { status: 'paid', purchase_date: { $gte: last7DayStart } } },
+        { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$purchase_date' } }, total: { $sum: '$amount' } } }
+      ]),
     ]);
 
-    // Map month indices to labels
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const revenueChartData = [];
-    
-    // Fill in last 6 months with 0s as fallback
-    for (let i = 5; i >= 0; i--) {
-      const d = new Date();
-      d.setMonth(d.getMonth() - i);
-      const m = d.getMonth() + 1; // 1-indexed
-      const y = d.getFullYear();
-      
-      const matchedMonth = monthlySales.find(s => s._id.month === m && s._id.year === y);
-      revenueChartData.push({
-        name: monthNames[m - 1],
-        Revenue: matchedMonth ? matchedMonth.revenue : 0
-      });
+    const trends: Record<string, number[]> = { inquiries: [], purchases: [], revenue: [] };
+    for (let i = 6; i >= 0; i--) {
+      const dayStart = getDayStart(i);
+      const dayKey = dayStart.toISOString().split('T')[0];
+      trends.inquiries.push((dailyInquiries as {_id: string, count: number}[]).find(d => d._id === dayKey)?.count || 0);
+      trends.purchases.push((dailyPurchases as {_id: string, count: number}[]).find(d => d._id === dayKey)?.count || 0);
+      trends.revenue.push((dailyRevenue as {_id: string, total: number}[]).find(d => d._id === dayKey)?.total || 0);
     }
 
-    // 8. Recent Activities
-    const recentClients = await Client.find({ isDeleted: { $ne: true } })
-      .select('name mobile email createdAt source status')
-      .sort({ createdAt: -1 })
-      .limit(5);
+    // ── FEEDS: RECENT ACTIVITY ────────────────────────────────────────────
+    const [recentClients, recentInvoices] = await Promise.all([
+      Client.find({ isDeleted: { $ne: true } })
+        .select('name mobile email createdAt source status referralCode')
+        .sort({ createdAt: -1 })
+        .limit(8)
+        .lean(),
+      Invoice.find({ status: 'paid' })
+        .select('invoice_number amount purchase_date client_id referrer_id')
+        .populate('client_id', 'name')
+        .sort({ purchase_date: -1 })
+        .limit(8)
+        .lean(),
+    ]);
 
-    const recentEnquiries = await Client.find({})
-      .sort({ createdAt: -1 })
-      .limit(5);
+    type ActivityItem = {
+      type: string; title: string; subtitle: string;
+      timestamp: Date | string | undefined; badge: string;
+    };
 
-    // Retrieve and flatten recent subscription purchases from users
-    const usersWithSubs = await User.find({ 'subscriptions.0': { $exists: true } })
-      .select('firstName lastName email subscriptions')
-      .limit(50); // pull recent active users
+    const recentActivity: ActivityItem[] = [
+      ...recentClients.map(c => ({
+        type: (c.source as string) === 'referral' ? 'referral' : 'enquiry',
+        title: c.name as string,
+        subtitle: (c.source as string) === 'referral' ? `Referred — ${c.referralCode || ''}` : `New Enquiry — ${c.status}`,
+        timestamp: c.createdAt,
+        badge: (c.source as string) === 'referral' ? 'Referral' : 'Enquiry',
+      })),
+      ...recentInvoices.map(inv => {
+        const clientName = (inv.client_id as unknown as { name?: string })?.name || 'Client';
+        return {
+          type: 'invoice',
+          title: `₹${(inv.amount as number).toLocaleString('en-IN')} — ${clientName}`,
+          subtitle: `Invoice ${inv.invoice_number}`,
+          timestamp: inv.purchase_date,
+          badge: 'Invoice',
+        };
+      }),
+    ]
+      .sort((a, b) => new Date(b.timestamp || 0).getTime() - new Date(a.timestamp || 0).getTime())
+      .slice(0, 12);
 
-    const allSubs: {
-      userName: string;
-      email: string;
-      packageName: string;
-      price: number;
-      startDate: Date | string;
-      status: string;
-    }[] = [];
-    usersWithSubs.forEach(u => {
-      u.subscriptions.forEach(s => {
-        allSubs.push({
-          userName: u.fullName,
-          email: u.email,
-          packageName: s.packageName,
-          price: s.totalPrice,
-          startDate: s.startDate,
-          status: s.status
-        });
-      });
-    });
-
-    // Sort by start date desc and limit to 5
-    const recentPurchases = allSubs
-      .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
-      .slice(0, 5);
-
+    // ── RESPONSE ──────────────────────────────────────────────────────────
     return NextResponse.json({
       success: true,
       stats: {
         totalRevenue,
-        activeSubsCount,
-        totalClients,
-        activeClients,
+        totalInquiries,
+        totalPurchases,
         conversionRate,
-        totalClicks
+        totalPartners,
+        activeCodes,
+        activeClients,
+        rewardsPaid,
+        referredClients,
+        pendingEnquiries,
+        pendingInvoices,
+        pendingRewardsDocs,
+        newClientsToday,
+        monthlyInquiryGrowth,
+        monthlySalesGrowth,
+        referralAttributionRate,
+        thisMonthInquiries,
+        thisMonthPurchases,
       },
       charts: {
-        revenueChartData,
-        funnelChartData
+        revenueWithReferral,
+        inquiryVsPurchase,
+        topSubscriptions,
+        clientStatusBreakdown,
+        funnelChartData,
       },
-      feeds: {
-        recentClients,
-        recentPurchases,
-        recentEnquiries
-      }
+      trends,
+      feeds: { recentActivity },
     });
 
   } catch (error) {
@@ -175,3 +338,4 @@ export async function GET() {
     );
   }
 }
+
