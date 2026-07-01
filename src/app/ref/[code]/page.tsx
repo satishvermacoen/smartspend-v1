@@ -383,19 +383,19 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("lead.cm") || nameLower.includes("leadcm")) {
     src = LOGOS["marquee-lead-cm"];
-    scaleClass = "scale-[0.85]";
+    scaleClass = "scale-[0.9]";
   } else if (nameLower.includes("gumloop")) {
     src = LOGOS["marquee-gumloop"];
-    scaleClass = "scale-[1.1]";
+    scaleClass = "scale-[1.8]";
   } else if (nameLower.includes("textshift")) {
     src = LOGOS["marquee-textshift"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("lightfield")) {
     src = LOGOS["marquee-lightfield-crm"];
-    scaleClass = "scale-[0.9]";
+    scaleClass = "scale-[1.4]";
   } else if (nameLower.includes("indy")) {
     src = LOGOS["marquee-indy"];
-    scaleClass = "scale-[1.1]";
+    scaleClass = "scale-[1.6]";
   } else {
     // Local overrides for all other tools to prevent loading failures on strict network
     const LOCAL_OVERRIDES: Record<string, any> = {
