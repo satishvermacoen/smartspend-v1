@@ -293,13 +293,13 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     scaleClass = "scale-[1.2]";
   } else if (nameLower.includes("hotstar") || nameLower.includes("jio")) {
     src = LOGOS["hotstar-icon"];
-    scaleClass = "scale-[1.2]";
+    scaleClass = "scale-[1.0]";
   } else if (nameLower.includes("sonyliv") || nameLower.includes("sony")) {
     src = LOGOS["sonyliv-icon"];
-    scaleClass = "scale-[1.2]";
+    scaleClass = "scale-[1.0]";
   } else if (nameLower.includes("zee5") || nameLower.includes("zee 5")) {
     src = LOGOS["zee5-icon"];
-    scaleClass = "scale-[1.2]";
+    scaleClass = "scale-[1.0]";
   } else if (nameLower.includes("mongodb")) {
     src = LOGOS["mongodb"];
     scaleClass = "scale-[0.85]";
@@ -307,10 +307,10 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     src = LOGOS["openai"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("scalingo")) {
-    src = LOGOS["scalingo"];
+    src = LOGOS["scalingo-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("render")) {
-    src = LOGOS["render"];
+    src = LOGOS["render-icon"];
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("vapi")) {
     src = LOGOS["vapi"];

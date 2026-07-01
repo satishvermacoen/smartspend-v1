@@ -130,6 +130,8 @@ import primevideoIconPng from "@/assets/logos/primevideo-icon.png";
 import sonylivIconPng from "@/assets/logos/sonyliv-icon.png";
 import zee5IconPng from "@/assets/logos/zee5-icon.png";
 import hotstarIconPng from "@/assets/logos/hotstar-icon.png";
+import scalingoIconPng from "@/assets/logos/scalingo-icon.png";
+import renderIconPng from "@/assets/logos/render-icon.png";
 
 export const LOGOS: Record<string, unknown> = {
   "adobe-cc": adobeCcLogo,
@@ -264,4 +266,6 @@ export const LOGOS: Record<string, unknown> = {
   "sonyliv-icon": sonylivIconPng,
   "zee5-icon": zee5IconPng,
   "hotstar-icon": hotstarIconPng,
+  "scalingo-icon": scalingoIconPng,
+  "render-icon": renderIconPng,
 };
