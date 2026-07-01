@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { toast } from 'sonner';
-import { Loader2, Plus, Receipt, Eye, RefreshCw, ShoppingCart, ShieldAlert } from 'lucide-react';
+import { Loader2, Plus, Eye, RefreshCw, ShoppingCart } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -53,11 +53,14 @@ export default function ClientPurchasesDialog({
     } finally {
       setLoading(false);
     }
-  }, [client]);
+  }, [client, apiUrl]);
 
   useEffect(() => {
     if (isOpen && client?._id) {
-      fetchInvoices();
+      const timer = setTimeout(() => {
+        fetchInvoices();
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [isOpen, client, fetchInvoices]);
 

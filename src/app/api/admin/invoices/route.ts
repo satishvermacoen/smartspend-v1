@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/mongodb";
 import Client from "@/features/shared/model/client";
-import Invoice from "@/features/shared/model/invoice";
+import Invoice, { IInvoiceItem } from "@/features/shared/model/invoice";
 import User from "@/features/shared/model/user";
 import ReferralSetting from "@/features/shared/model/referral-setting";
 import ReferralReward from "@/features/shared/model/referral-reward";
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
 
     await connectDB();
 
-    const query: Record<string, any> = {};
+    const query: Record<string, unknown> = {};
 
     if (clientId) {
       query.client_id = clientId;
@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Calculate total amount from items
-    let calculatedAmount = items.reduce((sum: number, item: any) => {
+    const calculatedAmount = (items as IInvoiceItem[]).reduce((sum: number, item: IInvoiceItem) => {
       const amt = Number(item.amount) || 0;
       const qty = Number(item.quantity) || 1;
       return sum + (amt * qty);
@@ -192,10 +192,11 @@ export async function POST(req: NextRequest) {
       invoice: newInvoice
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error("Create Invoice Error:", error);
+    const message = error instanceof Error ? error.message : "An error occurred while creating the invoice.";
     return NextResponse.json(
-      { error: error?.message || "An error occurred while creating the invoice." },
+      { error: message },
       { status: 500 }
     );
   }

@@ -41,11 +41,14 @@ export function ReferredClientsList({ clients, loading }: ReferredClientsListPro
     const correctedClients = clients.map(client => {
       const hasInvoices = client.purchase !== undefined && client.purchase > 0;
       if (hasInvoices && client.status !== "active" && client.status !== "inactive") {
-        return { ...client, status: "active" as any };
+        return { ...client, status: "active" as Client["status"] };
       }
       return client;
     });
-    setClientList(correctedClients);
+    const timer = setTimeout(() => {
+      setClientList(correctedClients);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [clients])
 
   const handleStatusChange = async (clientId: string, newStatus: string) => {
@@ -62,7 +65,7 @@ export function ReferredClientsList({ clients, loading }: ReferredClientsListPro
       if (data.success) {
         toast.success("Client status updated successfully")
         setClientList(prev =>
-          prev.map(c => (c._id === clientId ? { ...c, status: newStatus as any } : c))
+          prev.map(c => (c._id === clientId ? { ...c, status: newStatus as Client["status"] } : c))
         )
       } else {
         toast.error(data.error || "Failed to update status")

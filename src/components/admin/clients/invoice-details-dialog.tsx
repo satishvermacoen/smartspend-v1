@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText, Calendar, Wallet, Receipt, CheckCircle, Clock, XCircle, ArrowRight } from 'lucide-react';
+import { Calendar, Wallet, Receipt, CheckCircle, Clock, XCircle } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -11,8 +11,10 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
+import { Invoice, InvoiceItem } from '@/types';
+
 interface InvoiceDetailsDialogProps {
-  invoice: any;
+  invoice: Invoice | null;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -62,7 +64,7 @@ export default function InvoiceDetailsDialog({
   // Calculations
   const discount = invoice.discount_applied || 0;
   const tax = invoice.tax_amount || 0;
-  const subtotal = invoice.items?.reduce((sum: number, item: any) => sum + (item.amount * (item.quantity || 1)), 0) || invoice.amount;
+  const subtotal = invoice.items?.reduce((sum: number, item: InvoiceItem) => sum + (item.amount * (item.quantity || 1)), 0) || invoice.amount;
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -85,7 +87,7 @@ export default function InvoiceDetailsDialog({
               <p className="font-mono font-bold text-foreground text-sm">{invoice.invoice_number}</p>
               <div className="flex items-center gap-1.5 mt-1.5 text-muted-foreground">
                 <Calendar className="h-3.5 w-3.5" />
-                <span>Date: {formatDate(invoice.purchase_date || invoice.createdAt)}</span>
+                <span>Date: {formatDate(invoice.purchase_date || invoice.createdAt || '')}</span>
               </div>
             </div>
             <div className="flex flex-col items-end gap-1.5">
@@ -100,7 +102,7 @@ export default function InvoiceDetailsDialog({
           {/* Client Details Summary */}
           <div className="bg-soft/10 border border-border/5 rounded-xl p-4 text-xs space-y-1.5">
             <h5 className="font-semibold text-muted-foreground uppercase tracking-wider text-[10px]">Billed To</h5>
-            {invoice.client_id ? (
+            {invoice.client_id && typeof invoice.client_id === 'object' ? (
               <>
                 <p className="font-bold text-foreground">{invoice.client_id.name}</p>
                 <div className="text-muted-foreground flex gap-4 mt-1">
@@ -109,7 +111,9 @@ export default function InvoiceDetailsDialog({
                 </div>
               </>
             ) : (
-              <p className="text-muted-foreground italic">Client information unavailable</p>
+              <p className="text-muted-foreground italic">
+                {typeof invoice.client_id === 'string' ? invoice.client_id : 'Client information unavailable'}
+              </p>
             )}
           </div>
 
@@ -128,7 +132,7 @@ export default function InvoiceDetailsDialog({
                 </thead>
                 <tbody className="divide-y divide-border/5 text-foreground">
                   {invoice.items && invoice.items.length > 0 ? (
-                    invoice.items.map((item: any, idx: number) => (
+                    invoice.items.map((item: InvoiceItem, idx: number) => (
                       <tr key={idx} className="hover:bg-soft/5">
                         <td className="px-4 py-2.5 font-medium">{item.service_name}</td>
                         <td className="px-4 py-2.5 text-right font-mono text-muted-foreground">{item.quantity || 1}</td>
@@ -176,7 +180,7 @@ export default function InvoiceDetailsDialog({
           </div>
 
           {/* Referral Reward section if referrer linked */}
-          {invoice.referrer_id && (
+          {invoice.referrer_id && typeof invoice.referrer_id === 'object' && (
             <div className="bg-purple-500/5 border border-purple-500/10 rounded-xl p-4 text-xs space-y-2">
               <h5 className="font-semibold text-purple-400 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
                 <Wallet className="h-3.5 w-3.5 text-purple-400" />

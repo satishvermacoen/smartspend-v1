@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from "react"
-import { Loader2, Mail, Phone, Calendar, Receipt, Send, MessageSquare, ShoppingBag, Award, CheckCircle2 } from "lucide-react"
+import { Loader2, Mail, Phone, Calendar, Receipt, Send, MessageSquare, ShoppingBag, Award } from "lucide-react"
 import { Client } from "@/types"
 import { Button } from "@/components/ui/button"
 import ClientPurchasesDialog from "@/components/admin/clients/client-purchases-dialog"
@@ -21,20 +21,18 @@ const statusOptions = [
 ]
 
 export function PartnerClientsList({ clients, loading }: PartnerClientsListProps) {
-  const [clientList, setClientList] = React.useState<Client[]>([])
   const [selectedClient, setSelectedClient] = React.useState<Client | null>(null)
   const [isPurchasesOpen, setIsPurchasesOpen] = React.useState(false)
 
-  React.useEffect(() => {
+  const clientList = React.useMemo(() => {
     // Auto-correct client status in frontend state if they have purchases
-    const correctedClients = clients.map(client => {
+    return clients.map(client => {
       const hasInvoices = client.purchase !== undefined && client.purchase > 0;
       if (hasInvoices && client.status !== "active" && client.status !== "inactive") {
-        return { ...client, status: "active" as any };
+        return { ...client, status: "active" as Client["status"] };
       }
       return client;
     });
-    setClientList(correctedClients);
   }, [clients])
 
   const formatCurrency = (amount: number) => {
@@ -148,7 +146,7 @@ export function PartnerClientsList({ clients, loading }: PartnerClientsListProps
                   const isPurchased = client.purchase !== undefined && client.purchase > 0;
                   const isRewarded = client.conversion?.referrer_reward?.status === 'credited' || 
                                      client.conversion?.referrer_reward?.status === 'claimed' ||
-                                     (isPurchased && client.conversion?.purchase_details?.referrer_reward > 0);
+                                     (isPurchased && client.conversion?.purchase_details?.referrer_reward !== undefined && client.conversion.purchase_details.referrer_reward > 0);
 
                   let progressPercent = "w-1/3";
                   if (isRewarded) {

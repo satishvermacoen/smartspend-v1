@@ -36,26 +36,11 @@ interface DataTableToolbarProps<TData> {
   clientSourceFilter: string
   setClientSourceFilter: (val: string) => void
   uniqueSources: string[]
-  codesSearch: string
-  setCodesSearch: (val: string) => void
-  setCodesPage?: (page: number) => void
-  codesFilter?: string
-  setCodesFilter?: (val: string) => void
   convSearch: string
   setConvSearch: (val: string) => void
   setConvPage: (page: number) => void
   convStageFilter: string
   setConvStageFilter: (val: string) => void
-  handleCreateCode: (e: React.FormEvent) => void
-  newLinkName: string
-  setNewLinkName: (val: string) => void
-  newReferrerName: string
-  setNewReferrerName: (val: string) => void
-  newReferrerPhone: string
-  setNewReferrerPhone: (val: string) => void
-  newReferrerEmail: string
-  setNewReferrerEmail: (val: string) => void
-  creatingCode: boolean
 }
 
 export function DataTableToolbar<TData>({

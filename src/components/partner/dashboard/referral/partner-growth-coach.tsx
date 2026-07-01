@@ -1,6 +1,6 @@
 "use client";
 
-import { BrainCircuit, Rocket, Zap, TrendingUp, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
+import { BrainCircuit, Rocket, Zap, CheckCircle2, AlertTriangle, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 interface PartnerGrowthCoachProps {

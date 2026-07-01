@@ -25,8 +25,6 @@ function formatCurrency(n: number): string {
 export function GrowthMetrics({ stats }: GrowthMetricsProps) {
   const avgClientLTV = stats.activeClients > 0
     ? Math.round(stats.totalRevenue / stats.activeClients) : 0;
-  const avgRevenuePerPartner = stats.totalPartners > 0
-    ? Math.round(stats.totalRevenue / stats.totalPartners) : 0;
   const cpa = stats.totalPurchases > 0
     ? Math.round(stats.rewardsPaid / stats.totalPurchases) : 0;
   const partnerROI = stats.rewardsPaid > 0

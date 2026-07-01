@@ -4,7 +4,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/mongodb";
 import User from "@/features/shared/model/user";
 import ReferralConversion from "@/features/shared/model/referral-conversion";
-import ReferralReward from "@/features/shared/model/referral-reward";
+import ReferralReward, { IRedemption } from "@/features/shared/model/referral-reward";
 
 export async function GET() {
   try {
@@ -33,13 +33,13 @@ export async function GET() {
 
     const reward = await ReferralReward.findOne({ customer_id: user._id }).lean();
 
-    const claimedCash = reward?.redemptions
-      ?.filter((r: any) => r.type === 'cash_claim' && r.status === 'completed')
-      .reduce((sum: number, r: any) => sum + r.amount, 0) || 0;
+    const claimedCash = (reward?.redemptions as IRedemption[] || [])
+      ?.filter((r) => r.type === 'cash_claim' && r.status === 'completed')
+      .reduce((sum: number, r) => sum + r.amount, 0) || 0;
 
-    const pendingCashClaimed = reward?.redemptions
-      ?.filter((r: any) => r.type === 'cash_claim' && r.status === 'pending')
-      .reduce((sum: number, r: any) => sum + r.amount, 0) || 0;
+    const pendingCashClaimed = (reward?.redemptions as IRedemption[] || [])
+      ?.filter((r) => r.type === 'cash_claim' && r.status === 'pending')
+      .reduce((sum: number, r) => sum + r.amount, 0) || 0;
 
     const availableBalance = Math.max(0, (reward?.cash_earned || 0) - claimedCash - pendingCashClaimed);
 

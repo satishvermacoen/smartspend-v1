@@ -1,6 +1,6 @@
 "use client";
 
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, PieLabelRenderProps } from "recharts";
 import { Users } from "lucide-react";
 import Link from "next/link";
 
@@ -22,7 +22,17 @@ const STATUS_CONFIG: Record<string, { color: string; label: string }> = {
   ignored:   { color: "#ef4444", label: "Ignored" },
 };
 
-const CustomTooltip = ({ active, payload }: any) => {
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    value: number;
+    payload: {
+      status: string;
+    };
+  }>;
+}
+
+const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (!active || !payload?.length) return null;
   const d = payload[0];
   const cfg = STATUS_CONFIG[d.payload.status] || { color: "#888", label: d.payload.status };
@@ -37,11 +47,12 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 const RADIAN = Math.PI / 180;
-const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
-  if (percent < 0.05) return null;
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.6;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+const renderCustomLabel = (props: PieLabelRenderProps) => {
+  const { cx, cy, midAngle, innerRadius, outerRadius, percent } = props;
+  if (percent === undefined || percent < 0.05) return null;
+  const radius = (innerRadius || 0) + ((outerRadius || 0) - (innerRadius || 0)) * 0.6;
+  const x = (cx || 0) + radius * Math.cos(-(midAngle || 0) * RADIAN);
+  const y = (cy || 0) + radius * Math.sin(-(midAngle || 0) * RADIAN);
   return (
     <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={10} fontWeight={700}>
       {`${(percent * 100).toFixed(0)}%`}

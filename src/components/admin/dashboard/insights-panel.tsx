@@ -28,10 +28,6 @@ interface Insight {
 function getInsights(stats: InsightsPanelProps["stats"]): Insight[] {
   const insights: Insight[] = [];
 
-  const dormantRate = stats.totalPartners > 0
-    ? ((stats.totalPartners - (stats.totalInquiries > 0 ? Math.floor(stats.referredClients / stats.totalPartners) : 0)) / stats.totalPartners) * 100
-    : 0;
-
   // Insight 1 — Conversion Rate
   if (stats.conversionRate < 10) {
     insights.push({

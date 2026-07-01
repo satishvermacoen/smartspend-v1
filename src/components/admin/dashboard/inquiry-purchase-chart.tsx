@@ -17,12 +17,27 @@ interface InquiryPurchaseChartProps {
   data: DataPoint[];
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+interface CustomTooltipPayloadItem {
+  dataKey: string | number;
+  name: string;
+  value: number;
+  fill?: string;
+  color?: string;
+  stroke?: string;
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: CustomTooltipPayloadItem[];
+  label?: string;
+}
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-card border border-border/20 rounded-xl px-3 py-2.5 shadow-card text-xs space-y-1">
       <p className="font-semibold text-foreground mb-1.5">{label}</p>
-      {payload.map((p: any) => (
+      {payload.map((p) => (
         <div key={p.dataKey} className="flex items-center justify-between gap-6">
           <span className="flex items-center gap-1.5 text-muted-foreground">
             <span className="h-2 w-2 rounded-full" style={{ background: p.fill || p.color || p.stroke }} />

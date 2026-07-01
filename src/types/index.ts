@@ -28,6 +28,33 @@ export type Testimonial = {
   screenshots?: { src: StaticImageData; alt: string }[];
 };
 
+export interface ClientConversion {
+  referral_code?: string;
+  referrer_id?: string;
+  prospect_id?: string;
+  prospect_email?: string;
+  conversion_stage?: 'clicked' | 'visited' | 'enquired' | 'signed_up' | 'purchased' | 'cancelled';
+  timeline?: {
+    clicked_at?: string;
+    visited_at?: string;
+    signed_up_at?: string;
+    purchased_at?: string;
+    cancelled_at?: string;
+  };
+  purchase_details?: {
+    gross_amount?: number;
+    referral_bonus_applied?: number;
+    net_amount?: number;
+    referrer_reward?: number;
+  };
+  referrer_reward?: {
+    type?: 'cash' | 'subscription';
+    amount?: number;
+    status?: 'calculated' | 'credited' | 'claimed';
+    claimed_at?: string;
+  };
+}
+
 export interface Client {
   _id: string;
   name: string;
@@ -42,7 +69,7 @@ export interface Client {
   };
   notes?: string;
   purchase?: number;
-  conversion?: any;
+  conversion?: ClientConversion;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -68,6 +95,14 @@ export interface Invoice {
   tax_amount?: number;
   purchase_date: string;
   status: 'pending' | 'paid' | 'cancelled';
+  referrer_id?: string | {
+    _id: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    role?: string;
+  };
+  commission_amount?: number;
   createdAt?: string;
   updatedAt?: string;
 }

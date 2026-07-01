@@ -27,7 +27,10 @@ export default function AdminRewardSettingsPage() {
   }, [])
 
   useEffect(() => {
-    fetchSettings()
+    const timer = setTimeout(() => {
+      fetchSettings()
+    }, 0)
+    return () => clearTimeout(timer)
   }, [fetchSettings])
 
   const handleSaveSettings = async (e: React.FormEvent) => {

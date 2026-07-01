@@ -68,7 +68,7 @@ export default function AdminInviteCodesPage() {
     fetchCodes()
   }, [fetchCodes])
 
-  const handleToggleCodeStatus = async (id: string, currentStatus: boolean) => {
+  const handleToggleCodeStatus = useCallback(async (id: string, currentStatus: boolean) => {
     try {
       const res = await fetch(`/api/admin/referrals/codes/${id}`, {
         method: "PATCH",
@@ -84,9 +84,9 @@ export default function AdminInviteCodesPage() {
     } catch {
       toast.error("Failed to toggle code status.")
     }
-  }
+  }, [fetchCodes])
 
-  const handleDeleteCode = async (id: string) => {
+  const handleDeleteCode = useCallback(async (id: string) => {
     if (!confirm("Are you sure you want to permanently delete this code?")) return
     try {
       const res = await fetch(`/api/admin/referrals/codes/${id}`, { method: "DELETE" })
@@ -99,7 +99,7 @@ export default function AdminInviteCodesPage() {
     } catch {
       toast.error("Failed to delete code.")
     }
-  }
+  }, [fetchCodes])
 
   const handleCreateCode = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -152,23 +152,24 @@ export default function AdminInviteCodesPage() {
     }
   }
 
-  const handleCopyLink = (code: string) => {
+  const handleCopyLink = useCallback((code: string) => {
     const link = `${window.location.origin}/join/${code}`
     navigator.clipboard.writeText(link)
     toast.success("Link copied to clipboard")
-  }
+  }, [])
 
-  const handleWhatsAppShare = (code: string) => {
+  const handleWhatsAppShare = useCallback((code: string) => {
     const link = `${window.location.origin}/join/${code}`
     const message = encodeURIComponent(`Here is the invite link: ${link}`)
     window.open(`https://wa.me/?text=${message}`, "_blank")
-  }
+  }, [])
 
   const columns = React.useMemo(
     () => getCodeColumns(handleToggleCodeStatus, handleDeleteCode, handleCopyLink, handleWhatsAppShare),
-    []
+    [handleToggleCodeStatus, handleDeleteCode, handleCopyLink, handleWhatsAppShare]
   )
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: codes,
     columns,

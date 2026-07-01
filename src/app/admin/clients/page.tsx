@@ -14,8 +14,7 @@ import {
   Activity,
   Plus,
   MoreHorizontal,
-  ShoppingCart,
-  UserX
+  ShoppingCart
 } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -71,7 +70,6 @@ export default function AllClientsPage() {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isPurchasesOpen, setIsPurchasesOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [updatingUser, setUpdatingUser] = useState(false);
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -97,13 +95,15 @@ export default function AllClientsPage() {
   }, [status, type, search, page]);
 
   useEffect(() => {
-    fetchUsers();
+    const timer = setTimeout(() => {
+      fetchUsers();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [fetchUsers]);
 
   // Handle client status toggle (active / inactive)
   const handleToggleStatus = async (client: ClientItem) => {
     const newStatus = client.status === 'active' ? 'inactive' : 'active';
-    setUpdatingUser(true);
     try {
       const res = await fetch(`/api/admin/clients/${client._id}`, {
         method: "PATCH",
@@ -127,8 +127,6 @@ export default function AllClientsPage() {
       fetchUsers();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to update status.");
-    } finally {
-      setUpdatingUser(false);
     }
   };
 

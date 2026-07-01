@@ -114,11 +114,12 @@ export async function sendReferralEmail(email: string, subject: string, htmlCont
 
     if (data.error) {
       console.error('Failed to send referral email via Resend:', data.error);
+      return false;
     }
-    return data;
+    return true;
   } catch (error) {
     console.error('Error sending referral email:', error);
-    return null;
+    return false;
   }
 }
 

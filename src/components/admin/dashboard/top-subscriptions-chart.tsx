@@ -19,9 +19,17 @@ interface TopSubscriptionsChartProps {
 
 const COLORS = ["#6366f1", "#34d399", "#f59e0b", "#38bdf8", "#a78bfa", "#fb923c"];
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    payload: SubscriptionData;
+  }>;
+  label?: string;
+}
+
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (!active || !payload?.length) return null;
-  const d = payload[0]?.payload as SubscriptionData;
+  const d = payload[0]?.payload;
   return (
     <div className="bg-card border border-border/20 rounded-xl px-3 py-2.5 shadow-card text-xs space-y-1.5">
       <p className="font-bold text-foreground text-sm">{label}</p>

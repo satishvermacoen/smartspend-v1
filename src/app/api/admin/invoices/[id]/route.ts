@@ -145,10 +145,11 @@ export async function PATCH(
       message: "Invoice status updated successfully.",
       invoice
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Update Invoice Status Error:", error);
+    const message = error instanceof Error ? error.message : "An error occurred while updating the invoice.";
     return NextResponse.json(
-      { error: error?.message || "An error occurred while updating the invoice." },
+      { error: message },
       { status: 500 }
     );
   }

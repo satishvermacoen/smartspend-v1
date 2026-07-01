@@ -27,11 +27,8 @@ interface DataTablePaginationProps<TData> {
 
 export function DataTablePagination<TData>({
   table,
-  activeTab,
 }: DataTablePaginationProps<TData>) {
-  if (activeTab === "settings") {
-    return null
-  }
+
 
   return (
     <div className="flex items-center justify-between px-4 mt-2">

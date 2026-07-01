@@ -2,9 +2,22 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/mongodb";
-import ReferralReward from "@/features/shared/model/referral-reward";
+import ReferralReward, { IRedemption } from "@/features/shared/model/referral-reward";
 import User from "@/features/shared/model/user";
 import { sendWithdrawalStatusEmail } from "@/lib/mail";
+
+interface PopulatedPartner {
+  _id: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
+
+interface PopulatedReward {
+  _id: unknown;
+  customer_id?: PopulatedPartner;
+  redemptions?: IRedemption[];
+}
 
 // GET /api/admin/referrals/withdrawals
 export async function GET() {
@@ -22,8 +35,8 @@ export async function GET() {
       .lean();
 
     // Extract and flatten all redemptions
-    const allWithdrawals = rewards.flatMap((reward: any) => 
-      (reward.redemptions || []).map((redemption: any) => ({
+    const allWithdrawals = (rewards as unknown as PopulatedReward[]).flatMap((reward) => 
+      (reward.redemptions || []).map((redemption) => ({
         ...redemption,
         partnerId: reward.customer_id?._id,
         partnerName: reward.customer_id?.firstName 
@@ -76,7 +89,7 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "Referral reward not found." }, { status: 404 });
     }
 
-    const redemption = reward.redemptions.id(redemptionId);
+    const redemption = reward.redemptions.find(r => r._id?.toString() === redemptionId);
     if (!redemption) {
       return NextResponse.json({ error: "Redemption request not found." }, { status: 404 });
     }
@@ -98,7 +111,7 @@ export async function PATCH(req: Request) {
     await reward.save();
 
     // Send email notification to partner
-    const partner = reward.customer_id as any;
+    const partner = reward.customer_id as unknown as PopulatedPartner;
     if (partner && partner.email) {
       const partnerName = partner.firstName || 'Partner';
       await sendWithdrawalStatusEmail(

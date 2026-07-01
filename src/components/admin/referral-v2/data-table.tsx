@@ -43,7 +43,6 @@ import {
 
 import {
   getClientColumns,
-  getCodeColumns,
   getConversionColumns,
   getPendingColumns,
 } from "./data-table-parts/columns"
@@ -100,7 +99,6 @@ export function DataTable({
   setConvStageFilter,
   convSearch,
   setConvSearch,
-  convPage,
   setConvPage,
   formatDate,
 }: DataTableProps) {
@@ -307,7 +305,7 @@ export function DataTable({
     if (!selectedProfileClient) return
     setProfileUpdating(true)
     try {
-      const payload: Record<string, any> = {
+      const payload: Record<string, unknown> = {
         firstName: profileFirstName,
         lastName: profileLastName,
         email: profileEmail,
@@ -370,6 +368,7 @@ export function DataTable({
     pageSize: 10,
   })
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: currentData as TableItem[],
     columns: currentColumns as ColumnDef<TableItem>[],

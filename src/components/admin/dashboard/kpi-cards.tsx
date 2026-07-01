@@ -4,7 +4,7 @@ import {
   TrendingUp, TrendingDown, IndianRupee, ClipboardList,
   ShoppingCart, Target, Users, Tag, Bell, Gift, Minus
 } from "lucide-react";
-import { BarChart, Bar, ResponsiveContainer, Tooltip } from "recharts";
+import { BarChart, Bar, ResponsiveContainer } from "recharts";
 
 interface KPICardsProps {
   stats: {
