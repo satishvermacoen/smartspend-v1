@@ -282,7 +282,7 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     scaleClass = "scale-[1.2]";
   } else if (nameLower.includes("hotstar") || nameLower.includes("jio")) {
     src = LOGOS["hotstar-icon"];
-    scaleClass = "scale-[1.0]";
+    scaleClass = "scale-[1.15]";
   } else if (nameLower.includes("sonyliv") || nameLower.includes("sony")) {
     src = LOGOS["sonyliv-icon"];
     scaleClass = "scale-[1.0]";
@@ -372,19 +372,19 @@ function AllSubscriptionsLogo({ tool, className = "h-8 w-8" }: { tool: Tool; cla
     scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("lead.cm") || nameLower.includes("leadcm")) {
     src = LOGOS["marquee-lead-cm"];
-    scaleClass = "scale-[2.2]";
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("gumloop")) {
     src = LOGOS["marquee-gumloop"];
-    scaleClass = "scale-[2.2]";
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("textshift")) {
     src = LOGOS["marquee-textshift"];
-    scaleClass = "scale-[2.2]";
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("lightfield")) {
     src = LOGOS["marquee-lightfield-crm"];
-    scaleClass = "scale-[2.2]";
+    scaleClass = "scale-[0.85]";
   } else if (nameLower.includes("indy")) {
     src = LOGOS["marquee-indy"];
-    scaleClass = "scale-[2.2]";
+    scaleClass = "scale-[0.85]";
   } else {
     // Local overrides for all other tools to prevent loading failures on strict network
     const LOCAL_OVERRIDES: Record<string, any> = {
